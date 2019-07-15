@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="TID&#39;s Blog">
 <meta property="og:description" content="之前写的安卓程序，并不存在跨域这种说法，是可以自由的从不同的域名下请求数据的，现在看前端知识，则就出现了跨域这个概念。了解跨域，主要清楚以下的知识点就可以。  什么是同源策略，满足同源策略的三个条件是什么 跨域的具体方案是什么，怎么处理。  什么是同源策略，满足同源策略的三个条件是什么浏览器为了安全起见，制定了同源策略，只允许在本域名下的数据请求操作，同源策略主要要求以下三个条件  协议相同，注意">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-07-15T04:21:46.249Z">
+<meta property="og:updated_time" content="2019-07-15T08:52:22.056Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="跨域问题">
 <meta name="twitter:description" content="之前写的安卓程序，并不存在跨域这种说法，是可以自由的从不同的域名下请求数据的，现在看前端知识，则就出现了跨域这个概念。了解跨域，主要清楚以下的知识点就可以。  什么是同源策略，满足同源策略的三个条件是什么 跨域的具体方案是什么，怎么处理。  什么是同源策略，满足同源策略的三个条件是什么浏览器为了安全起见，制定了同源策略，只允许在本域名下的数据请求操作，同源策略主要要求以下三个条件  协议相同，注意">
@@ -366,7 +366,7 @@
 <p>请求的url和当前html的url满足以上三个条件就是同源的，非同源的情况下，使用数据就会受到限制。</p>
 <h4 id="跨域的具体方案是什么，怎么处理"><a href="#跨域的具体方案是什么，怎么处理" class="headerlink" title="跨域的具体方案是什么，怎么处理"></a>跨域的具体方案是什么，怎么处理</h4><p>实际场景中，我们不可能什么东西都放在自己的域名下来处理，比如我们可能需要一个天气请求的API，但是我们的主业是电商，那我们很可能就需要一个第三方的API来做。这个时候我们就不得不跨域。目前主流的跨域的方案有一下三类。</p>
 <ol>
-<li><h5 id="JSONP"><a href="#JSONP" class="headerlink" title="JSONP"></a>JSONP</h5><p> JSONP是JSON with padding的简称。我们知道<script>标签中的js不受同源策略的影响，我们可以自由加载任何域名下的js来执行。JSONP就是以此为契机建立的。具体的我们在执行的时候可以这么做</p>
+<li><h5 id="JSONP"><a href="#JSONP" class="headerlink" title="JSONP"></a>JSONP</h5><p> JSONP是JSON with padding的简称。我们知道 <script> 标签中的js不受同源策略的影响，我们可以自由加载任何域名下的js来执行。JSONP就是以此为契机建立的。具体的我们在执行的时候可以这么做</p>
 <ol>
 <li><p>在html端</p>
  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src = <span class="string">"https://a.imzy.me?callback = getWeather"</span>&gt;</span><br><span class="line">								    <span class="function"><span class="keyword">function</span> <span class="title">getWeather</span>(<span class="params">data</span>)</span>&#123;</span><br><span class="line">	        <span class="built_in">console</span>.log(data)</span><br><span class="line">		    &#125;</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
