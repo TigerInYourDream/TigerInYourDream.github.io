@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="JavaScript,前端,if() 和 ==,">
+  <meta name="keywords" content="区块链,SPV,">
 
 
 
@@ -79,18 +79,20 @@
 
 
 
-<meta name="description" content="JavaScript真是一种奇怪的语言。 开头就是这么一句对JS性质的限定，因为之前都使用的是静态语言，强类型语言，所以对于if() 和 ==这种简单的语法并没有必要去写一篇文章，但是js的天生缺陷确会产生一些很奇怪的行为。所以特地写一篇文章来记录这些行为。 语义首先解释语义  if() 用于条件判断 其中括号中需要一个boolean 表达式 == 用于判断 得到的结果是一个布尔表达式， 在js中">
-<meta name="keywords" content="JavaScript,前端,if() 和 ==">
+<meta name="description" content="SPV是什么何为SPV文章的开头首先要明确一个问题，什么是SPV？   SPV是一个典型的区块链的领域知识，SPV的全称叫做 Simplified Payment Verification翻译成中文就叫做“简单支付认证”。   其实对应简单支付认证的是不是还有一个叫做复杂支付认证的东西呢？答案是肯定的。虽然说对应的知识叫做不叫做”复杂支付认证“但是我们还有有必要来了解其概念。 我们都知道，SPV是">
+<meta name="keywords" content="区块链,SPV">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JavaScript 中的if() 和 == 的奇怪行为">
-<meta property="og:url" content="https://imzy.vip/2019/06/14/JavaScript-中的if-和-的奇怪行为/index.html">
+<meta property="og:title" content="SPV">
+<meta property="og:url" content="https://imzy.vip/2019/08/02/SPV/index.html">
 <meta property="og:site_name" content="TID&#39;s Blog">
-<meta property="og:description" content="JavaScript真是一种奇怪的语言。 开头就是这么一句对JS性质的限定，因为之前都使用的是静态语言，强类型语言，所以对于if() 和 ==这种简单的语法并没有必要去写一篇文章，但是js的天生缺陷确会产生一些很奇怪的行为。所以特地写一篇文章来记录这些行为。 语义首先解释语义  if() 用于条件判断 其中括号中需要一个boolean 表达式 == 用于判断 得到的结果是一个布尔表达式， 在js中">
+<meta property="og:description" content="SPV是什么何为SPV文章的开头首先要明确一个问题，什么是SPV？   SPV是一个典型的区块链的领域知识，SPV的全称叫做 Simplified Payment Verification翻译成中文就叫做“简单支付认证”。   其实对应简单支付认证的是不是还有一个叫做复杂支付认证的东西呢？答案是肯定的。虽然说对应的知识叫做不叫做”复杂支付认证“但是我们还有有必要来了解其概念。 我们都知道，SPV是">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-14T09:38:52.823Z">
+<meta property="og:image" content="file:///Users/zhaoyue/Documents/blog/source/images/merkle.png?lastModify=1564729442">
+<meta property="og:updated_time" content="2019-08-02T08:27:38.245Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JavaScript 中的if() 和 == 的奇怪行为">
-<meta name="twitter:description" content="JavaScript真是一种奇怪的语言。 开头就是这么一句对JS性质的限定，因为之前都使用的是静态语言，强类型语言，所以对于if() 和 ==这种简单的语法并没有必要去写一篇文章，但是js的天生缺陷确会产生一些很奇怪的行为。所以特地写一篇文章来记录这些行为。 语义首先解释语义  if() 用于条件判断 其中括号中需要一个boolean 表达式 == 用于判断 得到的结果是一个布尔表达式， 在js中">
+<meta name="twitter:title" content="SPV">
+<meta name="twitter:description" content="SPV是什么何为SPV文章的开头首先要明确一个问题，什么是SPV？   SPV是一个典型的区块链的领域知识，SPV的全称叫做 Simplified Payment Verification翻译成中文就叫做“简单支付认证”。   其实对应简单支付认证的是不是还有一个叫做复杂支付认证的东西呢？答案是肯定的。虽然说对应的知识叫做不叫做”复杂支付认证“但是我们还有有必要来了解其概念。 我们都知道，SPV是">
+<meta name="twitter:image" content="file:///Users/zhaoyue/Documents/blog/source/images/merkle.png?lastModify=1564729442">
 
 
 
@@ -120,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="https://imzy.vip/2019/06/14/JavaScript-中的if-和-的奇怪行为/">
+  <link rel="canonical" href="https://imzy.vip/2019/08/02/SPV/">
 
 
 
 
 
-  <title>JavaScript 中的if() 和 == 的奇怪行为 | TID's Blog</title>
+  <title>SPV | TID's Blog</title>
   
 
 
@@ -263,7 +265,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://imzy.vip/2019/06/14/JavaScript-中的if-和-的奇怪行为/">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/2019/08/02/SPV/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TigerInYourDream">
@@ -280,7 +282,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">JavaScript 中的if() 和 == 的奇怪行为</h1>
+          <h1 class="post-title" itemprop="name headline">SPV</h1>
         
 
         <div class="post-meta">
@@ -292,8 +294,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-14T16:36:50+08:00">
-                2019-06-14
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-02T16:22:05+08:00">
+                2019-08-02
               </time>
             
 
@@ -352,149 +354,106 @@
       
 
       
-        <p>JavaScript真是一种奇怪的语言。</p>
-<p>开头就是这么一句对JS性质的限定，因为之前都使用的是静态语言，强类型语言，所以对于if() 和 ==这种简单的语法并没有必要去写一篇文章，但是js的天生缺陷确会产生一些很奇怪的行为。所以特地写一篇文章来记录这些行为。</p>
-<h4 id="语义"><a href="#语义" class="headerlink" title="语义"></a>语义</h4><p>首先解释语义</p>
+        <h3 id="SPV是什么"><a href="#SPV是什么" class="headerlink" title="SPV是什么"></a>SPV是什么</h3><h4 id="何为SPV"><a href="#何为SPV" class="headerlink" title="何为SPV"></a>何为SPV</h4><p>文章的开头首先要明确一个问题，什么是SPV？ </p>
+<blockquote>
+<p>SPV是一个典型的区块链的领域知识，SPV的全称叫做 <strong>Simplified Payment Verification</strong>翻译成中文就叫做“简单支付认证”。 </p>
+</blockquote>
+<p>其实对应简单支付认证的是不是还有一个叫做复杂支付认证的东西呢？答案是肯定的。虽然说对应的知识叫做不叫做”复杂支付认证“但是我们还有有必要来了解其概念。 我们都知道，SPV是去中心化的分布式存储结构，一个完整的区块链节点包含以下四个部分（这种节点叫做full Node）</p>
 <ul>
-<li>if() 用于条件判断 其中括号中需要一个boolean 表达式</li>
-<li>== 用于判断 得到的结果是一个布尔表达式， 在js中是不严格判断，会先进行类型转换，然后进行比</li>
+<li>W -&gt;  Wallet</li>
+<li>M -&gt;  Miner</li>
+<li>B  -&gt;  Full  Blockchain</li>
+<li>N  -&gt;  (Network) Routing Node</li>
 </ul>
-<h4 id="if-的奇怪行为"><a href="#if-的奇怪行为" class="headerlink" title="if()的奇怪行为"></a>if()的奇怪行为</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="string">"a"</span>)&#123;</span><br><span class="line">					  <span class="built_in">console</span>.log(<span class="string">"a"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="string">""</span>)&#123;</span><br><span class="line">						  <span class="built_in">console</span>.log(<span class="string">"hello"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>([])&#123;</span><br><span class="line">	  <span class="built_in">console</span>.log(<span class="string">"world"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>以上的代码会怎么执行呢。可以直接去任意一个浏览器运行这些代码，查看结果。这里先抛出结论</p>
+<p>以上四个节点分别代表了钱包，矿工，完整的取款链数据库和网络路由。虽然是分布式，完全公平的节点，但是受限于网络，机器等具体情况，并不是每个节点都具有完整的这四个部分。特别是Full Blockchain。一个完整的比特币数据库，在比特币网络不断膨胀的今天，已经有数百G之多。实际情况中，很多比特币的节点都运行在老旧的设备上，或者是移动设备上，没办法保存完整的比特币数据库。因为完整的比特币节点可以独立的完成所有交易的校验，对应这种不完整的比特币节点的校验，就就产生了SPV，也就是简单支付验证。</p>
 <blockquote>
-<p>JavaScript会把括号中的 东西转化为布尔值，之后根据结果执行</p>
+<p>没有完整的比特币数据库的节点就叫做SPV节点，他的验证方式称之为SPV，这种节点相对于Full Node，被称之为轻量级节点。</p>
 </blockquote>
-<p>其中遵循的结果如下</p>
+<h4 id="SPV的认证方式"><a href="#SPV的认证方式" class="headerlink" title="SPV的认证方式"></a>SPV的认证方式</h4><p>区别于Full Node，SPV没有完整的比特币数据库，所以他在原理和认证方式上区别于全节点。在Mastering Bitcoin的8.8节，简单支付认证的一节中有这样一句话</p>
+<blockquote>
+<p>SPV 节点只需下载区块头，而不用下载包含在每个区块中的交易信息。由此产生 的不含交易信息的区块链，大小只有完整区块链的 1/1000。</p>
+</blockquote>
+<p>这个说明了，spv如何用更小的空间来保存交易信息。在SPV之前我们有必要回顾一下 <strong>区块</strong>的数据结构，一般来说一个完整的区块包含如下信息</p>
 <table>
 <thead>
 <tr>
-<th style="text-align:center">类型</th>
-<th style="text-align:center">转换形式</th>
+<th style="text-align:center">数据项</th>
+<th style="text-align:center">字节大小</th>
+<th style="text-align:center">字段</th>
+<th style="text-align:center">说明</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center">Undefined</td>
-<td style="text-align:center">false</td>
+<td style="text-align:center">Magic NO</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">魔数</td>
+<td style="text-align:center">常数</td>
 </tr>
 <tr>
-<td style="text-align:center">Null</td>
-<td style="text-align:center">False</td>
+<td style="text-align:center">Blocksize</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">区块大小</td>
+<td style="text-align:center">用字节表示的该字段之后的区块大小</td>
 </tr>
 <tr>
-<td style="text-align:center">Boolean</td>
-<td style="text-align:center">自己体会</td>
+<td style="text-align:center">Blockheader</td>
+<td style="text-align:center">80</td>
+<td style="text-align:center">区块头</td>
+<td style="text-align:center">组成区块头的几个字段</td>
 </tr>
 <tr>
-<td style="text-align:center">number</td>
-<td style="text-align:center">0 +0 -0 NaN为false 其他为True</td>
+<td style="text-align:center">Transaction counter</td>
+<td style="text-align:center">1-9</td>
+<td style="text-align:center">交易计数器</td>
+<td style="text-align:center">该区块包含的交易数量，包含coinbase交易</td>
 </tr>
 <tr>
-<td style="text-align:center">String</td>
-<td style="text-align:center">空字符串””为false 其他为true</td>
-</tr>
-<tr>
-<td style="text-align:center">Object</td>
-<td style="text-align:center">True</td>
+<td style="text-align:center">Transactions</td>
+<td style="text-align:center">不定</td>
+<td style="text-align:center">交易</td>
+<td style="text-align:center">记录在区块里的交易信息，使用原生的交易信息格式，并且交易在数据流中的位置必须与Merkle树的叶子节点顺序一致</td>
 </tr>
 <tr>
 <td style="text-align:center"></td>
-</tr>
-</tbody>
-</table>
-<p>所以带入就好了。根据这个原则  第一第三都可以输出，第二个是无法输出的。</p>
-<p>那忠告是什么呢？</p>
-<blockquote>
-<p>别这么写好吗，老老实实去写布尔表达式。</p>
-</blockquote>
-<h4 id="的奇怪行为"><a href="#的奇怪行为" class="headerlink" title="== 的奇怪行为"></a>== 的奇怪行为</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">""</span> == <span class="number">0</span></span><br><span class="line"><span class="string">" "</span> == <span class="number">0</span></span><br><span class="line"><span class="string">""</span> == <span class="literal">true</span></span><br><span class="line"><span class="string">""</span> == <span class="literal">false</span></span><br><span class="line"><span class="string">" "</span> == <span class="literal">false</span></span><br><span class="line"></span><br><span class="line">!<span class="string">" "</span> = <span class="literal">false</span></span><br><span class="line">!<span class="string">" "</span> = <span class="literal">true</span></span><br><span class="line"><span class="string">"hello"</span> = <span class="literal">true</span></span><br><span class="line"><span class="string">"0"</span> = <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<p>以上会产生什么结果？</p>
-<p>emmm。。。 这我怎么知道。只能说JS真会玩</p>
-<p>好了先上结论</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">x</th>
-<th style="text-align:center">Y</th>
-<th style="text-align:center">Result</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">null</td>
-<td style="text-align:center">undefiend</td>
-<td style="text-align:center">true</td>
-</tr>
-<tr>
-<td style="text-align:center">Number</td>
-<td style="text-align:center">String</td>
-<td style="text-align:center">x==toNumber(y)</td>
-</tr>
-<tr>
-<td style="text-align:center">Boolean</td>
-<td style="text-align:center">Any</td>
-<td style="text-align:center">tonumber(x) == y</td>
-</tr>
-<tr>
-<td style="text-align:center">Object</td>
-<td style="text-align:center">String or Number</td>
-<td style="text-align:center">toPrimitive(x) == y</td>
-</tr>
-<tr>
-<td style="text-align:center">Otherwise</td>
-<td style="text-align:center">Otherwise</td>
-<td style="text-align:center">False</td>
-</tr>
-<tr>
 <td style="text-align:center"></td>
 <td style="text-align:center"></td>
 </tr>
 </tbody>
 </table>
-<p>解释一下什么叫toPrimitive就是转为基本类型，特就是调用valueOf()方法和 toString()方法。valueOf的优先级比toString的优先级高。</p>
-<p>又有人问了，那数字怎么转</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">Type</th>
-<th style="text-align:center">Result</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">Undefined</td>
-<td style="text-align:center">NaN</td>
-</tr>
-<tr>
-<td style="text-align:center">Null</td>
-<td style="text-align:center">0</td>
-</tr>
-<tr>
-<td style="text-align:center">Boolean</td>
-<td style="text-align:center">True -&gt; 1, false -&gt; 0</td>
-</tr>
-<tr>
-<td style="text-align:center">String</td>
-<td style="text-align:center">“abc” -&gt; NaN, “123” -&gt; 123, “” -&gt; 0</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-</tr>
-</tbody>
-</table>
-<p>那重点是什么呢</p>
+<p>而SPV节点值保存其中的区块头，按照Mastering BitCoin的说法，只保存区块头，可以使的区块大小缩减到完整节点的1/1000以下。</p>
+<p>回顾之后开始确认，如何进行SPV</p>
 <blockquote>
-<p>遇到 == ，就尝试给等号两边的表达式，变量转化为数字，转为数字之后再比较。</p>
+<p>SPV 节点则不能验证 UTXO 是否还未被支付。相反地，SPV 节点会在该交易信息和它所在区块 之间用 merkle 路径建立一条链接。然后 SPV 节点一直等 待，直到序号从 300,001 到 300,006 的六个区块堆叠在该交易所在的区块之上， 并通过确立交易的深度是在第 300,006 区块~第 300,001 区块之下来验证交易的有 效性。</p>
 </blockquote>
-<p>也有特例</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">""</span> == <span class="number">0</span> <span class="comment">// true</span></span><br><span class="line"><span class="string">" "</span> == <span class="number">0</span> <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
-<p>按照上面说法字符串转过去其实应该是NaN啊 怎么就true了呢，说白了，如果没有这个例外，js能叫做奇怪的语言吗？所以假装他转成0了。然后去控制台试试，奥，他确实转成0了。所以表上加一条，空字符串，空白字符串(这是两个东西都是转成0)</p>
-<p>好了有了以上的原则，转的再奇怪也不怕了。等等那下面呢</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">!<span class="string">" "</span> == <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<p>分析一下 ，”  “转化为0, 那 !0是多少？   不对劲啊，这我怎么分析。机智的思考之后，这个牵扯到优先级问题，打开mdn,搜索运算符优先级。看来取非的优先级高，那我看看左边是个什么 ，别猜顺序的了，直接去控制台看看。我们得到!”” -&gt;false。  那这个结果只能是false了  。0 和 1肯定不能相等了。</p>
-<p>好了，以上就是这些奇怪的行为的总结。最后的忠告是什么呢？</p>
-<p><strong>能不能把代码写清楚点！别搞这些有的没的，这么写会被打死</strong></p>
-<p>伟大的编程著作都告诉我们了，代码写的别人都看不明白，你想干啥！请听大师的劝告！</p>
+<p>SPV的主要缺点就是只能验证一个交易是存在的，可以通过markle路径来验证，但是它无法验证一个交易是不存在的。</p>
+<h4 id="什么是Merkle-Tree"><a href="#什么是Merkle-Tree" class="headerlink" title="什么是Merkle Tree"></a>什么是Merkle Tree</h4><p>在此之前，先解释下上一节中提到的，“通过merkle 路径去验证”。那这个和markel tree有关的信息保存在哪？</p>
+<p>答案：保存在区块头中。</p>
+<p>区块头中有以下信息</p>
+<ul>
+<li>Version</li>
+<li>Previous Block Hash</li>
+<li>Merkle Root</li>
+<li>Timestamp</li>
+<li>Difficulty Target</li>
+<li>Nonce</li>
+</ul>
+<p>解释其中几个概念</p>
+<p>区块链，顾名思义就是像链表一样的结构，所以这个Previous Block Hash指向前置区块的Hash，也就是指向父区块</p>
+<p>Nonce属于挖矿的知识，可以自行查阅一下。（也叫随机数，是挖矿过程中控工暴力破解出来的随机数）</p>
+<p>这里的Merkle Root就是构建Merkle Tree验证路径的关键因素。Merkle Tree是一个二叉树数据结构，不过多解释二叉树。Merkle Tree是在二叉树基础上添加了Hash，所以说这是一种哈希二叉树。</p>
+<blockquote>
+<p>在比特币网络中，Merkle 树被用来归纳一个区块中的所有交易，同时生成整个交 易集合的数字指纹，且提供了一种校验区块是否存在某交易的高效途径。生成一 棵完整的 Merkle 树需要递归地对哈希节点对进行哈希，并将新生成的哈希节点插 入到 Merkle 树中，直到只剩一个哈希节点，该节点就是 Merkle 树的根。在比特 币的 Merkle 树中两次使用到了 SHA256 算法，因此其加密哈希算法也被称为 double-SHA256。</p>
+</blockquote>
+<p>值得注意的是，具体的交易信息hash,都是储存在markle Tree的叶子节点上的，通过两两归并向上，直到归结成一个merkle root。(如果是奇数个节点，则最后一个节点的hash再复制一份，形成偶数节点。)所以一个merkle root就包含了区块中所有交易的信息。需要强调的另外一点是，哪怕是区块中有数万个交易最后求解出来的merkle root也只有32个字节。验证节点（也就是交易存在）的方法就是从root到子节点的搜索过程。</p>
+<p><img src="file:///Users/zhaoyue/Documents/blog/source/images/merkle.png?lastModify=1564729442" alt="merkle"></p>
+<p>以上述构建的merkle树为例描述这个验证过程（这是个人理解的算法）</p>
+<blockquote>
+<p>假定需要验证的交易是HK</p>
+<p>SPV向一个Full Node发送 Block信息和 TXID，查询这笔Txid是否存在在这个Txid里面，Full Node根据Block.Hash值，先找到这个Block，然后遍历Block的Transactions数组(这一点请参考之前的Transactions的解释)，可以理解为遍历Transaction.Txid是否一样，如果没有，就直接返回SPV交易不存在，如果有的话，那么就要根据上图的信息，传输HL、HIJ、HMNOP 和 HABCDEFGH的值</p>
+</blockquote>
+<p>所以在难度为logn的状态下验证了交易存在。</p>
+<h4 id="相关概念Bloom"><a href="#相关概念Bloom" class="headerlink" title="相关概念Bloom."></a>相关概念Bloom.</h4><p>下一篇文章介绍相关概念，布隆过滤器。</p>
 
       
     </div>
@@ -512,11 +471,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+            <a href="/tags/区块链/" rel="tag"># 区块链</a>
           
-            <a href="/tags/前端/" rel="tag"># 前端</a>
-          
-            <a href="/tags/if-和/" rel="tag"># if() 和 ==</a>
+            <a href="/tags/SPV/" rel="tag"># SPV</a>
           
         </div>
       
@@ -529,8 +486,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/05/28/二叉树的遍历方法/" rel="next" title="二叉树的遍历方法">
-                <i class="fa fa-chevron-left"></i> 二叉树的遍历方法
+              <a href="/2019/07/15/跨域问题/" rel="next" title="跨域问题">
+                <i class="fa fa-chevron-left"></i> 跨域问题
               </a>
             
           </div>
@@ -538,10 +495,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/06/20/再读编程之道-类型系统/" rel="prev" title="再读编程之道-类型系统">
-                再读编程之道-类型系统 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -675,7 +628,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#语义"><span class="nav-number">1.</span> <span class="nav-text">语义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#if-的奇怪行为"><span class="nav-number">2.</span> <span class="nav-text">if()的奇怪行为</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#的奇怪行为"><span class="nav-number">3.</span> <span class="nav-text">== 的奇怪行为</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#SPV是什么"><span class="nav-number">1.</span> <span class="nav-text">SPV是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#何为SPV"><span class="nav-number">1.1.</span> <span class="nav-text">何为SPV</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SPV的认证方式"><span class="nav-number">1.2.</span> <span class="nav-text">SPV的认证方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#什么是Merkle-Tree"><span class="nav-number">1.3.</span> <span class="nav-text">什么是Merkle Tree</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#相关概念Bloom"><span class="nav-number">1.4.</span> <span class="nav-text">相关概念Bloom.</span></a></li></ol></li></ol></div>
             
 
           </div>
