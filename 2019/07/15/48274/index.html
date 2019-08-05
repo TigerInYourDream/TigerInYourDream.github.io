@@ -6,7 +6,7 @@
 
 
 <html class="theme-next muse use-motion" lang="zh-Hans">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="前端,技术,">
+  <meta name="keywords" content="技术,前端,">
 
 
 
@@ -80,10 +80,10 @@
 
 
 <meta name="description" content="之前写的安卓程序，并不存在跨域这种说法，是可以自由的从不同的域名下请求数据的，现在看前端知识，则就出现了跨域这个概念。了解跨域，主要清楚以下的知识点就可以。  什么是同源策略，满足同源策略的三个条件是什么 跨域的具体方案是什么，怎么处理。  什么是同源策略，满足同源策略的三个条件是什么浏览器为了安全起见，制定了同源策略，只允许在本域名下的数据请求操作，同源策略主要要求以下三个条件  协议相同，注意">
-<meta name="keywords" content="前端,技术">
+<meta name="keywords" content="技术,前端">
 <meta property="og:type" content="article">
 <meta property="og:title" content="跨域问题">
-<meta property="og:url" content="https://imzy.vip/2019/07/15/跨域问题/index.html">
+<meta property="og:url" content="https://imzy.vip/2019/07/15/48274/index.html">
 <meta property="og:site_name" content="TID&#39;s Blog">
 <meta property="og:description" content="之前写的安卓程序，并不存在跨域这种说法，是可以自由的从不同的域名下请求数据的，现在看前端知识，则就出现了跨域这个概念。了解跨域，主要清楚以下的知识点就可以。  什么是同源策略，满足同源策略的三个条件是什么 跨域的具体方案是什么，怎么处理。  什么是同源策略，满足同源策略的三个条件是什么浏览器为了安全起见，制定了同源策略，只允许在本域名下的数据请求操作，同源策略主要要求以下三个条件  协议相同，注意">
 <meta property="og:locale" content="zh-Hans">
@@ -120,7 +120,7 @@
 
 
 
-  <link rel="canonical" href="https://imzy.vip/2019/07/15/跨域问题/">
+  <link rel="canonical" href="https://imzy.vip/2019/07/15/48274/">
 
 
 
@@ -263,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://imzy.vip/2019/07/15/跨域问题/">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/2019/07/15/48274/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TigerInYourDream">
@@ -387,15 +387,19 @@
 <ol>
 <li><p>降域。</p>
  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">a.html</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  .ct&#123;</span><br><span class="line">    width: <span class="number">910</span>px;</span><br><span class="line">    margin: auto;</span><br><span class="line">  &#125;</span><br><span class="line">  .main&#123;</span><br><span class="line">    float: left;</span><br><span class="line">    width: <span class="number">450</span>px;</span><br><span class="line">    height: <span class="number">300</span>px;</span><br><span class="line">    border: 1px solid #ccc;</span><br><span class="line">  &#125;</span><br><span class="line">  .main input&#123;</span><br><span class="line">    margin: <span class="number">20</span>px;</span><br><span class="line">    width: <span class="number">200</span>px;</span><br><span class="line">  &#125;</span><br><span class="line">  .iframe&#123;</span><br><span class="line">    float: right;</span><br><span class="line">  &#125;</span><br><span class="line">  iframe&#123;</span><br><span class="line">    width: <span class="number">450</span>px;</span><br><span class="line">    height: <span class="number">300</span>px;</span><br><span class="line">    border: 1px dashed #ccc;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;<span class="regexp">/style&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">&lt;div class="ct"&gt;</span></span><br><span class="line"><span class="regexp">  &lt;h1&gt;使用降域实现跨域&lt;/</span>h1&gt;</span><br><span class="line">  &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"main"</span>&gt;</span><br><span class="line">    &lt;input type=<span class="string">"text"</span> placeholder=<span class="string">"http://a.nany.com:8080/a.html"</span>&gt;</span><br><span class="line">  &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">  &lt;iframe src="http:/</span><span class="regexp">/b.imzy.vip:8080/</span>b.html<span class="string">" frameborder="</span><span class="number">0</span><span class="string">" &gt;&lt;/iframe&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&lt;/div&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&lt;script&gt;</span></span><br><span class="line"><span class="string">//URL: http://a.imzy.vip:8080/a.html</span></span><br><span class="line"><span class="string">document.querySelector('.main input').addEventListener('input', function()&#123;</span></span><br><span class="line"><span class="string">  console.log(this.value);</span></span><br><span class="line"><span class="string">  window.frames[0].document.querySelector('input').value = this.value;</span></span><br><span class="line"><span class="string">&#125;)</span></span><br><span class="line"><span class="string">document.domain = 'imzy.vip'</span></span><br><span class="line"><span class="string">&lt;/script&gt;</span></span><br><span class="line"><span class="string">&lt;/html&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p> 以下是iframe中的代码</p>
  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">    html,body&#123;</span><br><span class="line">        margin: <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    input&#123;</span><br><span class="line">        margin: <span class="number">20</span>px;</span><br><span class="line">        width: <span class="number">200</span>px;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;<span class="regexp">/style&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">    &lt;input id="input" type="text"  placeholder="http:/</span><span class="regexp">/b.imzy.vip:8080/</span>b.html<span class="string">"&gt;</span></span><br><span class="line"><span class="string">&lt;script&gt;</span></span><br><span class="line"><span class="string">// URL: http://b.imzy.vip:8080/b.html</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">document.querySelector('#input').addEventListener('input', function()&#123;</span></span><br><span class="line"><span class="string">    window.parent.document.querySelector('input').value = this.value;</span></span><br><span class="line"><span class="string">&#125;)</span></span><br><span class="line"><span class="string">document.domain = 'imzy.vip';</span></span><br><span class="line"><span class="string">&lt;/script&gt;</span></span><br><span class="line"><span class="string">&lt;/html&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p> 注意以上代码中，a.imzy.vip和b.imzy.vip是不同的域名。但是他们的后缀是一样的，所以可以降域为imzy.vip</p>
 </li>
 <li><p>PostMessage</p>
 <p> 主要使用的是iframe的postMessage方法，来进行iframe的通信。</p>
  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">    &lt;head&gt;</span><br><span class="line">        &lt;meta charset=<span class="string">"utf-8"</span>&gt;</span><br><span class="line">        &lt;meta http-equiv=<span class="string">"X-UA-Compatible"</span> content=<span class="string">"IE=edge"</span>&gt;</span><br><span class="line">        &lt;title&gt;跨域POST消息发送&lt;<span class="regexp">/title&gt;</span></span><br><span class="line"><span class="regexp">        &lt;script type="text/</span>JavaScript<span class="string">"&gt;    </span></span><br><span class="line"><span class="string">            // sendPost 通过postMessage实现跨域通信将表单信息发送到 指定的域名上,</span></span><br><span class="line"><span class="string">            // 并取得返回的数据    </span></span><br><span class="line"><span class="string">            function sendPost() &#123;        </span></span><br><span class="line"><span class="string">                // 获取id为otherPage的iframe窗口对象        </span></span><br><span class="line"><span class="string">                var iframeWinow = document.getElementById("</span>otherPage<span class="string">").contentWindow;        </span></span><br><span class="line"><span class="string">                // 向该窗口发送消息        </span></span><br><span class="line"><span class="string">                iframeWin.postMessage(document.getElementById("</span>message<span class="string">").value, </span></span><br><span class="line"><span class="string">                    'http://imzy.vip');    </span></span><br><span class="line"><span class="string">            &#125;    </span></span><br><span class="line"><span class="string">            // 监听跨域请求的返回    </span></span><br><span class="line"><span class="string">            window.addEventListener("</span>message<span class="string">", function(event) &#123;        </span></span><br><span class="line"><span class="string">                console.log(event, event.data);    </span></span><br><span class="line"><span class="string">            &#125;, false);</span></span><br><span class="line"><span class="string">        &lt;/script&gt;</span></span><br><span class="line"><span class="string">    &lt;/head&gt;</span></span><br><span class="line"><span class="string">    &lt;body&gt; </span></span><br><span class="line"><span class="string">        &lt;textarea id="</span>message<span class="string">"&gt;&lt;/textarea&gt; </span></span><br><span class="line"><span class="string">        &lt;input type="</span>button<span class="string">" value="</span>发送<span class="string">" onclick="</span>sendPost()<span class="string">"&gt; </span></span><br><span class="line"><span class="string">        &lt;iframe</span></span><br><span class="line"><span class="string">            src="</span>http:<span class="comment">//imzy.vip/other-domain.html" id="otherPage"</span></span><br><span class="line">            style=<span class="string">"display:none"</span>&gt;&lt;/iframe&gt;</span><br><span class="line">    &lt;<span class="regexp">/body&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">&lt;/</span>html&gt;</span><br></pre></td></tr></table></figure>
+
 <p> 放在另一个域名下的iframe内容 </p>
  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">    &lt;head&gt;</span><br><span class="line">        &lt;meta charset=<span class="string">"utf-8"</span>&gt;</span><br><span class="line">        &lt;meta http-equiv=<span class="string">"X-UA-Compatible"</span> content=<span class="string">"IE=edge"</span>&gt;</span><br><span class="line">        &lt;title&gt;POST Handler&lt;<span class="regexp">/title&gt;</span></span><br><span class="line"><span class="regexp">        &lt;script src="/</span><span class="regexp">/code.jquery.com/</span>jquery<span class="number">-1.11</span><span class="number">.0</span>.min.js<span class="string">"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="string">        &lt;script type="</span>text/JavaScript<span class="string">"&gt;</span></span><br><span class="line"><span class="string">            window.addEventListener("</span>message<span class="string">", function( event ) &#123;</span></span><br><span class="line"><span class="string">                // 监听父窗口发送过来的数据向服务器发送post请求</span></span><br><span class="line"><span class="string">                var data = event.data;</span></span><br><span class="line"><span class="string">                $.ajax(&#123;</span></span><br><span class="line"><span class="string">                    // 注意这里的url只是一个示例.实际练习的时候你需要自己想办法提供		</span></span><br><span class="line"><span class="string">                    type: 'POST', </span></span><br><span class="line"><span class="string">                    url: 'http://imzy.vip/getData',</span></span><br><span class="line"><span class="string">                    data: "</span>info=<span class="string">" + data,</span></span><br><span class="line"><span class="string">                    dataType: "</span>json<span class="string">"</span></span><br><span class="line"><span class="string">                &#125;).done(function(res)&#123;        </span></span><br><span class="line"><span class="string">                    //将请求成功返回的数据通过postMessage发送给父窗口        </span></span><br><span class="line"><span class="string">                    window.parent.postMessage(res, "</span>*<span class="string">");    </span></span><br><span class="line"><span class="string">                &#125;).fail(function(res)&#123;        </span></span><br><span class="line"><span class="string">                    //将请求失败返回的数据通过postMessage发送给父窗口        </span></span><br><span class="line"><span class="string">                    window.parent.postMessage(res, "</span>*<span class="string">");    </span></span><br><span class="line"><span class="string">                &#125;);</span></span><br><span class="line"><span class="string">            &#125;, false);</span></span><br><span class="line"><span class="string">        &lt;/script&gt;</span></span><br><span class="line"><span class="string">    &lt;/head&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    &lt;body&gt;&lt;/body&gt;</span></span><br><span class="line"><span class="string">&lt;/html&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p> 以上是通过PostMessage来进行iframe通信的实例，主要是完成了，从主界面发送消息到子iframe,子iframe中监听消息，将数据使用window.parent.postMessage()方法，回传数据的过程。</p>
 </li>
 </ol>
@@ -418,9 +422,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/前端/" rel="tag"># 前端</a>
-          
             <a href="/tags/技术/" rel="tag"># 技术</a>
+          
+            <a href="/tags/前端/" rel="tag"># 前端</a>
           
         </div>
       
@@ -433,7 +437,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/06/20/再读编程之道-类型系统/" rel="next" title="再读编程之道-类型系统">
+              <a href="/2019/06/20/55711/" rel="next" title="再读编程之道-类型系统">
                 <i class="fa fa-chevron-left"></i> 再读编程之道-类型系统
               </a>
             
@@ -443,7 +447,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/08/02/SPV/" rel="prev" title="SPV">
+              <a href="/2019/08/02/12108/" rel="prev" title="SPV">
                 SPV <i class="fa fa-chevron-right"></i>
               </a>
             

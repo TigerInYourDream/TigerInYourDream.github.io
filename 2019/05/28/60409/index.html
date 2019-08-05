@@ -6,7 +6,7 @@
 
 
 <html class="theme-next muse use-motion" lang="zh-Hans">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -83,7 +83,7 @@
 <meta name="keywords" content="技术,遍历">
 <meta property="og:type" content="article">
 <meta property="og:title" content="二叉树的遍历方法">
-<meta property="og:url" content="https://imzy.vip/2019/05/28/二叉树的遍历方法/index.html">
+<meta property="og:url" content="https://imzy.vip/2019/05/28/60409/index.html">
 <meta property="og:site_name" content="TID&#39;s Blog">
 <meta property="og:description" content="最近刷算法，补充算算法知识，因为本人的基础薄弱，补起来比较吃力。二叉树的遍历方法，非递归版本的遍历方法让我迷惑，但是我读到了一篇写的非常精彩的文章 https://zhuanlan.zhihu.com/p/30490183 ；有兴趣的可以去参考下原文。 我在这里总结出核心思想。  对于二叉树中的任何一个节点而言，它都有两个角色需要扮演，一个是作为值存储的角色（角色1），另一个角色是作为它所带领的子">
 <meta property="og:locale" content="zh-Hans">
@@ -120,7 +120,7 @@
 
 
 
-  <link rel="canonical" href="https://imzy.vip/2019/05/28/二叉树的遍历方法/">
+  <link rel="canonical" href="https://imzy.vip/2019/05/28/60409/">
 
 
 
@@ -263,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://imzy.vip/2019/05/28/二叉树的遍历方法/">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/2019/05/28/60409/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TigerInYourDream">
@@ -360,6 +360,7 @@
 <p>通过这个核心思想，我们可以将二叉数的遍历方法做一个统一的规划了，我们先包装Node,让他带一个是否访问过的标志，(如果你不用Java,比如py,你可以直接用元组)。</p>
 <p>`       </p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * public class TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode left;</span></span><br><span class="line"><span class="comment"> *     TreeNode right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) &#123; val = x; &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">TreeNodeWhithBoolean</span> </span>&#123;</span><br><span class="line">        TreeNode node;</span><br><span class="line">        <span class="keyword">boolean</span> visited;</span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">TreeNodeWhithBoolean</span><span class="params">(TreeNode node,<span class="keyword">boolean</span> visited)</span></span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.node = node;</span><br><span class="line">            <span class="keyword">this</span>.visited = visited;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">preorderTraversal</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span>(root == <span class="keyword">null</span>)&#123;</span><br><span class="line">           <span class="keyword">return</span> <span class="keyword">new</span> ArrayList();</span><br><span class="line">       &#125;</span><br><span class="line">        </span><br><span class="line">        List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">        TreeNodeWhithBoolean rootBoolean = <span class="keyword">new</span> TreeNodeWhithBoolean(root, <span class="keyword">false</span>);</span><br><span class="line">        Stack&lt;TreeNodeWhithBoolean&gt; stack = <span class="keyword">new</span> Stack&lt;TreeNodeWhithBoolean&gt;();</span><br><span class="line">        stack.push(rootBoolean);</span><br><span class="line">        <span class="keyword">while</span>(!stack.isEmpty())&#123;</span><br><span class="line">            TreeNodeWhithBoolean current =  stack.pop();</span><br><span class="line">            <span class="keyword">if</span>(current.visited)&#123;</span><br><span class="line">                list.add(current.node.val);               </span><br><span class="line">            &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">if</span>(current.node.right != <span class="keyword">null</span>)&#123;</span><br><span class="line">                    stack.push(<span class="keyword">new</span> TreeNodeWhithBoolean(current.node.right, <span class="keyword">false</span>));</span><br><span class="line">                &#125;</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span>(current.node.left != <span class="keyword">null</span>)&#123;</span><br><span class="line">                    stack.push(<span class="keyword">new</span> TreeNodeWhithBoolean(current.node.left, <span class="keyword">false</span>));</span><br><span class="line">                &#125;</span><br><span class="line">                </span><br><span class="line">                stack.push(<span class="keyword">new</span> TreeNodeWhithBoolean(current.node, <span class="keyword">true</span>));</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> list;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>上面这段是前序遍历的代码，中序遍历和后续遍历的代码也大同小异，只需要替换入栈顺序即可，因为栈为我们提供了一个天然翻转的工具。 比如前序遍历的顺序是 根，左，右。也就是说出栈顺序就是这个，那入栈顺序反过来就好了。其他的遍历也是完全按照这个思路来。</p>
 
       
@@ -393,7 +394,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/05/16/关于em和line-height的备忘录/" rel="next" title="关于em和line-height的备忘录">
+              <a href="/2019/05/16/4005/" rel="next" title="关于em和line-height的备忘录">
                 <i class="fa fa-chevron-left"></i> 关于em和line-height的备忘录
               </a>
             
@@ -403,7 +404,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/06/14/JavaScript-中的if-和-的奇怪行为/" rel="prev" title="JavaScript 中的if() 和 == 的奇怪行为">
+              <a href="/2019/06/14/33446/" rel="prev" title="JavaScript 中的if() 和 == 的奇怪行为">
                 JavaScript 中的if() 和 == 的奇怪行为 <i class="fa fa-chevron-right"></i>
               </a>
             

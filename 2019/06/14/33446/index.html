@@ -6,7 +6,7 @@
 
 
 <html class="theme-next muse use-motion" lang="zh-Hans">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -83,7 +83,7 @@
 <meta name="keywords" content="JavaScript,前端,if() 和 ==">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JavaScript 中的if() 和 == 的奇怪行为">
-<meta property="og:url" content="https://imzy.vip/2019/06/14/JavaScript-中的if-和-的奇怪行为/index.html">
+<meta property="og:url" content="https://imzy.vip/2019/06/14/33446/index.html">
 <meta property="og:site_name" content="TID&#39;s Blog">
 <meta property="og:description" content="JavaScript真是一种奇怪的语言。 开头就是这么一句对JS性质的限定，因为之前都使用的是静态语言，强类型语言，所以对于if() 和 ==这种简单的语法并没有必要去写一篇文章，但是js的天生缺陷确会产生一些很奇怪的行为。所以特地写一篇文章来记录这些行为。 语义首先解释语义  if() 用于条件判断 其中括号中需要一个boolean 表达式 == 用于判断 得到的结果是一个布尔表达式， 在js中">
 <meta property="og:locale" content="zh-Hans">
@@ -120,7 +120,7 @@
 
 
 
-  <link rel="canonical" href="https://imzy.vip/2019/06/14/JavaScript-中的if-和-的奇怪行为/">
+  <link rel="canonical" href="https://imzy.vip/2019/06/14/33446/">
 
 
 
@@ -263,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://imzy.vip/2019/06/14/JavaScript-中的if-和-的奇怪行为/">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/2019/06/14/33446/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TigerInYourDream">
@@ -360,6 +360,7 @@
 <li>== 用于判断 得到的结果是一个布尔表达式， 在js中是不严格判断，会先进行类型转换，然后进行比</li>
 </ul>
 <h4 id="if-的奇怪行为"><a href="#if-的奇怪行为" class="headerlink" title="if()的奇怪行为"></a>if()的奇怪行为</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="string">"a"</span>)&#123;</span><br><span class="line">					  <span class="built_in">console</span>.log(<span class="string">"a"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="string">""</span>)&#123;</span><br><span class="line">						  <span class="built_in">console</span>.log(<span class="string">"hello"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>([])&#123;</span><br><span class="line">	  <span class="built_in">console</span>.log(<span class="string">"world"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>以上的代码会怎么执行呢。可以直接去任意一个浏览器运行这些代码，查看结果。这里先抛出结论</p>
 <blockquote>
 <p>JavaScript会把括号中的 东西转化为布尔值，之后根据结果执行</p>
@@ -368,129 +369,129 @@
 <table>
 <thead>
 <tr>
-<th style="text-align:center">类型</th>
-<th style="text-align:center">转换形式</th>
+<th align="center">类型</th>
+<th align="center">转换形式</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">Undefined</td>
-<td style="text-align:center">false</td>
+<tbody><tr>
+<td align="center">Undefined</td>
+<td align="center">false</td>
 </tr>
 <tr>
-<td style="text-align:center">Null</td>
-<td style="text-align:center">False</td>
+<td align="center">Null</td>
+<td align="center">False</td>
 </tr>
 <tr>
-<td style="text-align:center">Boolean</td>
-<td style="text-align:center">自己体会</td>
+<td align="center">Boolean</td>
+<td align="center">自己体会</td>
 </tr>
 <tr>
-<td style="text-align:center">number</td>
-<td style="text-align:center">0 +0 -0 NaN为false 其他为True</td>
+<td align="center">number</td>
+<td align="center">0 +0 -0 NaN为false 其他为True</td>
 </tr>
 <tr>
-<td style="text-align:center">String</td>
-<td style="text-align:center">空字符串””为false 其他为true</td>
+<td align="center">String</td>
+<td align="center">空字符串””为false 其他为true</td>
 </tr>
 <tr>
-<td style="text-align:center">Object</td>
-<td style="text-align:center">True</td>
+<td align="center">Object</td>
+<td align="center">True</td>
 </tr>
 <tr>
-<td style="text-align:center"></td>
+<td align="center"></td>
+<td align="center"></td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <p>所以带入就好了。根据这个原则  第一第三都可以输出，第二个是无法输出的。</p>
 <p>那忠告是什么呢？</p>
 <blockquote>
 <p>别这么写好吗，老老实实去写布尔表达式。</p>
 </blockquote>
 <h4 id="的奇怪行为"><a href="#的奇怪行为" class="headerlink" title="== 的奇怪行为"></a>== 的奇怪行为</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">""</span> == <span class="number">0</span></span><br><span class="line"><span class="string">" "</span> == <span class="number">0</span></span><br><span class="line"><span class="string">""</span> == <span class="literal">true</span></span><br><span class="line"><span class="string">""</span> == <span class="literal">false</span></span><br><span class="line"><span class="string">" "</span> == <span class="literal">false</span></span><br><span class="line"></span><br><span class="line">!<span class="string">" "</span> = <span class="literal">false</span></span><br><span class="line">!<span class="string">" "</span> = <span class="literal">true</span></span><br><span class="line"><span class="string">"hello"</span> = <span class="literal">true</span></span><br><span class="line"><span class="string">"0"</span> = <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
 <p>以上会产生什么结果？</p>
 <p>emmm。。。 这我怎么知道。只能说JS真会玩</p>
 <p>好了先上结论</p>
 <table>
 <thead>
 <tr>
-<th style="text-align:center">x</th>
-<th style="text-align:center">Y</th>
-<th style="text-align:center">Result</th>
+<th align="center">x</th>
+<th align="center">Y</th>
+<th align="center">Result</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">null</td>
-<td style="text-align:center">undefiend</td>
-<td style="text-align:center">true</td>
+<tbody><tr>
+<td align="center">null</td>
+<td align="center">undefiend</td>
+<td align="center">true</td>
 </tr>
 <tr>
-<td style="text-align:center">Number</td>
-<td style="text-align:center">String</td>
-<td style="text-align:center">x==toNumber(y)</td>
+<td align="center">Number</td>
+<td align="center">String</td>
+<td align="center">x==toNumber(y)</td>
 </tr>
 <tr>
-<td style="text-align:center">Boolean</td>
-<td style="text-align:center">Any</td>
-<td style="text-align:center">tonumber(x) == y</td>
+<td align="center">Boolean</td>
+<td align="center">Any</td>
+<td align="center">tonumber(x) == y</td>
 </tr>
 <tr>
-<td style="text-align:center">Object</td>
-<td style="text-align:center">String or Number</td>
-<td style="text-align:center">toPrimitive(x) == y</td>
+<td align="center">Object</td>
+<td align="center">String or Number</td>
+<td align="center">toPrimitive(x) == y</td>
 </tr>
 <tr>
-<td style="text-align:center">Otherwise</td>
-<td style="text-align:center">Otherwise</td>
-<td style="text-align:center">False</td>
+<td align="center">Otherwise</td>
+<td align="center">Otherwise</td>
+<td align="center">False</td>
 </tr>
 <tr>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <p>解释一下什么叫toPrimitive就是转为基本类型，特就是调用valueOf()方法和 toString()方法。valueOf的优先级比toString的优先级高。</p>
 <p>又有人问了，那数字怎么转</p>
 <table>
 <thead>
 <tr>
-<th style="text-align:center">Type</th>
-<th style="text-align:center">Result</th>
+<th align="center">Type</th>
+<th align="center">Result</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">Undefined</td>
-<td style="text-align:center">NaN</td>
+<tbody><tr>
+<td align="center">Undefined</td>
+<td align="center">NaN</td>
 </tr>
 <tr>
-<td style="text-align:center">Null</td>
-<td style="text-align:center">0</td>
+<td align="center">Null</td>
+<td align="center">0</td>
 </tr>
 <tr>
-<td style="text-align:center">Boolean</td>
-<td style="text-align:center">True -&gt; 1, false -&gt; 0</td>
+<td align="center">Boolean</td>
+<td align="center">True -&gt; 1, false -&gt; 0</td>
 </tr>
 <tr>
-<td style="text-align:center">String</td>
-<td style="text-align:center">“abc” -&gt; NaN, “123” -&gt; 123, “” -&gt; 0</td>
+<td align="center">String</td>
+<td align="center">“abc” -&gt; NaN, “123” -&gt; 123, “” -&gt; 0</td>
 </tr>
 <tr>
-<td style="text-align:center"></td>
+<td align="center"></td>
+<td align="center"></td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <p>那重点是什么呢</p>
 <blockquote>
 <p>遇到 == ，就尝试给等号两边的表达式，变量转化为数字，转为数字之后再比较。</p>
 </blockquote>
 <p>也有特例</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">""</span> == <span class="number">0</span> <span class="comment">// true</span></span><br><span class="line"><span class="string">" "</span> == <span class="number">0</span> <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
 <p>按照上面说法字符串转过去其实应该是NaN啊 怎么就true了呢，说白了，如果没有这个例外，js能叫做奇怪的语言吗？所以假装他转成0了。然后去控制台试试，奥，他确实转成0了。所以表上加一条，空字符串，空白字符串(这是两个东西都是转成0)</p>
 <p>好了有了以上的原则，转的再奇怪也不怕了。等等那下面呢</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">!<span class="string">" "</span> == <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
 <p>分析一下 ，”  “转化为0, 那 !0是多少？   不对劲啊，这我怎么分析。机智的思考之后，这个牵扯到优先级问题，打开mdn,搜索运算符优先级。看来取非的优先级高，那我看看左边是个什么 ，别猜顺序的了，直接去控制台看看。我们得到!”” -&gt;false。  那这个结果只能是false了  。0 和 1肯定不能相等了。</p>
 <p>好了，以上就是这些奇怪的行为的总结。最后的忠告是什么呢？</p>
 <p><strong>能不能把代码写清楚点！别搞这些有的没的，这么写会被打死</strong></p>
@@ -529,7 +530,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/05/28/二叉树的遍历方法/" rel="next" title="二叉树的遍历方法">
+              <a href="/2019/05/28/60409/" rel="next" title="二叉树的遍历方法">
                 <i class="fa fa-chevron-left"></i> 二叉树的遍历方法
               </a>
             
@@ -539,7 +540,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/06/20/再读编程之道-类型系统/" rel="prev" title="再读编程之道-类型系统">
+              <a href="/2019/06/20/55711/" rel="prev" title="再读编程之道-类型系统">
                 再读编程之道-类型系统 <i class="fa fa-chevron-right"></i>
               </a>
             
