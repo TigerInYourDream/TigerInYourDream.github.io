@@ -87,12 +87,12 @@
 <meta property="og:site_name" content="TID&#39;s Blog">
 <meta property="og:description" content="SPV是什么何为SPV文章的开头首先要明确一个问题，什么是SPV？   SPV是一个典型的区块链的领域知识，SPV的全称叫做 Simplified Payment Verification翻译成中文就叫做“简单支付认证”。   其实对应简单支付认证的是不是还有一个叫做复杂支付认证的东西呢？答案是肯定的。虽然说对应的知识叫做不叫做”复杂支付认证“但是我们还有有必要来了解其概念。 我们都知道，SPV是">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="file:///Users/zhaoyue/Documents/blog/source/images/merkle.png">
-<meta property="og:updated_time" content="2019-08-05T06:11:31.315Z">
+<meta property="og:image" content="https://s2.ax1x.com/2019/08/06/eWvszT.md.jpg">
+<meta property="og:updated_time" content="2019-08-06T06:08:36.239Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SPV">
 <meta name="twitter:description" content="SPV是什么何为SPV文章的开头首先要明确一个问题，什么是SPV？   SPV是一个典型的区块链的领域知识，SPV的全称叫做 Simplified Payment Verification翻译成中文就叫做“简单支付认证”。   其实对应简单支付认证的是不是还有一个叫做复杂支付认证的东西呢？答案是肯定的。虽然说对应的知识叫做不叫做”复杂支付认证“但是我们还有有必要来了解其概念。 我们都知道，SPV是">
-<meta name="twitter:image" content="file:///Users/zhaoyue/Documents/blog/source/images/merkle.png">
+<meta name="twitter:image" content="https://s2.ax1x.com/2019/08/06/eWvszT.md.jpg">
 
 
 
@@ -445,7 +445,7 @@
 <p>在比特币网络中，Merkle 树被用来归纳一个区块中的所有交易，同时生成整个交 易集合的数字指纹，且提供了一种校验区块是否存在某交易的高效途径。生成一 棵完整的 Merkle 树需要递归地对哈希节点对进行哈希，并将新生成的哈希节点插 入到 Merkle 树中，直到只剩一个哈希节点，该节点就是 Merkle 树的根。在比特 币的 Merkle 树中两次使用到了 SHA256 算法，因此其加密哈希算法也被称为 double-SHA256。</p>
 </blockquote>
 <p>值得注意的是，具体的交易信息hash,都是储存在markle Tree的叶子节点上的，通过两两归并向上，直到归结成一个merkle root。(如果是奇数个节点，则最后一个节点的hash再复制一份，形成偶数节点。)所以一个merkle root就包含了区块中所有交易的信息。需要强调的另外一点是，哪怕是区块中有数万个交易最后求解出来的merkle root也只有32个字节。验证节点（也就是交易存在）的方法就是从root到子节点的搜索过程。</p>
-<p><img src="file:///Users/zhaoyue/Documents/blog/source/images/merkle.png" alt="merkle"></p>
+<p><img src="https://s2.ax1x.com/2019/08/06/eWvszT.md.jpg" alt="eWvszT.md.jpg"></p>
 <p>以上述构建的merkle树为例描述这个验证过程（这是个人理解的算法）</p>
 <blockquote>
 <p>假定需要验证的交易是HK</p>
@@ -716,6 +716,9 @@
 
 
 
+  
+  
+
 
 
 
@@ -750,6 +753,16 @@
   
   
     <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script>
   
 
 
