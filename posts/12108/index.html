@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="区块链,SPV,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="SPV是什么何为SPV文章的开头首先要明确一个问题，什么是SPV？   SPV是一个典型的区块链的领域知识，SPV的全称叫做 Simplified Payment Verification翻译成中文就叫做“简单支付认证”。   其实对应简单支付认证的是不是还有一个叫做复杂支付认证的东西呢？答案是肯定的。虽然说对应的知识叫做不叫做”复杂支付认证“但是我们还有有必要来了解其概念。 我们都知道，SPV是">
+<meta name="keywords" content="区块链,SPV">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SPV">
+<meta property="og:url" content="https://imzy.vip/posts/12108/index.html">
+<meta property="og:site_name" content="TID&#39;s Blog">
+<meta property="og:description" content="SPV是什么何为SPV文章的开头首先要明确一个问题，什么是SPV？   SPV是一个典型的区块链的领域知识，SPV的全称叫做 Simplified Payment Verification翻译成中文就叫做“简单支付认证”。   其实对应简单支付认证的是不是还有一个叫做复杂支付认证的东西呢？答案是肯定的。虽然说对应的知识叫做不叫做”复杂支付认证“但是我们还有有必要来了解其概念。 我们都知道，SPV是">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://s2.ax1x.com/2019/08/06/eWvszT.md.jpg">
+<meta property="og:updated_time" content="2019-08-06T06:08:36.239Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SPV">
+<meta name="twitter:description" content="SPV是什么何为SPV文章的开头首先要明确一个问题，什么是SPV？   SPV是一个典型的区块链的领域知识，SPV的全称叫做 Simplified Payment Verification翻译成中文就叫做“简单支付认证”。   其实对应简单支付认证的是不是还有一个叫做复杂支付认证的东西呢？答案是肯定的。虽然说对应的知识叫做不叫做”复杂支付认证“但是我们还有有必要来了解其概念。 我们都知道，SPV是">
+<meta name="twitter:image" content="https://s2.ax1x.com/2019/08/06/eWvszT.md.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://imzy.vip/posts/12108/">
+
+
+
+
+
+  <title>SPV | TID's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">TID's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-motto">
+          <a href="/motto/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-comment"></i> <br>
+            
+            一言
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/12108/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TigerInYourDream">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TID's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SPV</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-02T16:22:05+08:00">
+                2019-08-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">技术笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="SPV是什么"><a href="#SPV是什么" class="headerlink" title="SPV是什么"></a>SPV是什么</h3><h4 id="何为SPV"><a href="#何为SPV" class="headerlink" title="何为SPV"></a>何为SPV</h4><p>文章的开头首先要明确一个问题，什么是SPV？ </p>
+<blockquote>
+<p>SPV是一个典型的区块链的领域知识，SPV的全称叫做 <strong>Simplified Payment Verification</strong>翻译成中文就叫做“简单支付认证”。 </p>
+</blockquote>
+<p>其实对应简单支付认证的是不是还有一个叫做复杂支付认证的东西呢？答案是肯定的。虽然说对应的知识叫做不叫做”复杂支付认证“但是我们还有有必要来了解其概念。 我们都知道，SPV是去中心化的分布式存储结构，一个完整的区块链节点包含以下四个部分（这种节点叫做full Node）</p>
+<ul>
+<li>W -&gt;  Wallet</li>
+<li>M -&gt;  Miner</li>
+<li>B  -&gt;  Full  Blockchain</li>
+<li>N  -&gt;  (Network) Routing Node</li>
+</ul>
+<p>以上四个节点分别代表了钱包，矿工，完整的取款链数据库和网络路由。虽然是分布式，完全公平的节点，但是受限于网络，机器等具体情况，并不是每个节点都具有完整的这四个部分。特别是Full Blockchain。一个完整的比特币数据库，在比特币网络不断膨胀的今天，已经有数百G之多。实际情况中，很多比特币的节点都运行在老旧的设备上，或者是移动设备上，没办法保存完整的比特币数据库。因为完整的比特币节点可以独立的完成所有交易的校验，对应这种不完整的比特币节点的校验，就就产生了SPV，也就是简单支付验证。</p>
+<blockquote>
+<p>没有完整的比特币数据库的节点就叫做SPV节点，他的验证方式称之为SPV，这种节点相对于Full Node，被称之为轻量级节点。</p>
+</blockquote>
+<h4 id="SPV的认证方式"><a href="#SPV的认证方式" class="headerlink" title="SPV的认证方式"></a>SPV的认证方式</h4><p>区别于Full Node，SPV没有完整的比特币数据库，所以他在原理和认证方式上区别于全节点。在Mastering Bitcoin的8.8节，简单支付认证的一节中有这样一句话</p>
+<blockquote>
+<p>SPV 节点只需下载区块头，而不用下载包含在每个区块中的交易信息。由此产生 的不含交易信息的区块链，大小只有完整区块链的 1/1000。</p>
+</blockquote>
+<p>这个说明了，spv如何用更小的空间来保存交易信息。在SPV之前我们有必要回顾一下 <strong>区块</strong>的数据结构，一般来说一个完整的区块包含如下信息</p>
+<table>
+<thead>
+<tr>
+<th align="center">数据项</th>
+<th align="center">字节大小</th>
+<th align="center">字段</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Magic NO</td>
+<td align="center">4</td>
+<td align="center">魔数</td>
+<td align="center">常数</td>
+</tr>
+<tr>
+<td align="center">Blocksize</td>
+<td align="center">4</td>
+<td align="center">区块大小</td>
+<td align="center">用字节表示的该字段之后的区块大小</td>
+</tr>
+<tr>
+<td align="center">Blockheader</td>
+<td align="center">80</td>
+<td align="center">区块头</td>
+<td align="center">组成区块头的几个字段</td>
+</tr>
+<tr>
+<td align="center">Transaction counter</td>
+<td align="center">1-9</td>
+<td align="center">交易计数器</td>
+<td align="center">该区块包含的交易数量，包含coinbase交易</td>
+</tr>
+<tr>
+<td align="center">Transactions</td>
+<td align="center">不定</td>
+<td align="center">交易</td>
+<td align="center">记录在区块里的交易信息，使用原生的交易信息格式，并且交易在数据流中的位置必须与Merkle树的叶子节点顺序一致</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<p>而SPV节点值保存其中的区块头，按照Mastering BitCoin的说法，只保存区块头，可以使的区块大小缩减到完整节点的1/1000以下。</p>
+<p>回顾之后开始确认，如何进行SPV</p>
+<blockquote>
+<p>SPV 节点则不能验证 UTXO 是否还未被支付。相反地，SPV 节点会在该交易信息和它所在区块 之间用 merkle 路径建立一条链接。然后 SPV 节点一直等 待，直到序号从 300,001 到 300,006 的六个区块堆叠在该交易所在的区块之上， 并通过确立交易的深度是在第 300,006 区块~第 300,001 区块之下来验证交易的有 效性。</p>
+</blockquote>
+<p>SPV的主要缺点就是只能验证一个交易是存在的，可以通过markle路径来验证，但是它无法验证一个交易是不存在的。</p>
+<h4 id="什么是Merkle-Tree"><a href="#什么是Merkle-Tree" class="headerlink" title="什么是Merkle Tree"></a>什么是Merkle Tree</h4><p>在此之前，先解释下上一节中提到的，“通过merkle 路径去验证”。那这个和markel tree有关的信息保存在哪？</p>
+<p>答案：保存在区块头中。</p>
+<p>区块头中有以下信息</p>
+<ul>
+<li>Version</li>
+<li>Previous Block Hash</li>
+<li>Merkle Root</li>
+<li>Timestamp</li>
+<li>Difficulty Target</li>
+<li>Nonce</li>
+</ul>
+<p>解释其中几个概念</p>
+<p>区块链，顾名思义就是像链表一样的结构，所以这个Previous Block Hash指向前置区块的Hash，也就是指向父区块</p>
+<p>Nonce属于挖矿的知识，可以自行查阅一下。（也叫随机数，是挖矿过程中控工暴力破解出来的随机数）</p>
+<p>这里的Merkle Root就是构建Merkle Tree验证路径的关键因素。Merkle Tree是一个二叉树数据结构，不过多解释二叉树。Merkle Tree是在二叉树基础上添加了Hash，所以说这是一种哈希二叉树。</p>
+<blockquote>
+<p>在比特币网络中，Merkle 树被用来归纳一个区块中的所有交易，同时生成整个交 易集合的数字指纹，且提供了一种校验区块是否存在某交易的高效途径。生成一 棵完整的 Merkle 树需要递归地对哈希节点对进行哈希，并将新生成的哈希节点插 入到 Merkle 树中，直到只剩一个哈希节点，该节点就是 Merkle 树的根。在比特 币的 Merkle 树中两次使用到了 SHA256 算法，因此其加密哈希算法也被称为 double-SHA256。</p>
+</blockquote>
+<p>值得注意的是，具体的交易信息hash,都是储存在markle Tree的叶子节点上的，通过两两归并向上，直到归结成一个merkle root。(如果是奇数个节点，则最后一个节点的hash再复制一份，形成偶数节点。)所以一个merkle root就包含了区块中所有交易的信息。需要强调的另外一点是，哪怕是区块中有数万个交易最后求解出来的merkle root也只有32个字节。验证节点（也就是交易存在）的方法就是从root到子节点的搜索过程。</p>
+<p><img src="https://s2.ax1x.com/2019/08/06/eWvszT.md.jpg" alt="eWvszT.md.jpg"></p>
+<p>以上述构建的merkle树为例描述这个验证过程（这是个人理解的算法）</p>
+<blockquote>
+<p>假定需要验证的交易是HK</p>
+<p>SPV向一个Full Node发送 Block信息和 TXID，查询这笔Txid是否存在在这个Txid里面，Full Node根据Block.Hash值，先找到这个Block，然后遍历Block的Transactions数组(这一点请参考之前的Transactions的解释)，可以理解为遍历Transaction.Txid是否一样，如果没有，就直接返回SPV交易不存在，如果有的话，那么就要根据上图的信息，传输HL、HIJ、HMNOP 和 HABCDEFGH的值</p>
+</blockquote>
+<p>所以在难度为logn的状态下验证了交易存在。</p>
+<h4 id="相关概念Bloom"><a href="#相关概念Bloom" class="headerlink" title="相关概念Bloom."></a>相关概念Bloom.</h4><p>下一篇文章介绍相关概念，布隆过滤器。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/区块链/" rel="tag"># 区块链</a>
+          
+            <a href="/tags/SPV/" rel="tag"># SPV</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/48274/" rel="next" title="跨域问题">
+                <i class="fa fa-chevron-left"></i> 跨域问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/62625/" rel="prev" title="比特币交易过程一">
+                比特币交易过程一 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/uploads/avatar.jpg" alt="TigerInYourDream">
+            
+              <p class="site-author-name" itemprop="name">TigerInYourDream</p>
+              <p class="site-description motion-element" itemprop="description">每一篇文章都是一种进步，每一句感慨都是一次思考</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#SPV是什么"><span class="nav-number">1.</span> <span class="nav-text">SPV是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#何为SPV"><span class="nav-number">1.1.</span> <span class="nav-text">何为SPV</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SPV的认证方式"><span class="nav-number">1.2.</span> <span class="nav-text">SPV的认证方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#什么是Merkle-Tree"><span class="nav-number">1.3.</span> <span class="nav-text">什么是Merkle Tree</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#相关概念Bloom"><span class="nav-number">1.4.</span> <span class="nav-text">相关概念Bloom.</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TigerInYourDream</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>
