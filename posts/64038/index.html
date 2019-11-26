@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Rust,数据溢出,">
+  <meta name="keywords" content="rust,">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="在4个多月之前，也就是19年的7月份。在大佬的推荐下，有幸拿到了今日头条的面试机会。在漫长的面试过程中，头条的面试官态度热情，问的问题兼具广度和深度。再很多问题回答的一塌糊涂的条件下，也让我面试了长达五小时。特别的最后的面试官，态度友好且诚恳，对我的诸多不足之处提出委婉的建议。有这样的面试体验是非常棒让我获益良多，在此表达我的感谢之情。不过本篇文章不是讲述面试经验或者体会的，是讲面试中被反复提到的">
-<meta name="keywords" content="Rust,数据溢出">
+<meta name="description" content="在rust中，我们可以很方便的用Derive给结构体实现Debug宏（是编译器自动实现的），但是编译器给数组实现的Debug只有长度在32以下的，要是超过32位就得自己实现了。所以出现了本文的问题 如何给过长数组手动实现Debug Trait。一番尝试之后，发现可以这样 12345678910111213141516use std::fmt;struct Array&amp;lt;T&amp;gt; &amp;#123;">
+<meta name="keywords" content="rust">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Rust关于数据溢出安全">
-<meta property="og:url" content="https://imzy.vip/posts/36864/index.html">
+<meta property="og:title" content="如何给过长数组实现Debug">
+<meta property="og:url" content="https://imzy.vip/posts/64038/index.html">
 <meta property="og:site_name" content="TID&#39;s Blog">
-<meta property="og:description" content="在4个多月之前，也就是19年的7月份。在大佬的推荐下，有幸拿到了今日头条的面试机会。在漫长的面试过程中，头条的面试官态度热情，问的问题兼具广度和深度。再很多问题回答的一塌糊涂的条件下，也让我面试了长达五小时。特别的最后的面试官，态度友好且诚恳，对我的诸多不足之处提出委婉的建议。有这样的面试体验是非常棒让我获益良多，在此表达我的感谢之情。不过本篇文章不是讲述面试经验或者体会的，是讲面试中被反复提到的">
+<meta property="og:description" content="在rust中，我们可以很方便的用Derive给结构体实现Debug宏（是编译器自动实现的），但是编译器给数组实现的Debug只有长度在32以下的，要是超过32位就得自己实现了。所以出现了本文的问题 如何给过长数组手动实现Debug Trait。一番尝试之后，发现可以这样 12345678910111213141516use std::fmt;struct Array&amp;lt;T&amp;gt; &amp;#123;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-18T08:22:28.001Z">
+<meta property="og:updated_time" content="2019-11-26T10:42:02.112Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Rust关于数据溢出安全">
-<meta name="twitter:description" content="在4个多月之前，也就是19年的7月份。在大佬的推荐下，有幸拿到了今日头条的面试机会。在漫长的面试过程中，头条的面试官态度热情，问的问题兼具广度和深度。再很多问题回答的一塌糊涂的条件下，也让我面试了长达五小时。特别的最后的面试官，态度友好且诚恳，对我的诸多不足之处提出委婉的建议。有这样的面试体验是非常棒让我获益良多，在此表达我的感谢之情。不过本篇文章不是讲述面试经验或者体会的，是讲面试中被反复提到的">
+<meta name="twitter:title" content="如何给过长数组实现Debug">
+<meta name="twitter:description" content="在rust中，我们可以很方便的用Derive给结构体实现Debug宏（是编译器自动实现的），但是编译器给数组实现的Debug只有长度在32以下的，要是超过32位就得自己实现了。所以出现了本文的问题 如何给过长数组手动实现Debug Trait。一番尝试之后，发现可以这样 12345678910111213141516use std::fmt;struct Array&amp;lt;T&amp;gt; &amp;#123;">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="https://imzy.vip/posts/36864/">
+  <link rel="canonical" href="https://imzy.vip/posts/64038/">
 
 
 
 
 
-  <title>Rust关于数据溢出安全 | TID's Blog</title>
+  <title>如何给过长数组实现Debug | TID's Blog</title>
   
 
 
@@ -263,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/36864/">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/64038/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TigerInYourDream">
@@ -280,7 +280,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Rust关于数据溢出安全</h1>
+          <h1 class="post-title" itemprop="name headline">如何给过长数组实现Debug</h1>
         
 
         <div class="post-meta">
@@ -292,8 +292,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-18T15:44:09+08:00">
-                2019-11-18
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-26T18:34:18+08:00">
+                2019-11-26
               </time>
             
 
@@ -352,30 +352,11 @@
       
 
       
-        <p>在4个多月之前，也就是19年的7月份。在大佬的推荐下，有幸拿到了今日头条的面试机会。在漫长的面试过程中，头条的面试官态度热情，问的问题兼具广度和深度。再很多问题回答的一塌糊涂的条件下，也让我面试了长达五小时。特别的最后的面试官，态度友好且诚恳，对我的诸多不足之处提出委婉的建议。有这样的面试体验是非常棒让我获益良多，在此表达我的感谢之情。不过本篇文章不是讲述面试经验或者体会的，是讲面试中被反复提到的问题：</p>
-<p><strong>Rust数据计算溢出怎么办？</strong></p>
-<p>因为面试的是cpp/rust相关的岗位，面试官提出这个问题之后我是很懵的。以为之前完全没考虑过这个问题。Rust号称安全，那么他是如何处理这个问题的呢。当时我的回答是：换用更大的数据类型。其实当时这个回答说出口，就觉得完全不对，毕竟int32之上还有int64，无论用多大的数据类型，计算依旧可能溢出。</p>
-<p>我想今天我可以很好的回答这个问题。在c语言中，无符号整数完全不会溢出（overflow）,因为数据一旦超过上限，则自动舍弃高位数据。对于有符号数，一旦超过上限，则标准这是ub。Rust号称安全，从设计上就要尽可能的避免ub，对于数据溢出，也算是语言必须面对的bug。rust处理这个bug分为以下两种情况（默认情况，先不谈编译参数的调整）</p>
-<ol>
-<li>debug模式下，编译器会自动插入溢出检查，一旦overflow则立即panic。</li>
-<li>release模式下，编译器不进行溢出检查，一旦overflow则舍弃高位</li>
-</ol>
-<p>如果我们在编译时调整编译参数</p>
-<blockquote>
-<p><code>rustc -C overflow-checks=no</code></p>
-</blockquote>
-<p>overflow-checks=yes 或者 no，可以打开或关闭编译器的溢出检查。这样的话，无论是debug还是release模式都可以有统一的溢出检查设置。</p>
-<p>当然，我们需要的不仅仅是这个，如果需要更细力度的溢出处理，我们可以使用以下函数</p>
-<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">check_*</span><br><span class="line">saturating_*</span><br><span class="line">warpping_*</span><br></pre></td></tr></table></figure>
+        <p>在rust中，我们可以很方便的用Derive给结构体实现Debug宏（是编译器自动实现的），但是编译器给数组实现的Debug只有长度在32以下的，要是超过32位就得自己实现了。所以出现了本文的问题</p>
+<h4 id="如何给过长数组手动实现Debug-Trait。"><a href="#如何给过长数组手动实现Debug-Trait。" class="headerlink" title="如何给过长数组手动实现Debug Trait。"></a>如何给过长数组手动实现Debug Trait。</h4><p>一番尝试之后，发现可以这样</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> std::fmt;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Array</span></span>&lt;T&gt; &#123;</span><br><span class="line">    data: [T; <span class="number">1024</span>]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span>&lt;T: fmt::<span class="built_in">Debug</span>&gt; fmt::<span class="built_in">Debug</span> <span class="keyword">for</span> Array&lt;T&gt; &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fn</span> <span class="title">fmt</span></span>(&amp;<span class="keyword">self</span>, formatter: &amp;<span class="keyword">mut</span> fmt::Formatter) -&gt; fmt::<span class="built_in">Result</span> &#123;</span><br><span class="line">        <span class="keyword">self</span>.data[..].fmt(formatter)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> array = Array &#123; data: [<span class="number">0u8</span>; <span class="number">1024</span>] &#125;;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">"&#123;:?&#125;"</span>, array);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>查阅API文档可知</p>
-<ol>
-<li>check_*函数返回Option，一旦发生溢出则返回None</li>
-<li>saturating_*系列函数返回类型是整数，如果溢出，则给出该类型可表示范围的“最大/最小”值</li>
-<li>wrapping_*系列函数则是直接抛弃已经溢出的最高位，将剩下的部分返回</li>
-</ol>
-<p>如果你再进一步仔细查阅Rust源码，发现源码中大量的数据运算都采用这三个函数。当然了，如果你不使用这三类函数，你还可以使用std::num::Warping<t>的类型，他重载了基本运算符。溢出直接截断。这类包裹的用法，不受编译器溢出参数的影响，永远直接截断高位，不会panic.</t></p>
-<p>以上方法就是rust处理溢出的所有情况。</p>
+<p>注意：如果直接考虑给[T; 1024]实现Debug是不行的，因为违反了孤儿规则。Debug Tarit和[T;1204]都没有在本crate中定义。</p>
 
       
     </div>
@@ -393,9 +374,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Rust/" rel="tag"># Rust</a>
-          
-            <a href="/tags/数据溢出/" rel="tag"># 数据溢出</a>
+            <a href="/tags/rust/" rel="tag"># rust</a>
           
         </div>
       
@@ -408,8 +387,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/posts/46484/" rel="next" title="构建离线交易">
-                <i class="fa fa-chevron-left"></i> 构建离线交易
+              <a href="/posts/51833/" rel="next" title="周报，软件构建和职业发展">
+                <i class="fa fa-chevron-left"></i> 周报，软件构建和职业发展
               </a>
             
           </div>
@@ -417,10 +396,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/posts/51833/" rel="prev" title="周报，软件构建和职业发展">
-                周报，软件构建和职业发展 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -472,8 +447,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -535,6 +519,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#如何给过长数组手动实现Debug-Trait。"><span class="nav-number">1.</span> <span class="nav-text">如何给过长数组手动实现Debug Trait。</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
