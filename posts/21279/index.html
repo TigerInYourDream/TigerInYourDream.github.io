@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="感悟,">
+  <meta name="keywords" content="rust,问题经验,">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="混沌初开，第一篇博客。之前在另一个GitHub账号上也创建了Hexo的Blog,现在新开了Blog账号，开启新的旅程。敬请期待">
-<meta name="keywords" content="感悟">
+<meta name="description" content="记录一次烦人的编译问题，因为这个过程可以能可能会对以后解决类似问题有一定的参考性，特地做个记录。 我想做什么我之所以要做这个，是因为我想借用murmel库，在murmel基础上拓展功能。其中murmel的消息类型定义在rust-bitcoin库中。为了拓展功能，我准备先fork rust-bitcoin魔改rust-bitcoin，加我想要的消息。然后fork murmel，魔改murmel外带让">
+<meta name="keywords" content="rust,问题经验">
 <meta property="og:type" content="article">
-<meta property="og:title" content="初见博客">
-<meta property="og:url" content="https://imzy.vip/posts/39190/index.html">
+<meta property="og:title" content="记录一次烦人的编译出错问题">
+<meta property="og:url" content="https://imzy.vip/posts/21279/index.html">
 <meta property="og:site_name" content="TID&#39;s Blog">
-<meta property="og:description" content="混沌初开，第一篇博客。之前在另一个GitHub账号上也创建了Hexo的Blog,现在新开了Blog账号，开启新的旅程。敬请期待">
+<meta property="og:description" content="记录一次烦人的编译问题，因为这个过程可以能可能会对以后解决类似问题有一定的参考性，特地做个记录。 我想做什么我之所以要做这个，是因为我想借用murmel库，在murmel基础上拓展功能。其中murmel的消息类型定义在rust-bitcoin库中。为了拓展功能，我准备先fork rust-bitcoin魔改rust-bitcoin，加我想要的消息。然后fork murmel，魔改murmel外带让">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-05T06:11:31.318Z">
+<meta property="og:updated_time" content="2019-12-24T09:41:56.255Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="初见博客">
-<meta name="twitter:description" content="混沌初开，第一篇博客。之前在另一个GitHub账号上也创建了Hexo的Blog,现在新开了Blog账号，开启新的旅程。敬请期待">
+<meta name="twitter:title" content="记录一次烦人的编译出错问题">
+<meta name="twitter:description" content="记录一次烦人的编译问题，因为这个过程可以能可能会对以后解决类似问题有一定的参考性，特地做个记录。 我想做什么我之所以要做这个，是因为我想借用murmel库，在murmel基础上拓展功能。其中murmel的消息类型定义在rust-bitcoin库中。为了拓展功能，我准备先fork rust-bitcoin魔改rust-bitcoin，加我想要的消息。然后fork murmel，魔改murmel外带让">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="https://imzy.vip/posts/39190/">
+  <link rel="canonical" href="https://imzy.vip/posts/21279/">
 
 
 
 
 
-  <title>初见博客 | TID's Blog</title>
+  <title>记录一次烦人的编译出错问题 | TID's Blog</title>
   
 
 
@@ -263,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/39190/">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/21279/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TigerInYourDream">
@@ -280,7 +280,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">初见博客</h1>
+          <h1 class="post-title" itemprop="name headline">记录一次烦人的编译出错问题</h1>
         
 
         <div class="post-meta">
@@ -292,8 +292,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-24T23:03:59+08:00">
-                2019-03-24
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-23T18:08:35+08:00">
+                2019-12-23
               </time>
             
 
@@ -315,8 +315,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/感悟/" itemprop="url" rel="index">
-                    <span itemprop="name">感悟</span>
+                  <a href="/categories/技术笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">技术笔记</span>
                   </a>
                 </span>
 
@@ -352,7 +352,51 @@
       
 
       
-        <p>混沌初开，第一篇博客。之前在另一个GitHub账号上也创建了Hexo的Blog,现在新开了Blog账号，开启新的旅程。敬请期待</p>
+        <p>记录一次烦人的编译问题，因为这个过程可以能可能会对以后解决类似问题有一定的参考性，特地做个记录。</p>
+<h2 id="我想做什么"><a href="#我想做什么" class="headerlink" title="我想做什么"></a>我想做什么</h2><p>我之所以要做这个，是因为我想借用murmel库，在murmel基础上拓展功能。其中murmel的消息类型定义在rust-bitcoin库中。为了拓展功能，我准备先fork rust-bitcoin魔改rust-bitcoin，加我想要的消息。然后fork murmel，魔改murmel外带让murmel依赖我修改过的rust-bitcoin。</p>
+<p>听起来有点像把大象放冰箱需要几步。是的，我先改rust-bitcoin(这个库是序列化比特币消息的)，然后我修改murmel，让他依赖改过的rust-bitcoin。最后我得到一个可以用的SPV节点。完工！</p>
+<h2 id="我遇到了什么问题"><a href="#我遇到了什么问题" class="headerlink" title="我遇到了什么问题"></a>我遇到了什么问题</h2><p>先魔改rust-bitcoin。这个很顺利。然后fork了murmel，然后编译不过。此处应该有编译错误（但我不想列出来），总体意思是说有的类型 Hash 没有实现serde的部分trait。</p>
+<h2 id="我的折腾过程"><a href="#我的折腾过程" class="headerlink" title="我的折腾过程"></a>我的折腾过程</h2><p>这个问题很奇怪，我之前git clone的版本是可以编译的，而且看提交记录这个项目这几个月并没有更新。然后编译之前备份的版本，可以编译。clone的新版本编译，又失败。那先对比下Cargo.lock文件。使用Beyond Compare对比。发现两份文件的真的不一样。问题来了，代码一样，一个可以编译一个不可以。所以先替换了lock，发现了一个事实：用之前可以编译版本的lock文件就可以正常编译，如果删出lock文件之后自动生成则无法编译。</p>
+<p>然后开始回退版本，因为之前可以编译。猜想是版本问题，使用git log 查看版本。神奇的情况出现了，一个一个rev回退之后竟然都不可以编译。一般来说回退版本之后基本是可以找到可以编译版本的。然后查看Tag，发现只有两个Tag，直接切换到对应的Tag上竟然也不可以编译。算了，那直接去下载github上的release版本。发现还是不可以编译…</p>
+<p>经过之前的折腾，完全不知所措。本来想的是一个版本一个版本的回退，找到一个可以编译的版本，然后查看他依赖的哪个版本的rust-bitcoin，然后把这个rust-bitcoin改成本地依赖。现在发现都不可以编译…没办法需要阅读《Cargo Book》看看有没有解决办法。毕竟他之前是可以编译的。<strong>看了一夜</strong>《Cargo Book》之后发现事实：</p>
+<ol>
+<li>Cargo.toml文件中version的依赖方式是依托于cartes.io的，并不是依赖github。</li>
+<li>上传到crates.io的包一定是可以编译的。</li>
+</ol>
+<p>基于以上两点，那可以考虑从crates.io上clone一个包下来进行编译。需要安装一个第三方包cargo clone。使用cargo clone拉一个murmel。发现可以编译。OK，现在问题解决一大半了。crates.io上的版本是一定可以编译的。然后再使用另一个第三方的包cargo tree去分析下可以编译版本的murmel的依赖关系。<strong>注意：这个cargo tree是依赖lock文件分析依赖关系的</strong>，必须在一个真正的项目下下去运行，加入在work-space的目录下是无法分析的。可以看到出对应的rust-bitcoin版本。接下来直接使用cargo clone去拉可以编译版本的rust-bitcoin。下载下来之后尝试下是否可以直接编译。发现rust-bitcoin直接编译没有问题。然后把murmel中的依赖指向我们可以编译的rust-bitcoin。<strong>注意：murmel和rust-bitcoin必须在同一个大的cargo项目下。</strong>否则编译murmel的时候找不到rust-bitcoin。可以使用work-space的方式去组织项目。遗憾的是这么做竟然还不行。</p>
+<p>emmm，到这里快放弃了。不过别慌，再看看《Cargo Book》。还好，cargo book 上还有一个解决办法那就是使用Cargo.Patch。</p>
+<p><a href="https://doc.rust-lang.org/edition-guide/rust-2018/cargo-and-crates-io/replacing-dependencies-with-patch.html" target="_blank" rel="noopener">https://doc.rust-lang.org/edition-guide/rust-2018/cargo-and-crates-io/replacing-dependencies-with-patch.html</a></p>
+<p><a href="https://learnku.com/docs/cargo-book/2018/specifying-dependencies/4773" target="_blank" rel="noopener">https://learnku.com/docs/cargo-book/2018/specifying-dependencies/4773</a></p>
+<p>两份资料一起看。我们直接使用patch。然后又出现问题了……原来我们的项目是一个workspace下面有两个平行的项目murmel 和 rust-bitcoin。patch不能这么做。ok那调整文件结构。<strong>把rust-bitcoin调整到murmel文件夹中，和murmel的Cargo.toml一级。</strong>然后在Cargo.toml在使用如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[dependencies.bitcoin]</span><br><span class="line">version = &quot;0.21&quot;</span><br><span class="line">features = [&quot;serde&quot;]</span><br><span class="line"></span><br><span class="line">[patch.crates-io]</span><br><span class="line">bitcoin = &#123; path = &quot;bitcoin&quot; &#125;</span><br></pre></td></tr></table></figure>
+
+<p>patch这一行是新添加的。path代表路径，从crates.io上下下来的rust-bitcoin文件夹名称为“bitcoin”。</p>
+<p>编译通过。</p>
+<p>然后murmel和rust-bitcoin都在本地了。想改哪个该哪个。完工。</p>
+<p>最后，还有改进余地。把修改过rust-bitcoin上传到github，然后在patch中依赖{git=”xxxxx.git”，rev = “xxxxx”}。更适合代码管理，不用依赖本地了。我因为要频繁修改代码，所以先不依赖github上的版本。</p>
+<p>总结知识点</p>
+<blockquote>
+<p>Cargo中依赖方式有三种</p>
+<ol>
+<li>依赖本地</li>
+<li>依赖git {git = “xxx”, rev = “xxxx”}</li>
+<li>依赖crates.io上的包。</li>
+</ol>
+</blockquote>
+<p>最终解决的办法是</p>
+<blockquote>
+<ol>
+<li>安装Cargo tree 和 Cargo Clone</li>
+<li>从crates上clone一个可以编译的murmel</li>
+<li>使用cargo tree看依赖关系。（其实直接看Cargo.toml也可以看出来，问题在于看起来都没差别但是就是编译不过，以前的备份又确实可以编译过）</li>
+<li>使用cargo clone提取能编译版本的rust-bitcoin</li>
+<li>把murmel依赖的能编译的版本的rust-bitcoin放倒murmel目录下</li>
+<li>使用cargo patch打补丁，使murmel依赖的rust-bitcoin指向本地。</li>
+<li>编译通过了，现在murmel和rust-bitcoin都在本地，可以自由更改了。</li>
+<li>可以把自己改过的rust-bitcoin上传到github。Patch指向github从版本管理角度更好点。</li>
+</ol>
+</blockquote>
+<p>穷举法解决问题。要是还不行，那我真没办法了。</p>
 
       
     </div>
@@ -370,7 +414,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/感悟/" rel="tag"># 感悟</a>
+            <a href="/tags/rust/" rel="tag"># rust</a>
+          
+            <a href="/tags/问题经验/" rel="tag"># 问题经验</a>
           
         </div>
       
@@ -383,15 +429,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/posts/2926/" rel="next" title="SPV节点获取merkerblock数据">
+                <i class="fa fa-chevron-left"></i> SPV节点获取merkerblock数据
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/posts/31755/" rel="prev" title="Mac上安装和使用PostgreSQL的方法">
-                Mac上安装和使用PostgreSQL的方法 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -443,8 +489,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -506,6 +561,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#我想做什么"><span class="nav-number">1.</span> <span class="nav-text">我想做什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#我遇到了什么问题"><span class="nav-number">2.</span> <span class="nav-text">我遇到了什么问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#我的折腾过程"><span class="nav-number">3.</span> <span class="nav-text">我的折腾过程</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
