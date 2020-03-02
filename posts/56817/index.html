@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="前端,网络,">
+  <meta name="keywords" content="SPV钱包,系列文章,交易,">
 
 
 
@@ -79,18 +79,20 @@
 
 
 
-<meta name="description" content="​        之前一段时间，阅读了计算机网络，对于每个章节都做了一个相应的思维导图来描绘计算机网络的七层模型(或者说5层模型)，现在写一篇简答的博文来来回答一个简单的问题：当我们浏览网页的过程中发生了什么？一个典型的浏览的过程是什么呢？简单的感受就是，在浏览器的地址栏输入网址，比如www.imzy.vip ,然后呈现的出该网站的界面。当然访问每一个网页，抽象出来的过程都是一致的主要简单划分为以">
-<meta name="keywords" content="前端,网络">
+<meta name="description" content="从零构建一个SPV钱包其一开篇这是如何从零开始构建一个SPV钱包的开篇文章的第一篇，按照行文习惯，先列出系列文章的目的：  构建一个SPV钱包，确切的说是一个BTC的SPV钱包  在区块链世界中，去中心化一直是核心话题，实际上市面上很多钱包是有后端的，或者说有后端支援。出于种种目的，他们的钱包并非完全去中心化。但是BIP37给比特币提供了一个去中心的提案。本文的全部方案均起源于BIP37  htt">
+<meta name="keywords" content="SPV钱包,系列文章,交易">
 <meta property="og:type" content="article">
-<meta property="og:title" content="浏览网页时,发生了什么">
-<meta property="og:url" content="https://imzy.vip/posts/36226/index.html">
+<meta property="og:title" content="从零构建一个SPV钱包其一">
+<meta property="og:url" content="https://imzy.vip/posts/56817/index.html">
 <meta property="og:site_name" content="TID&#39;s Blog">
-<meta property="og:description" content="​        之前一段时间，阅读了计算机网络，对于每个章节都做了一个相应的思维导图来描绘计算机网络的七层模型(或者说5层模型)，现在写一篇简答的博文来来回答一个简单的问题：当我们浏览网页的过程中发生了什么？一个典型的浏览的过程是什么呢？简单的感受就是，在浏览器的地址栏输入网址，比如www.imzy.vip ,然后呈现的出该网站的界面。当然访问每一个网页，抽象出来的过程都是一致的主要简单划分为以">
+<meta property="og:description" content="从零构建一个SPV钱包其一开篇这是如何从零开始构建一个SPV钱包的开篇文章的第一篇，按照行文习惯，先列出系列文章的目的：  构建一个SPV钱包，确切的说是一个BTC的SPV钱包  在区块链世界中，去中心化一直是核心话题，实际上市面上很多钱包是有后端的，或者说有后端支援。出于种种目的，他们的钱包并非完全去中心化。但是BIP37给比特币提供了一个去中心的提案。本文的全部方案均起源于BIP37  htt">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-05T06:11:31.323Z">
+<meta property="og:image" content="https://s2.ax1x.com/2020/03/03/3fGrVg.md.jpg">
+<meta property="og:updated_time" content="2020-03-02T16:23:39.222Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="浏览网页时,发生了什么">
-<meta name="twitter:description" content="​        之前一段时间，阅读了计算机网络，对于每个章节都做了一个相应的思维导图来描绘计算机网络的七层模型(或者说5层模型)，现在写一篇简答的博文来来回答一个简单的问题：当我们浏览网页的过程中发生了什么？一个典型的浏览的过程是什么呢？简单的感受就是，在浏览器的地址栏输入网址，比如www.imzy.vip ,然后呈现的出该网站的界面。当然访问每一个网页，抽象出来的过程都是一致的主要简单划分为以">
+<meta name="twitter:title" content="从零构建一个SPV钱包其一">
+<meta name="twitter:description" content="从零构建一个SPV钱包其一开篇这是如何从零开始构建一个SPV钱包的开篇文章的第一篇，按照行文习惯，先列出系列文章的目的：  构建一个SPV钱包，确切的说是一个BTC的SPV钱包  在区块链世界中，去中心化一直是核心话题，实际上市面上很多钱包是有后端的，或者说有后端支援。出于种种目的，他们的钱包并非完全去中心化。但是BIP37给比特币提供了一个去中心的提案。本文的全部方案均起源于BIP37  htt">
+<meta name="twitter:image" content="https://s2.ax1x.com/2020/03/03/3fGrVg.md.jpg">
 
 
 
@@ -120,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="https://imzy.vip/posts/36226/">
+  <link rel="canonical" href="https://imzy.vip/posts/56817/">
 
 
 
 
 
-  <title>浏览网页时,发生了什么 | TID's Blog</title>
+  <title>从零构建一个SPV钱包其一 | TID's Blog</title>
   
 
 
@@ -263,7 +265,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/36226/">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/56817/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="TigerInYourDream">
@@ -280,7 +282,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">浏览网页时,发生了什么</h1>
+          <h1 class="post-title" itemprop="name headline">从零构建一个SPV钱包其一</h1>
         
 
         <div class="post-meta">
@@ -292,8 +294,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-11T16:03:41+08:00">
-                2019-05-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-03T00:20:49+08:00">
+                2020-03-03
               </time>
             
 
@@ -315,8 +317,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术/" itemprop="url" rel="index">
-                    <span itemprop="name">技术</span>
+                  <a href="/categories/技术文章/" itemprop="url" rel="index">
+                    <span itemprop="name">技术文章</span>
                   </a>
                 </span>
 
@@ -352,36 +354,53 @@
       
 
       
-        <p>​        之前一段时间，阅读了计算机网络，对于每个章节都做了一个相应的思维导图来描绘计算机网络的七层模型(或者说5层模型)，现在写一篇简答的博文来来回答一个简单的问题：当我们浏览网页的过程中发生了什么？<br>一个典型的浏览的过程是什么呢？简单的感受就是，在浏览器的地址栏输入网址，比如<a href="http://www.imzy.vip" target="_blank" rel="noopener">www.imzy.vip</a> ,然后呈现的出该网站的界面。当然访问每一个网页，抽象出来的过程都是一致的主要简单划分为以下几个过程。</p>
-<h4 id="网址和协议"><a href="#网址和协议" class="headerlink" title="网址和协议"></a>网址和协议</h4><p>​        在浏览器界面上的地址栏输入的东西，比如<a href="http://www.imzy.vip，整个地址就叫做网址，网址的构成如下" target="_blank" rel="noopener">http://www.imzy.vip，整个地址就叫做网址，网址的构成如下</a></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">协议:<span class="comment">//域名::端口号/资源地址</span></span><br></pre></td></tr></table></figure>
-
-<p>形如http的部分就是协议名称，http协议被称为超文本传输协议，对应的还有file协议，如果用浏览器打开本地计算机上的对应文件，html之类的就会用到file协议。另外一种常见的协议就是ftp协议，在http协议之前，ftp是网络时间上最常见的协议，用于文件的传输。</p>
-<p>端口号是指::8080这种形式，其中http默认的端口号是80，这种默认的端口号可以不用填写。</p>
-<p>之后用斜杠跟着的是资源位置，不再赘述。</p>
-<h4 id="DNS的解析"><a href="#DNS的解析" class="headerlink" title="DNS的解析"></a>DNS的解析</h4><p>浏览器中输入的域名经过寻址，才能找到指定的服务器，但是服务器的地址是ip地址，形如xx.xx.xx.xx  这里的xx指的10进制的数字。这种是典型的ipv4地址。从域名<a href="http://www.imzy.vip" target="_blank" rel="noopener">www.imzy.vip</a> 到xx.xx.xx.xx的转换就称之为域名的解析。域名的解析，简单来说就是需要域名解析服务来解析，根据网络建设的架构，全球分布着数台顶级域名解析器。需要注意的是，域名用点分发记录，越高级的域名排在最后。比如我的域名vip是顶级域名，常见的顶级域名还有 .cn  .com .org .gov等。详细的知识可以参考谢希成的计算机网络一书，截止目前这本书已经发布了第七版。堪称与时俱进。</p>
-<p>DNS的解析是按顺序的，不是所有的网络请求都直接去顶级域名服务器申请解析的，主要的解析按照以下顺序进行</p>
+        <h1 id="从零构建一个SPV钱包其一"><a href="#从零构建一个SPV钱包其一" class="headerlink" title="从零构建一个SPV钱包其一"></a>从零构建一个SPV钱包其一</h1><h3 id="开篇"><a href="#开篇" class="headerlink" title="开篇"></a>开篇</h3><p>这是如何从零开始构建一个SPV钱包的开篇文章的第一篇，按照行文习惯，先列出系列文章的目的：</p>
+<blockquote>
+<p>构建一个SPV钱包，确切的说是一个BTC的SPV钱包</p>
+</blockquote>
+<p>在区块链世界中，<strong>去中心化</strong>一直是核心话题，实际上市面上很多钱包是有后端的，或者说有后端支援。出于种种目的，他们的钱包并非完全去中心化。但是BIP37给比特币提供了一个去中心的提案。本文的全部方案均起源于BIP37</p>
+<blockquote>
+<p><a href="https://github.com/bitcoin/bips/blob/master/bip-0037.mediawiki" target="_blank" rel="noopener">https://github.com/bitcoin/bips/blob/master/bip-0037.mediawiki</a></p>
+</blockquote>
+<p>BIP37是一切的起点，所以阅读本片文章的开端必然需要阅读BIP37。</p>
+<h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><p>在正式开始之前，还需要预先的准备知识。因为不是知识普及型的文章，所以不准备介绍基本概念。但是需要提供的基本的知识会提到</p>
+<h4 id="首先会搭建BTC节点"><a href="#首先会搭建BTC节点" class="headerlink" title="首先会搭建BTC节点"></a>首先会搭建BTC节点</h4><p>关于如何搭建btc节点的文章很多，不列出。本文中使用过的节点版本为v0.18，其他稳定版本均可。使用环境为乌班图。一切以可以稳定运行比特币节点为主。它属于基础准备知识，并非重点。关于如何配置节点，可参考我的博文</p>
+<p><a href="https://imzy.vip/posts/55622/">比特币客户端设置</a></p>
+<p><a href="https://imzy.vip/posts/42988/">比特币节点远程访问</a></p>
+<p>搭建节点之后，再按照以上文章的内容，达到的的目标是配置的<strong>比特币节点可以在远端访问</strong>。当然这并不是强制目的，我只是希望开发和运行比特币节点不是在一台机器上。只要搭建的比特币节点可以支持rpc访问即可。</p>
+<h4 id="理解比特币如何交易"><a href="#理解比特币如何交易" class="headerlink" title="理解比特币如何交易"></a>理解比特币如何交易</h4><p><strong>交易</strong>是区块链系统的核心。在搭建一个比特币节点就是为了可以在这个节点上利用rpc发起交易，让读者理解比特币交易的具体形式（确切的说是构建裸交易的具体形式）。关于如何构建交易可以参考我的博文</p>
+<p><a href="https://imzy.vip/posts/36076/">比特币交易的基本问题</a></p>
+<p><a href="https://imzy.vip/posts/60903/">使用比特币节点进行交易</a></p>
+<p>读了以上两篇博文之后，基本可以理解如何进行比特币裸交易的构建，在以下还是特意列出核心步骤</p>
+<blockquote>
 <ol>
-<li>浏览器缓存</li>
-<li>系统(指计算机操作系统OS)的HOST</li>
-<li>路由器(按照计算机网络一书，路由器也算是网络世界中的计算机，不过他承担的任务特殊罢了)</li>
-<li>ISP服务商，既提供给你网络服务的电信服务商的缓存，比如中国电信提供的DNS解析服务</li>
-<li>根域名服务器</li>
+<li>提取UTXO</li>
+<li>发起交易</li>
+<li>对交易进行签名</li>
+<li>全网广播</li>
 </ol>
-<p>从上到下六个部分都可以进行域名的解析，哪一步能完成就到哪一步进行，域名和ip的转换就在那里进行，不去下一步。这样也减小了域名解析的压力。</p>
-<p>由此产生了两个小问题如下</p>
+</blockquote>
+<p>理解比特币如何交易之后，就知道了如何发起一个基本的交易。基本交易的方式就是按照以上的步骤进行（特指使用本身提供的cli服务或者curl进行访问），如果还需要进一步（定义进一步为使用自己的rpc代码进行交互完成交易），我自己本身也写了一个rpc服务的代码，挂在我的githu上。很简陋，但是可以用。</p>
+<h3 id="准备的原因"><a href="#准备的原因" class="headerlink" title="准备的原因"></a>准备的原因</h3><p>有以上两方面的准备处于这个目的。其一，和比特币有关的东西都需要从搭建节点开始，虽然最后的代码中无需使用我们本地搭建的节点，以DNS探测为主，但这是基础中的基础。其二，使用SPV钱包最终也是要进行交易。我们在最开始的地方就确定最终的目标，防止在复杂的区块链钱包技术细节中迷失自己。为了达到这两个目的，我提到的文章建议阅读，如有其他疑惑也可以参考《精通比特币》一书。我很多对比特币最初的疑惑都在这本书中得到了解答。</p>
+<h3 id="理解基石"><a href="#理解基石" class="headerlink" title="理解基石"></a>理解基石</h3><p>进行以后的步骤之后，是需要明白构建SPV钱包的基石我们实现交易的形式</p>
+<blockquote>
 <ol>
-<li>为什么不直接用ip，减少域名解析的步骤呢？</li>
-<li>DNS劫持指什么</li>
+<li>搭建全节点，利用全节点提供的rpc服务进行交易。也就是准备章节的第二部分所提到的方法</li>
+<li>利用SPV节点，借助SPV节点，利用比特币协议进行交互达到交易的目的。</li>
 </ol>
-<p>关于两个问题的回答如下</p>
-<p>其一，使用域名的解析是为了语义化，所谓的语义化，简单理解就是贴近自然语义，方便人的理解。比如我们访问百度，直接说访问百度，或者说访问<a href="http://www.baidu.com，如果没有域名，直接说访问202.108.22.5。" target="_blank" rel="noopener">www.baidu.com，如果没有域名，直接说访问202.108.22.5。</a> 直接对比一下，那个好记录呢。可以说域名是人记忆力的妥协，毕竟对于人来说，词才是有意义的，数字并无直接意义。对于计算机来说，点分十进制和域名的记录都是一样的。工具为人服务，自然要向人妥协</p>
-<p>其二，DNS劫持。DNS的解析就是拿到域名之后解析成为ip的过程，所谓劫持，就是扰乱这个过程，访问百度域名，给了你一个非百度的ip，用户这边看到地址栏还是百度的域名，背后发生了什么一无所知。DNS劫持是一种后果非常严重的不安全行为，假如你要访问淘宝买东西，但是你的DNS被劫持了，指向了非淘宝的地址。这个过程一想，就会造成非常严重的经济损失。当然，还有其他的损失。一般的DNS劫持都发生在路由器，当然ISP服务商也有可能会劫持DNS。之前闹的沸沸扬扬的小米路由器DNS劫持事件，也是一个非常热门的话题。</p>
-<p>补充一点，我们平时填写的DNS服务器，8.8.8.8 或者 114.114.114.114以及最近比较火的1.1.1.1都是域名解析器的地址。</p>
-<h4 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h4><p>网络请求经过DNS解析，找到对应的服务器ip，通过路由器的层层转发，到达了服务器，算是真正进入了后端控制的部分了。一般把用于web服务的服务器都叫做 Web Server。后文把它简称为WS。WS简单来说就是安装了服务器软件的电脑，常见的Web服务器的操作系统主要是Linux和Windows Server。对应的服务器的软件有Apache，Nginx，IIS，Lighttpd等。这种OS+软件，就称之为WS。WS主要是为了接受请求，或者反向代理到其他的WS。一台WS上可能运行有不同的服务器程序(这个就是程序开发者自己写的)，这些软件也负责吧不同的请求分发到对应的处理程序上去。</p>
-<h4 id="网站的处理流程"><a href="#网站的处理流程" class="headerlink" title="网站的处理流程"></a>网站的处理流程</h4><p>经过长时间的游荡，请求终于到了程序猿自己掌控的时间了。以常用的Ruby on rails为例。我也在之前的博文中写过，如何使用Actix-web来写一个web程序，之前也参考过Ruby on rails。典型的网路处理流程是MVC模式的。这里的Modle指数据部分。V指view，显示层简单来书哦就是html界面。C就是控制层，controller，用来粘合这两个层层面，直白的说就是根据不用的请求从model拿数据，交给view层渲染(view需要数据来渲染)。</p>
-<p>更具体点的过程是这样的，一个请求过来，经过router，分配给对应的controller。controller处理对应的逻辑，从model拿数据，交给view层来生成界面。最后把生成好的界面交给用户。一个题外话，一个合理的架构中，处理逻辑的controller和处理数据的model，应该是独立的。也就是说Data Server应该独立于单独web服务之外。更多对于mvc的理解是基于编程理解的。也不是本文的主要讨论过程。有兴趣的可以去看我用rust写的Actix-web博客，麻雀虽小，但是整个框架是完整的。</p>
-<h4 id="浏览器解析"><a href="#浏览器解析" class="headerlink" title="浏览器解析"></a>浏览器解析</h4><p>服务器处理之后，终于交给用户了。简单来说就是说吧html交给浏览器。浏览器就会解析html和css，生成我们看到的界面。</p>
+</blockquote>
+<p><strong>Rome was not built in a day</strong>理解第一点，更有助于理解第二点。为此我专门绘制了如下的图</p>
+<p><a href="https://imgchr.com/i/3fGrVg" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2020/03/03/3fGrVg.md.jpg" alt="3fGrVg.md.jpg"></a></p>
+<p>以上的图体现了SPV体系的基本关系，对这张图提出一个简要的说明</p>
+<blockquote>
+<p>第一部分是全节点的交易方式，全节点保存全部的交易数据，互相关联且拥有全部数据。是基本的比特币网络和基本交易形式</p>
+<p>第二部分是我们需要关注的，SPV节点需要如何构建交易。为了清楚的说明问题，特地把wallet和spv且分开，其实我们要开发的钱包为了达到去中心化交易的目的，这两个部分是不可分割的。wallet链接一个SPV节点，SPV节点也通过p2p网络接入比特币网络。特别强调：SPV节点也需要和全节点相互链接才可以发挥正常的功能，否则spv节点数据缺失不足以完成正常功能。SPV节点发送loadfilter消息给fullNode。fullNode设置过滤器后加载过滤后的数据给SPV节点。其中用到的过滤器我布隆过滤器。他们之间的消息规范遵循比特币网络协议。此外SPV节点也需要存储完整的<strong>blockheader</strong>用于消息的验证。</p>
+</blockquote>
+<p>比特币网络协议请参考如下</p>
+<p><a href="https://en.bitcoin.it/wiki/Protocol_documentation" target="_blank" rel="noopener">https://en.bitcoin.it/wiki/Protocol_documentation</a></p>
+<p>请务必仔细研读，它对于后续的工作意义非凡。也需要反复参阅！</p>
+<p>基础理论的准备工作先写到这里，后续的细节会成为一个系列文章。本文也会在后续有较大幅度的改动。</p>
+<p>待续…</p>
 
       
     </div>
@@ -399,9 +418,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/前端/" rel="tag"># 前端</a>
+            <a href="/tags/SPV钱包/" rel="tag"># SPV钱包</a>
           
-            <a href="/tags/网络/" rel="tag"># 网络</a>
+            <a href="/tags/系列文章/" rel="tag"># 系列文章</a>
+          
+            <a href="/tags/交易/" rel="tag"># 交易</a>
           
         </div>
       
@@ -414,8 +435,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/posts/13602/" rel="next" title="思维导图心得">
-                <i class="fa fa-chevron-left"></i> 思维导图心得
+              <a href="/posts/10047/" rel="next" title="rust工程实践">
+                <i class="fa fa-chevron-left"></i> rust工程实践
               </a>
             
           </div>
@@ -423,10 +444,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/posts/4005/" rel="prev" title="关于em和line-height的备忘录">
-                关于em和line-height的备忘录 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -560,7 +577,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#网址和协议"><span class="nav-number">1.</span> <span class="nav-text">网址和协议</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DNS的解析"><span class="nav-number">2.</span> <span class="nav-text">DNS的解析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#服务器"><span class="nav-number">3.</span> <span class="nav-text">服务器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#网站的处理流程"><span class="nav-number">4.</span> <span class="nav-text">网站的处理流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#浏览器解析"><span class="nav-number">5.</span> <span class="nav-text">浏览器解析</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#从零构建一个SPV钱包其一"><span class="nav-number">1.</span> <span class="nav-text">从零构建一个SPV钱包其一</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#开篇"><span class="nav-number">1.0.1.</span> <span class="nav-text">开篇</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#准备"><span class="nav-number">1.0.2.</span> <span class="nav-text">准备</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#首先会搭建BTC节点"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">首先会搭建BTC节点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#理解比特币如何交易"><span class="nav-number">1.0.2.2.</span> <span class="nav-text">理解比特币如何交易</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#准备的原因"><span class="nav-number">1.0.3.</span> <span class="nav-text">准备的原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#理解基石"><span class="nav-number">1.0.4.</span> <span class="nav-text">理解基石</span></a></li></ol></li></ol></div>
             
 
           </div>
