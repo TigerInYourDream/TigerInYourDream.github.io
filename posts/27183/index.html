@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="TID&#39;s Blog">
 <meta property="og:description" content="使用rust写安卓库rust写安卓库也是rust的一个重要应用方向，之前用来写安卓的库的语言大多数都是c/c++。本文不讨论两种（或者叫两类）语言的优劣，只说明如何搭建一个rust-android相互交互的环境。 Android使用Java语言，java与c/c++交互使用jni技术。Android与rust交互也使用jni。在这里我们使用jni-rs库。在使用rust写安卓库之前我们先简化一下问">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-03-31T11:16:51.235Z">
+<meta property="og:updated_time" content="2020-04-10T10:36:53.563Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用rust写安卓库">
 <meta name="twitter:description" content="使用rust写安卓库rust写安卓库也是rust的一个重要应用方向，之前用来写安卓的库的语言大多数都是c/c++。本文不讨论两种（或者叫两类）语言的优劣，只说明如何搭建一个rust-android相互交互的环境。 Android使用Java语言，java与c/c++交互使用jni技术。Android与rust交互也使用jni。在这里我们使用jni-rs库。在使用rust写安卓库之前我们先简化一下问">
@@ -379,6 +379,18 @@
 <p>Jni-rs库是一个bundle。函数的实现基本上是ffi的标准写法。类型要和jni中的对应。jstring就相当于Java中的String。<strong>这里函数一定要和 .h 文件中的一样。</strong>代码很简单，获取参数input.然后和Hello 拼接。最后输出。</p>
 <p>接下来进行编译即可。拿到库文件，放倒java项目下即可运行。更详细的东西可以自己去jni-rs下面看example。</p>
 <p>重点关注的是，java -h命令和rust中的函数如何编写。</p>
+<p>再更新</p>
+<p>很多人说这样做会找不到库的位置，会出现如下错误</p>
+<blockquote>
+<p>Exception in thread “main” java.lang.UnsatisfiedLinkError: no mylib in java.library.path</p>
+</blockquote>
+<p>和之前没有这个库的报告的错误是一样的。这是因为定位不到库，代码不知道如何去定位”mylib.so”（linux）或者”mylib.dylib”（mac）。假如使用IDEA，请Edit Configurations(就是运行按钮)</p>
+<blockquote>
+<p>在VM Options栏目添加上如下</p>
+<p>-Djava.library.path=/path/to/your/lib/target/debug</p>
+<p>即指定你lib库的地址即可。注意你实际的so文件叫做libxxxxx.so，但是你在java中loadLibrary时候依然加载的是 xxxxx(你项目的名字)。</p>
+</blockquote>
+<p>以上即可正常运行。但是如果要考虑自动化，请使用别的成套构建工具。但是从写库的角度，这样直接写起来测试即可。毕竟交付的是so文件。</p>
 <h2 id="进一步使用交叉编译"><a href="#进一步使用交叉编译" class="headerlink" title="进一步使用交叉编译"></a>进一步使用交叉编译</h2><p>上一节的内容并不涉及交叉编译，只是简单讲解了如何使用jni-rs库，以及我们写jni时的主要思路：从使用端去定义接口，然后在rust端实现代码。这一部分开始进入正题，如何使用rust写安卓的库。</p>
 <p>在使用之前需要先安装rust环境，默认读者都装了。</p>
 <p>然后安装Android环境。我们直接使用AndroidStudio即可。安装好之后，直接在上面的菜单栏找到Tools–&gt;SDK manager–&gt;SDK Tools。</p>
