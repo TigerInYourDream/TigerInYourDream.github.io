@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="区块链,比特币,交易,总结,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="使用比特币节点进行交易如果读过之前的完整的一系列文章，应该已经经历了从节点源代码编译，运行，和配置 rpc 的完全过程，本文在之前工作的过程上进行总结，使用比特币节点发起一笔交易。  注意：读了之前的文章也应该清楚一点，比特币节点代码和 rpc api 更新较快。本文依赖比特币 0. 18 版本，系统环境乌班图。  比特币发起交易步骤首先列出比特币交易的最主干的过程如下   提取UTXO 发起交易">
+<meta name="keywords" content="区块链,比特币,交易,总结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用比特币节点进行交易">
+<meta property="og:url" content="https://imzy.vip/posts/60903/index.html">
+<meta property="og:site_name" content="TID&#39;s Blog">
+<meta property="og:description" content="使用比特币节点进行交易如果读过之前的完整的一系列文章，应该已经经历了从节点源代码编译，运行，和配置 rpc 的完全过程，本文在之前工作的过程上进行总结，使用比特币节点发起一笔交易。  注意：读了之前的文章也应该清楚一点，比特币节点代码和 rpc api 更新较快。本文依赖比特币 0. 18 版本，系统环境乌班图。  比特币发起交易步骤首先列出比特币交易的最主干的过程如下   提取UTXO 发起交易">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-05-12T02:49:43.911Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用比特币节点进行交易">
+<meta name="twitter:description" content="使用比特币节点进行交易如果读过之前的完整的一系列文章，应该已经经历了从节点源代码编译，运行，和配置 rpc 的完全过程，本文在之前工作的过程上进行总结，使用比特币节点发起一笔交易。  注意：读了之前的文章也应该清楚一点，比特币节点代码和 rpc api 更新较快。本文依赖比特币 0. 18 版本，系统环境乌班图。  比特币发起交易步骤首先列出比特币交易的最主干的过程如下   提取UTXO 发起交易">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://imzy.vip/posts/60903/">
+
+
+
+
+
+  <title>使用比特币节点进行交易 | TID's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">TID's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-一言">
+          <a href="/motto" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-camera"></i> <br>
+            
+            一言
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/60903/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TigerInYourDream">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TID's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用比特币节点进行交易</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-21T14:18:46+08:00">
+                2019-09-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">技术笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="使用比特币节点进行交易"><a href="#使用比特币节点进行交易" class="headerlink" title="使用比特币节点进行交易"></a>使用比特币节点进行交易</h2><p>如果读过之前的完整的一系列文章，应该已经经历了从节点源代码编译，运行，和配置 rpc 的完全过程，本文在之前工作的过程上进行总结，<strong>使用比特币节点发起一笔交易</strong>。</p>
+<blockquote>
+<p>注意：读了之前的文章也应该清楚一点，比特币节点代码和 rpc api 更新较快。本文依赖比特币 0. 18 版本，系统环境乌班图。</p>
+</blockquote>
+<h3 id="比特币发起交易步骤"><a href="#比特币发起交易步骤" class="headerlink" title="比特币发起交易步骤"></a>比特币发起交易步骤</h3><p>首先列出比特币交易的最主干的过程如下</p>
+<blockquote>
+<ol>
+<li>提取UTXO</li>
+<li>发起交易</li>
+<li>对交易进行签名</li>
+<li>广播交易</li>
+</ol>
+</blockquote>
+<h4 id="提取UXTO"><a href="#提取UXTO" class="headerlink" title="提取UXTO"></a>提取UXTO</h4><p>交易的最重要的部分就是一开始的提取UXTO的过程。根据官方的 RPC Api 。我们可以使用 listunspent 的api 来获取UTXO的列表。</p>
+<p>这是交易过程中第一个会出现问题的地方，如果我们直接使用这个 api 会发现一个问题，我们可能会发现完全提取不倒信息。</p>
+<p>这是因为我们想要发起交易，很大程度上依赖的是比特币节点的钱包的功能。（关于比特币全节点的概念，请参考《精通比特币》一书）。这个比特币地址如果和本节点上的钱包是没有关联的话，我们是无法得到UTXO的。</p>
+<h5 id="接下来介绍什么叫做关联："><a href="#接下来介绍什么叫做关联：" class="headerlink" title="接下来介绍什么叫做关联："></a>接下来介绍什么叫做<strong>关联</strong>：</h5><p>根据比特币早期的文档（文档版本比较老，可以去查阅早期的wiki文档，不再列出）。比特币早期中有账号的概念。也就是说，比特币钱包都是依赖账号来管理的 Account。比特币的地址都是存在某个账号下的。之所以直接查询对应的比特币地址没有信息。是因为我们的地址，<strong>不是比特币钱包的账号下面的</strong>，所以我们直接去过滤相应地址下的UTXO是没有信息的。</p>
+<p>当然后期的版本比特币不再强调账号的概念，换成了如下体系。</p>
+<p>比特币钱包使用 name 属性来管理，钱包内部使用 label 对地址进行管理（图稍后补上）</p>
+<p>在体系途中 xxxxx yyyyy zzzzz代表地址，Alvin Mike 代表钱包的 name。我们直接查询的 zzzzz 属于和钱包没有关系的地址，属于 <strong>没有关联</strong>。</p>
+<h5 id="如何关联"><a href="#如何关联" class="headerlink" title="如何关联"></a>如何<strong>关联</strong></h5><p>那么如何关联呢，其实很简单，我们只需要把地址对应的私钥导入钱包即可。我们可以使用比特币 RPC Api 中的 importprivkey 来导入私钥。这样这个地址就纳入了钱包中，属于地址和钱包进行了<strong>关联</strong>。我们可以参考文档</p>
+<p><a href="https://bitcoincore.org/en/doc/0.18.0/rpc/wallet/importprivkey/" target="_blank" rel="noopener">importprivkey</a></p>
+<p>请仔细参阅文档，注意参数 rescan。导入私钥请开启 rescan，这样的话节点会对这个地址进行扫描，对该地址对应的 UTXO 进行索引。这样就可以查询 UTXO 了。当然他需要一个较长时间构建索引，在运行期间你<strong>可能无法得到正确的结果</strong>，你只需要等待 rescan 完成即可。</p>
+<h6 id="不导入私钥可以吗"><a href="#不导入私钥可以吗" class="headerlink" title="不导入私钥可以吗"></a>不导入私钥可以吗</h6><p>不导入私钥是可以的，我们参阅文档可以得到以下两种方法，都可以在不导入私钥的情况下查询UXTO</p>
+<ol>
+<li>在启动节点的时候加入 txindex = 1; 这个参数可以帮助你建立所有的交易索引，这样你就可以在节点上查询所有地址的交易信息了。大胆猜测，比特币浏览器之类的节点需要这种配置</li>
+<li>可以只导入<strong>地址</strong>，假定只导入地址的话使用 importprivkey ，没有私钥，无法签名。作为只读钱包还是可以的。具体请参阅文档。</li>
+</ol>
+<p>以上两种不是很方便，就不再详细介绍了。</p>
+<p>再强调一下</p>
+<blockquote>
+<p>网上搜集很多教程中，都会出现从起一个节点开始，然后使用 getnewaddress 这个 Api 。这种操作其实就是就规避了<strong>关联</strong> 这个问题，因为直接用钱包的功能生成的地址就是挂在钱包下面的，所以我们可以很容易的查询这种地址下面的 UTXO。</p>
+</blockquote>
+<h4 id="发起交易"><a href="#发起交易" class="headerlink" title="发起交易"></a>发起交易</h4><p>确切的说，我们需要的是<strong>发起裸交易</strong>，（也有 sendtoadddress 方法，这个不属于本文的讨论范围）。这个就比较直接，这里依然可以从前文提到的链接中方便的找到说明。</p>
+<p>发起裸交易的核心就是从之前的某交易中，支付一定数量的比特币到目标地址。至少要满足的条件是：你发的比特币数量要低于交易中的比特币总量。毕竟钱不够如何支付呢。</p>
+<p>注意:<strong>我们使用的是 createrawtransaction</strong> 。这种交易方式不会生成找零地址。则输入和输出之差会成为交易费用 fee 将会成为矿工的奖励。这种交易会造成<strong>超高费用交易</strong>，同时会影响最后一步的交易广播。关于对广播的影响，我们稍后再谈。如果我们需要创建找零地址，请使用 <strong>fundcreaterawtransaction</strong>。（后面可能会出现专门的一篇介绍这个）</p>
+<p>总之这一步之后 我们会得到一个<strong>未经过签名的</strong> rawhex</p>
+<h4 id="交易签名"><a href="#交易签名" class="headerlink" title="交易签名"></a>交易签名</h4><p>得到一个裸交易的 hexstring 之后，需要我们对交易进行签名，在当前 0.18 版本下我们有两条签名路径</p>
+<ol>
+<li><p>使用钱包的签名功能 [<a href="https://bitcoincore.org/en/doc/0.18.0/rpc/wallet/signrawtransactionwithwallet/]" target="_blank" rel="noopener">https://bitcoincore.org/en/doc/0.18.0/rpc/wallet/signrawtransactionwithwallet/]</a></p>
+<blockquote>
+<p>使用钱包的签名功能需要我们事先导入私钥，也就是说地址对应的私钥和钱包是有<strong>关联</strong>的 </p>
+</blockquote>
+</li>
+<li><p>使用私钥进行签名 [<a href="https://bitcoincore.org/en/doc/0.18.0/rpc/rawtransactions/signrawtransactionwithkey/]" target="_blank" rel="noopener">https://bitcoincore.org/en/doc/0.18.0/rpc/rawtransactions/signrawtransactionwithkey/]</a></p>
+<blockquote>
+<p>使用私钥进行签名，需要我们有发起地址的所有权，也就是有私钥</p>
+</blockquote>
+</li>
+</ol>
+<p>无论使用哪种签名，都可以得到签名之后的 hexstring 。</p>
+<blockquote>
+<p>这个也是交易中最关键的步骤步骤，如果我们签名正常结束，我们会得到签名的结果</p>
+<p>“complete”: true</p>
+<p>同时得到一个更长的<strong>经过签名的</strong> hexstring</p>
+<p>需要注意的是：出现complete: true 这种结果<strong>并不代表</strong>签名就是万无一失的，这种签名可能会有别的错误，我们只是提供了合适的参数进行签名而已。如果这里的签名不正常，这次交易是无法广播的。</p>
+<p>如果需要耍个小聪明，稍微调整参数，你会发现得到的签名后 hex 是有细微差别的（这个很容易理解，因为这一串字符串本身就是拼接而来的）</p>
+<p>所以无法广播，请优先考虑签名错误。请仔细对照文档中的PrevTX参数。</p>
+</blockquote>
+<h4 id="广播交易"><a href="#广播交易" class="headerlink" title="广播交易"></a>广播交易</h4><p>如果我们前面三个步骤正确，到这一步直接广播交易即可</p>
+<p>我们使用 sendrawtransaction 方法即可，参数就是上一步中得到的 $SIGNED_RAW_TRANSACTION_STRING</p>
+<p>这里提到的一个超高交易费的问题，如果我们使用之前的 createrawtaranstion 是没有设置找零地址的，所以这里直接广播是不行的。需要加上参数 allowhignfee 。参考文档。</p>
+<blockquote>
+<p>在允许高额交易费用这个错误之外，我们还可能遇到其他错误，比如我在 Testnet 环境下遇到了 Missing Input 的错误。或者其他类型的错误。排错原则为：<strong>优先检查交易签名</strong></p>
+</blockquote>
+<p>之后等待挖矿即可。后文将列出我直接使用 bitcoin-cli 进行交易的过程，为了保持文档的完整性，中间出错的步骤并没有删除，是完整保留的。下文的命令行操作过程是<strong>百分百</strong>完成的</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">启动私链   发起一个交易</span><br><span class="line"></span><br><span class="line">1. bitcoind -printtoconsole -regtest // 其余参数全部参照原来的设计,其余几个项目都去 .bitcoin/bitcoin.conf 下去掉</span><br><span class="line"></span><br><span class="line">//先测试私链起来了没有</span><br><span class="line">2. bitcoin-cli -regtest  -getinfo</span><br><span class="line"></span><br><span class="line">//在查询一下</span><br><span class="line">3. bitcoin-cli -regtest getbestblockhash</span><br><span class="line"></span><br><span class="line">//查询当前用户信息 不出所料的话都应该没有币的</span><br><span class="line">4. bitcoin-cli -regtest getbalance</span><br><span class="line"></span><br><span class="line">//现在生成一个地址 得到一个地址  2N4cpCv7VgohRaQAxWuknR5dg97ryBFR91e  这个地址作为初始的地址</span><br><span class="line">5. bitcoin-cli -regtest  getnewaddress</span><br><span class="line"></span><br><span class="line">//验证一下这个地址</span><br><span class="line">6. bitcoin-cli -regtest validateaddress 2N4cpCv7VgohRaQAxWuknR5dg97ryBFR91e</span><br><span class="line"></span><br><span class="line">//尝试导出这个私钥  cS3c2UNjTjhREK59T7YK93NrvF9vUTXdP9d6vgR9bqYVJTizQtuj</span><br><span class="line">7. bitcoin-cli -regtest dumpprivkey 2N4cpCv7VgohRaQAxWuknR5dg97ryBFR91e</span><br><span class="line"></span><br><span class="line">//开始挖矿 注意这里的 api 发生了变化 以前是直接generate 现在推荐下面的方法 直接100个区块到之前生成的地址上</span><br><span class="line">8. bitcoin-cli -regtest generatetoaddress 101 2N4cpCv7VgohRaQAxWuknR5dg97ryBFR91e</span><br><span class="line"></span><br><span class="line">//接下来 获取当前账户下的信息   确认一百个块 得到50个比特币</span><br><span class="line">9. bitcoin-cli -regtest getbalance</span><br><span class="line"></span><br><span class="line">//再生成第二个地址 用于接受转账  2N9KXa3WdbbGRYM4XgNWqnQemDRSj5fqgDh</span><br><span class="line">10. bitcoin-cli -regtest getnewaddress</span><br><span class="line"></span><br><span class="line">//接下来 提取utxo</span><br><span class="line">11. bitcoin-cli -regtest listunspent </span><br><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    "txid": "bea69fa6b4d2395f340f8b57ab5c6b0afd3de451b63cf335848e3f11885e89b4",</span><br><span class="line">    "vout": 0,</span><br><span class="line">    "address": "2N4cpCv7VgohRaQAxWuknR5dg97ryBFR91e",</span><br><span class="line">    "label": "",</span><br><span class="line">    "redeemScript": "0014cecad7bc6e1e2a2aa842474e6f26e8bf45f02292",</span><br><span class="line">    "scriptPubKey": "a9147cbeaeb1f3919c7e0963c635287ce3385dfa91dd87",</span><br><span class="line">    "amount": 50.00000000,</span><br><span class="line">    "confirmations": 101,</span><br><span class="line">    "spendable": true,</span><br><span class="line">    "solvable": true,</span><br><span class="line">    "desc": "sh(wpkh([bec83093/0'/0'/0']0295b3ceb919a0364a790361d8557702af364343d418b2e32fb95e1627c3012180))#pv6ux7wl",</span><br><span class="line">    "safe": true</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">//创建一个裸交易 给新生成的地址转20个比特币  得到一个交易id 0200000001b4895e88113f8e8435f33cb651e43dfd0a6b5cab578b0f345f39d2b4a69fa6be0000000000ffffffff01009435770000000017a914b0525a68d151f78a49bfaa86b6456b856e3a64ef8700000000</span><br><span class="line">12. bitcoin-cli -regtest createrawtransaction '[&#123;"txid" :"bea69fa6b4d2395f340f8b57ab5c6b0afd3de451b63cf335848e3f11885e89b4","vout" : 0&#125;]' '&#123;"2N9KXa3WdbbGRYM4XgNWqnQemDRSj5fqgDh": 20&#125;'</span><br><span class="line"></span><br><span class="line">//使用私钥进行签名</span><br><span class="line">13. bitcoin-cli -regtest signrawtransactionwithwallet 0200000001b4895e88113f8e8435f33cb651e43dfd0a6b5cab578b0f345f39d2b4a69fa6be0000000000ffffffff01009435770000000017a914b0525a68d151f78a49bfaa86b6456b856e3a64ef8700000000 '[&#123;"txid":"bea69fa6b4d2395f340f8b57ab5c6b0afd3de451b63cf335848e3f11885e89b4", "vout":0, "scriptPubKey":"a9147cbeaeb1f3919c7e0963c635287ce3385dfa91dd87","amount":20, "redeemScript":"0014cecad7bc6e1e2a2aa842474e6f26e8bf45f02292"&#125;]'</span><br><span class="line"></span><br><span class="line">得到</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  "hex": "02000000000101b4895e88113f8e8435f33cb651e43dfd0a6b5cab578b0f345f39d2b4a69fa6be0000000017160014cecad7bc6e1e2a2aa842474e6f26e8bf45f02292ffffffff01009435770000000017a914b0525a68d151f78a49bfaa86b6456b856e3a64ef8702473044022013597740ee733abe79849008462e3e87cc96c6e7e195fbcb74a7519c9df37e04022039ee7076ad688fa68f4a4d4497b5e0b2504682137e0359c100c49310ebdaef9401210295b3ceb919a0364a790361d8557702af364343d418b2e32fb95e1627c301218000000000",</span><br><span class="line">  "complete": true</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 广播交易 出错</span><br><span class="line">14. bitcoin-cli -regtest sendrawtransaction 02000000000101b4895e88113f8e8435f33cb651e43dfd0a6b5cab578b0f345f39d2b4a69fa6be0000000017160014cecad7bc6e1e2a2aa842474e6f26e8bf45f02292ffffffff01009435770000000017a914b0525a68d151f78a49bfaa86b6456b856e3a64ef8702473044022013597740ee733abe79849008462e3e87cc96c6e7e195fbcb74a7519c9df37e04022039ee7076ad688fa68f4a4d4497b5e0b2504682137e0359c100c49310ebdaef9401210295b3ceb919a0364a790361d8557702af364343d418b2e32fb95e1627c301218000000000</span><br><span class="line"></span><br><span class="line">//只使用；裸交易id进行签名 </span><br><span class="line">15. bitcoin-cli -regtest signrawtransactionwithwallet "0200000001b4895e88113f8e8435f33cb651e43dfd0a6b5cab578b0f345f39d2b4a69fa6be0000000000ffffffff01009435770000000017a914b0525a68d151f78a49bfaa86b6456b856e3a64ef8700000000"</span><br><span class="line">&#123;</span><br><span class="line">  "hex": "02000000000101b4895e88113f8e8435f33cb651e43dfd0a6b5cab578b0f345f39d2b4a69fa6be0000000017160014cecad7bc6e1e2a2aa842474e6f26e8bf45f02292ffffffff01009435770000000017a914b0525a68d151f78a49bfaa86b6456b856e3a64ef870247304402205388b5674d8874a8fc9ae7acbd39f14a0658163c22684dcd8bc32073ec295d1702206cbda91f9bbfc5479e380077ff2ba5e480a402f883fc638b8c82ad71e01977bc01210295b3ceb919a0364a790361d8557702af364343d418b2e32fb95e1627c301218000000000",</span><br><span class="line">  "complete": true</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 广播</span><br><span class="line">16. bitcoin-cli -regtest sendrawtransaction "02000000000101b4895e88113f8e8435f33cb651e43dfd0a6b5cab578b0f345f39d2b4a69fa6be0000000017160014cecad7bc6e1e2a2aa842474e6f26e8bf45f02292ffffffff01009435770000000017a914b0525a68d151f78a49bfaa86b6456b856e3a64ef870247304402205388b5674d8874a8fc9ae7acbd39f14a0658163c22684dcd8bc32073ec295d1702206cbda91f9bbfc5479e380077ff2ba5e480a402f883fc638b8c82ad71e01977bc01210295b3ceb919a0364a790361d8557702af364343d418b2e32fb95e1627c301218000000000" true</span><br><span class="line"></span><br><span class="line">得到 3b3c8646fb03764aae2b2d9c8ef81704576f94c356e2d38f76bcd98ea4d9a5ae 已完成交易 等待挖矿即可</span><br></pre></td></tr></table></figure>
+
+<h4 id="额外提醒"><a href="#额外提醒" class="headerlink" title="额外提醒"></a>额外提醒</h4><p>在完成以上操作后，就实现了利用比特币节点进行交易，此外再提供两点温馨提示</p>
+<ol>
+<li>如果使用私链，使用命令行启动和使用bitcoin.conf启动，这两个配置一定不能冲突，否则比特币节点是无法启动的。（当然别的方式这两个配置也不能冲突，算是比特币一个比较人性化的地方？）</li>
+<li>Bitcoin-cli 操作本质上是使用 json-rpc 使用 curl 一样可以达到这个效果。当然也不是为了使用代码进行交互。这里使用的认证方式是 Basic。如果需要写代码，注意这一点。之后可能会列出我自己 封装的 bitcoin-json rpc 代码。</li>
+<li>实在想测试，建议使用私链。环境比较纯净。你不会遇到：比特币过少，网络差等问题。最主要的是你可以自己挖矿，适合急性子。</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/区块链/" rel="tag"># 区块链</a>
+          
+            <a href="/tags/比特币/" rel="tag"># 比特币</a>
+          
+            <a href="/tags/交易/" rel="tag"># 交易</a>
+          
+            <a href="/tags/总结/" rel="tag"># 总结</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/42988/" rel="next" title="比特币节点远程访问">
+                <i class="fa fa-chevron-left"></i> 比特币节点远程访问
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/27102/" rel="prev" title="创建具有找零地址的交易">
+                创建具有找零地址的交易 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="TigerInYourDream">
+            
+              <p class="site-author-name" itemprop="name">TigerInYourDream</p>
+              <p class="site-description motion-element" itemprop="description">每一篇文章都是一种进步，每一句感慨都是一次思考</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用比特币节点进行交易"><span class="nav-number">1.</span> <span class="nav-text">使用比特币节点进行交易</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#比特币发起交易步骤"><span class="nav-number">1.1.</span> <span class="nav-text">比特币发起交易步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#提取UXTO"><span class="nav-number">1.1.1.</span> <span class="nav-text">提取UXTO</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#接下来介绍什么叫做关联："><span class="nav-number">1.1.1.1.</span> <span class="nav-text">接下来介绍什么叫做关联：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#如何关联"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">如何关联</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#不导入私钥可以吗"><span class="nav-number">1.1.1.2.1.</span> <span class="nav-text">不导入私钥可以吗</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#发起交易"><span class="nav-number">1.1.2.</span> <span class="nav-text">发起交易</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#交易签名"><span class="nav-number">1.1.3.</span> <span class="nav-text">交易签名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#广播交易"><span class="nav-number">1.1.4.</span> <span class="nav-text">广播交易</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#额外提醒"><span class="nav-number">1.1.5.</span> <span class="nav-text">额外提醒</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TigerInYourDream</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
