@@ -1822,7 +1822,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #4b87ff;
+  background: #ff1d11;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2659,4 +2659,25 @@ embed {
 }
 .links-of-blogroll-inline .links-of-blogroll-item {
   display: inline-block;
+}
+.gist {
+  opacity: 1 !important;
+}
+.gist .gist-file article {
+  padding: 0px !important;
+}
+.gist-meta {
+  display: none !important;
+}
+.gist-data {
+  border-radius: 6px 6px 6px 6px !important;
+  background: rgba(255,255,255,0.004) !important;
+  border: none !important;
+}
+.gist-file {
+  font-weight: 510 !important;
+  margin-bottom: 0em !important;
+  font-family: 'Roboto Slab', 'Noto Serif SC', "Noto Serif SC", sans-serif !important;
+  color: #000 !important;
+  border: 0px solid !important;
 }
