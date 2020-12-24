@@ -167,6 +167,108 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/63616/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="TigerInYourDream">
+      <meta itemprop="description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TID's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/posts/63616/" class="post-title-link" itemprop="url">多线程原语ConVar</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-12-24 16:33:46 / 修改时间：17:13:27" itemprop="dateCreated datePublished" datetime="2020-12-24T16:33:46+08:00">2020-12-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">技术笔记</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="多线程原语CondVar"><a href="#多线程原语CondVar" class="headerlink" title="多线程原语CondVar"></a>多线程原语CondVar</h1><p>多线程下的原语，除了我们常用的锁，还有另外一类用于同步的原语叫做“屏障”，“条件变量”(在rust或者cpp中)。在其他语言中也有类似的概念，叫做栅栏，闭锁，屏障，信号量等。他们具有相同的意义。</p>
+<p>在介绍条件变量之前，先介绍屏障（Barrier）。屏障相当于一堵带门的墙，使用wait方法，在某个点阻塞全部进入临界区的线程。条件变量（Condition Variable）和屏障的语义类似，但它不是阻塞全部线程，而是在<strong>满足某些特定条件之前</strong>阻塞某一个得到互斥锁的线程。</p>
+<p>单纯讲条件变量的意义并不直观。换种描述</p>
+<blockquote>
+<p>条件变量可以在我们达到某种条件之前阻塞线程，我们利用此特性可以对线程进行同步。或者说做到按照某种条件，在多个线程中达到按照<strong>特定顺序执行</strong>的目的。</p>
+</blockquote>
+<p>为此我们设计如下下面流程。为此流程写一段代码，来体会条件变量的作用</p>
+<blockquote>
+<p>我们启动三个线程，t1，t2，t3。分别执行任务T1，T2，T3。现在要求：T2必须等待T1和T3完成之后再执行</p>
+</blockquote>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> parking_lot::&#123;Mutex, Condvar&#125;;</span><br><span class="line"><span class="keyword">use</span> std::sync::Arc;</span><br><span class="line"><span class="keyword">use</span> std::thread;</span><br><span class="line"><span class="keyword">use</span> std::thread::sleep;</span><br><span class="line"><span class="keyword">use</span> std::time::Duration;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> pair = Arc::new((Mutex::new(<span class="number">0</span>),</span><br><span class="line">                         Condvar::new()));</span><br><span class="line">    <span class="keyword">let</span> pair2 = pair.clone();</span><br><span class="line">    <span class="keyword">let</span> pair3 = pair.clone();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> t1 = thread::Builder::new()</span><br><span class="line">        .name(<span class="string">&quot;T1&quot;</span>.to_string())</span><br><span class="line">        .spawn(<span class="keyword">move</span> ||</span><br><span class="line">            &#123;</span><br><span class="line">                sleep(Duration::from_secs(<span class="number">4</span>));</span><br><span class="line">                <span class="built_in">println!</span>(<span class="string">&quot;I&#x27;m working in T1, step 1&quot;</span>);</span><br><span class="line">                <span class="keyword">let</span> &amp;(<span class="keyword">ref</span> lock, <span class="keyword">ref</span> cvar) = &amp;*pair2;</span><br><span class="line">                <span class="keyword">let</span> <span class="keyword">mut</span> started = lock.lock();</span><br><span class="line">                *started += <span class="number">2</span>;</span><br><span class="line">                cvar.notify_one();</span><br><span class="line">            &#125;</span><br><span class="line">        )</span><br><span class="line">        .unwrap();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> t2 = thread::Builder::new()</span><br><span class="line">        .name(<span class="string">&quot;T2&quot;</span>.to_string())</span><br><span class="line">        .spawn(<span class="keyword">move</span> ||</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="built_in">println!</span>(<span class="string">&quot;I&#x27;m working in T2, start&quot;</span>);</span><br><span class="line">                <span class="keyword">let</span> &amp;(<span class="keyword">ref</span> lock, <span class="keyword">ref</span> cvar) = &amp;*pair;</span><br><span class="line">                <span class="keyword">let</span> <span class="keyword">mut</span> notify = lock.lock();</span><br><span class="line"></span><br><span class="line">                <span class="keyword">while</span> *notify &lt; <span class="number">5</span> &#123;</span><br><span class="line">                    cvar.wait(&amp;<span class="keyword">mut</span> notify);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="built_in">println!</span>(<span class="string">&quot;I&#x27;m working in T2, final&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        )</span><br><span class="line">        .unwrap();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> t3 = thread::Builder::new()</span><br><span class="line">        .name(<span class="string">&quot;T3&quot;</span>.to_string())</span><br><span class="line">        .spawn(<span class="keyword">move</span> ||</span><br><span class="line">            &#123;</span><br><span class="line">                sleep(Duration::from_secs(<span class="number">3</span>));</span><br><span class="line">                <span class="built_in">println!</span>(<span class="string">&quot;I&#x27;m working in T3, step 2&quot;</span>);</span><br><span class="line">                <span class="keyword">let</span> &amp;(<span class="keyword">ref</span> lock, <span class="keyword">ref</span> cvar) = &amp;*pair3;</span><br><span class="line">                <span class="keyword">let</span> <span class="keyword">mut</span> started = lock.lock();</span><br><span class="line">                *started += <span class="number">3</span>;</span><br><span class="line">                cvar.notify_one();</span><br><span class="line">            &#125;</span><br><span class="line">        )</span><br><span class="line">        .unwrap();</span><br><span class="line"></span><br><span class="line">    t1.join().unwrap();</span><br><span class="line">    t2.join().unwrap();</span><br><span class="line">    t3.join().unwrap();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上代码可以在 <a target="_blank" rel="noopener" href="https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=31292aa4c8c86b93f4111597679329e2">这个链接</a> 下在playground运行。</p>
+<p>上面的代码需要注意的点如下</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/63616/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/55704/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -198,7 +300,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-26 12:56:04" itemprop="dateModified" datetime="2020-11-26T12:56:04+08:00">2020-11-26</time>
+                <time title="修改时间：2020-12-24 17:13:27" itemprop="dateModified" datetime="2020-12-24T17:13:27+08:00">2020-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -295,7 +397,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-26 12:56:04" itemprop="dateModified" datetime="2020-11-26T12:56:04+08:00">2020-11-26</time>
+                <time title="修改时间：2020-12-24 17:13:27" itemprop="dateModified" datetime="2020-12-24T17:13:27+08:00">2020-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -390,7 +492,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-26 12:56:04" itemprop="dateModified" datetime="2020-11-26T12:56:04+08:00">2020-11-26</time>
+                <time title="修改时间：2020-12-24 17:13:27" itemprop="dateModified" datetime="2020-12-24T17:13:27+08:00">2020-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -485,7 +587,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-26 12:56:04" itemprop="dateModified" datetime="2020-11-26T12:56:04+08:00">2020-11-26</time>
+                <time title="修改时间：2020-12-24 17:13:27" itemprop="dateModified" datetime="2020-12-24T17:13:27+08:00">2020-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -580,7 +682,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-26 12:56:04" itemprop="dateModified" datetime="2020-11-26T12:56:04+08:00">2020-11-26</time>
+                <time title="修改时间：2020-12-24 17:13:27" itemprop="dateModified" datetime="2020-12-24T17:13:27+08:00">2020-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -675,7 +777,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-26 12:56:04" itemprop="dateModified" datetime="2020-11-26T12:56:04+08:00">2020-11-26</time>
+                <time title="修改时间：2020-12-24 17:13:27" itemprop="dateModified" datetime="2020-12-24T17:13:27+08:00">2020-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -770,7 +872,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-26 12:56:04" itemprop="dateModified" datetime="2020-11-26T12:56:04+08:00">2020-11-26</time>
+                <time title="修改时间：2020-12-24 17:13:27" itemprop="dateModified" datetime="2020-12-24T17:13:27+08:00">2020-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -865,7 +967,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-26 12:56:04" itemprop="dateModified" datetime="2020-11-26T12:56:04+08:00">2020-11-26</time>
+                <time title="修改时间：2020-12-24 17:13:27" itemprop="dateModified" datetime="2020-12-24T17:13:27+08:00">2020-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -960,7 +1062,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-26 12:56:04" itemprop="dateModified" datetime="2020-11-26T12:56:04+08:00">2020-11-26</time>
+                <time title="修改时间：2020-12-24 17:13:27" itemprop="dateModified" datetime="2020-12-24T17:13:27+08:00">2020-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1001,105 +1103,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/posts/64038/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/51833/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="TigerInYourDream">
-      <meta itemprop="description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="TID's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/posts/51833/" class="post-title-link" itemprop="url">周报，软件构建和职业发展</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-11-18 16:40:50" itemprop="dateCreated datePublished" datetime="2019-11-18T16:40:50+08:00">2019-11-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-26 12:56:04" itemprop="dateModified" datetime="2020-11-26T12:56:04+08:00">2020-11-26</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%84%9F%E6%82%9F/" itemprop="url" rel="index"><span itemprop="name">感悟</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>吾日三省吾身</p>
-<p>​                        ——《论语·学而》</p>
-</blockquote>
-<p>距离上次频繁发布文章，已经过去一个多月了。这一个多月以来，我非常认真的研究关于取款链交易和SPV节点相关的问题。今日又听闻leader关于自己软件生涯的反思和总结。leader开发生涯漫长，反思亦有重大价值，故作文。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/51833/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1190,7 +1193,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-count">35</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1203,7 +1206,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-count">40</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1239,12 +1242,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">106k</span>
+    <span title="站点总字数">109k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:37</span>
+    <span title="站点阅读时长">1:39</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
