@@ -20,21 +20,20 @@
     var CONFIG = {"hostname":"imzy.vip","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="在4个多月之前，也就是19年的7月份。在大佬的推荐下，有幸拿到了今日头条的面试机会。在漫长的面试过程中，头条的面试官态度热情，问的问题兼具广度和深度。再很多问题回答的一塌糊涂的条件下，也让我面试了长达五小时。特别的最后的面试官，态度友好且诚恳，对我的诸多不足之处提出委婉的建议。有这样的面试体验是非常棒让我获益良多，在此表达我的感谢之情。不过本篇文章不是讲述面试经验或者体会的，是讲面试中被反复提到的">
+  <meta name="description" content="Sqlite自增字段起因：在使用数据库存储从区块链网络上取来的block_header时，block_header本身并不带自身的高度信息。不过取来的数据是经过筛选的，按照数据库存储的顺序就可以代表blockheader的高度。所以在数据库中增加一个id primiry key autoincrement 的自增主键。每次从数据库查询时获取id值来代表区块的高度。但后来重构，id被TEXT类型的逐">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Rust关于数据溢出安全">
-<meta property="og:url" content="https://imzy.vip/posts/36864/index.html">
+<meta property="og:title" content="sqlite自增小知识">
+<meta property="og:url" content="https://imzy.vip/posts/48571/index.html">
 <meta property="og:site_name" content="TID&#39;s Blog">
-<meta property="og:description" content="在4个多月之前，也就是19年的7月份。在大佬的推荐下，有幸拿到了今日头条的面试机会。在漫长的面试过程中，头条的面试官态度热情，问的问题兼具广度和深度。再很多问题回答的一塌糊涂的条件下，也让我面试了长达五小时。特别的最后的面试官，态度友好且诚恳，对我的诸多不足之处提出委婉的建议。有这样的面试体验是非常棒让我获益良多，在此表达我的感谢之情。不过本篇文章不是讲述面试经验或者体会的，是讲面试中被反复提到的">
+<meta property="og:description" content="Sqlite自增字段起因：在使用数据库存储从区块链网络上取来的block_header时，block_header本身并不带自身的高度信息。不过取来的数据是经过筛选的，按照数据库存储的顺序就可以代表blockheader的高度。所以在数据库中增加一个id primiry key autoincrement 的自增主键。每次从数据库查询时获取id值来代表区块的高度。但后来重构，id被TEXT类型的逐">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2019-11-18T07:44:09.000Z">
+<meta property="article:published_time" content="2021-01-20T02:06:54.000Z">
 <meta property="article:modified_time" content="2021-01-20T03:15:29.891Z">
 <meta property="article:author" content="TigerInYourDream">
-<meta property="article:tag" content="Rust">
-<meta property="article:tag" content="数据溢出">
+<meta property="article:tag" content="数据库">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://imzy.vip/posts/36864/">
+<link rel="canonical" href="https://imzy.vip/posts/48571/">
 
 
 <script id="page-configurations">
@@ -47,7 +46,7 @@
   };
 </script>
 
-  <title>Rust关于数据溢出安全 | TID's Blog</title>
+  <title>sqlite自增小知识 | TID's Blog</title>
   
 
 
@@ -172,7 +171,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/36864/">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/48571/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -185,7 +184,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Rust关于数据溢出安全
+          sqlite自增小知识
         </h1>
 
         <div class="post-meta">
@@ -194,16 +193,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2019-11-18 15:44:09" itemprop="dateCreated datePublished" datetime="2019-11-18T15:44:09+08:00">2019-11-18</time>
+              <time title="创建时间：2021-01-20 10:06:54 / 修改时间：11:15:29" itemprop="dateCreated datePublished" datetime="2021-01-20T10:06:54+08:00">2021-01-20</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-20 11:15:29" itemprop="dateModified" datetime="2021-01-20T11:15:29+08:00">2021-01-20</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -220,7 +213,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.1k</span>
+              <span>1.5k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -239,32 +232,27 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>在4个多月之前，也就是19年的7月份。在大佬的推荐下，有幸拿到了今日头条的面试机会。在漫长的面试过程中，头条的面试官态度热情，问的问题兼具广度和深度。再很多问题回答的一塌糊涂的条件下，也让我面试了长达五小时。特别的最后的面试官，态度友好且诚恳，对我的诸多不足之处提出委婉的建议。有这样的面试体验是非常棒让我获益良多，在此表达我的感谢之情。不过本篇文章不是讲述面试经验或者体会的，是讲面试中被反复提到的问题：</p>
-<a id="more"></a>
+        <h1 id="Sqlite自增字段"><a href="#Sqlite自增字段" class="headerlink" title="Sqlite自增字段"></a>Sqlite自增字段</h1><p>起因：在使用数据库存储从区块链网络上取来的block_header时，block_header本身并不带自身的高度信息。不过取来的数据是经过筛选的，按照数据库存储的顺序就可以代表blockheader的高度。所以在数据库中增加一个id primiry key autoincrement 的自增主键。每次从数据库查询时获取id值来代表区块的高度。但后来重构，id被TEXT类型的逐渐替代，所以这个功能无法正常实现。所以产生以下疑问</p>
+<h2 id="在已经有TEXT类型的主键后，sqlite可以拥有别的自增字段吗"><a href="#在已经有TEXT类型的主键后，sqlite可以拥有别的自增字段吗" class="headerlink" title="在已经有TEXT类型的主键后，sqlite可以拥有别的自增字段吗?"></a>在已经有TEXT类型的主键后，sqlite可以拥有别的自增字段吗?</h2><p>不可以！在sqlite的文档FAQ中第一个问题（文末给出参考链接）就是关于如何设置自增字段的。在sqlite中自增约束AUTOINCREMENT只可以跟在PRIMARY KEY后面。把AUTOINCREMENT放在主键以外的地方是不可以的。或者再明确一点，要想在sqlite中拥有一个自增字段必须这样写</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id INTEGER PRIMARY KEY AUTOINCREMENT,</span><br></pre></td></tr></table></figure>
 
-<p><strong>Rust数据计算溢出怎么办？</strong></p>
-<p>因为面试的是cpp/rust相关的岗位，面试官提出这个问题之后我是很懵的。以为之前完全没考虑过这个问题。Rust号称安全，那么他是如何处理这个问题的呢。当时我的回答是：换用更大的数据类型。其实当时这个回答说出口，就觉得完全不对，毕竟int32之上还有int64，无论用多大的数据类型，计算依旧可能溢出。</p>
-<p>我想今天我可以很好的回答这个问题。在c语言中，无符号整数完全不会溢出（overflow）,因为数据一旦超过上限，则自动舍弃高位数据。对于有符号数，一旦超过上限，则标准这是ub。Rust号称安全，从设计上就要尽可能的避免ub，对于数据溢出，也算是语言必须面对的bug。rust处理这个bug分为以下两种情况（默认情况，先不谈编译参数的调整）</p>
+<p>要求id的类型必须是INTEGER。每次插入数据库的时候，不要插入id的数据，数据库会自动为我们的主键id实现自增。之前提到的情况：id已经是TEXT PRIMARY KEY的状态下，<strong>无法</strong>再拥有另一个自增字段了。</p>
+<p>题外：在sqlite以外的数据库中是可以的。以mysql为例，mysql的AUTOINCREMENT是可以加在主键之外的地方的。一个表中，只允许有一个自增字段，而且在mysql中需要给主键以外的字段实现自增，<strong>必须给该字段加上</strong>unique约束。</p>
+<p>注意点:</p>
 <ol>
-<li>debug模式下，编译器会自动插入溢出检查，一旦overflow则立即panic。</li>
-<li>release模式下，编译器不进行溢出检查，一旦overflow则舍弃高位</li>
+<li>在设定id INTEGER PRIMARY KEY，不加AUTOINCREMENT，只要不指定插入id的数据，id字段也可以实现自增。</li>
 </ol>
-<p>如果我们在编译时调整编译参数</p>
-<blockquote>
-<p><code>rustc -C overflow-checks=no</code></p>
-</blockquote>
-<p>overflow-checks=yes 或者 no，可以打开或关闭编译器的溢出检查。这样的话，无论是debug还是release模式都可以有统一的溢出检查设置。</p>
-<p>当然，我们需要的不仅仅是这个，如果需要更细力度的溢出处理，我们可以使用以下函数</p>
-<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">check_*</span><br><span class="line">saturating_*</span><br><span class="line">warpping_*</span><br></pre></td></tr></table></figure>
+<h2 id="在已经有TEXT类型的主键后，一定要有一个自增的字段来记录当前所在的行数怎么办？"><a href="#在已经有TEXT类型的主键后，一定要有一个自增的字段来记录当前所在的行数怎么办？" class="headerlink" title="在已经有TEXT类型的主键后，一定要有一个自增的字段来记录当前所在的行数怎么办？"></a>在已经有TEXT类型的主键后，一定要有一个自增的字段来记录当前所在的行数怎么办？</h2><p>sqlite数据库中自带一个字段叫做 rowid，rowid就是一个自增字段。我们查询的时候，直接查询rowid就可以知道当前行数。（但是sqlite有without rowid类型表，这种表不带rowid字段）。一旦我们在数据库中设定 id INTEGER PRIMARY KEY，id就相当于rowid的别名。在sqlite3中，rowid的大小为64-bit signed integer，大小范围为i64。rowid最大值为9223372036854775807。</p>
+<h2 id="rowid的行为"><a href="#rowid的行为" class="headerlink" title="rowid的行为"></a>rowid的行为</h2><p>rowid由数据库自行维护，只要用户不去主动干涉。rowid每行加一。当rowid超过以上的范围时刻，会在允许范围内随机找还没占用到的数字填充。当我们删除行之后，rowid所代表的数字是可以被复用的。如果所有数字确实用完之后数据库会抛出SQLITE_FULL error。</p>
+<h2 id="rowid和序列"><a href="#rowid和序列" class="headerlink" title="rowid和序列"></a>rowid和序列</h2><p>在sqlite数据库中，如果启用了AUTOINCREMENT，数据库会有一个内建的表叫做<a target="_blank" rel="noopener" href="https://sqlite.org/fileformat2.html#seqtab">sqlite_sequence</a>来记录rowid的变化。注意：这个序列表是可以正常操作的，比如插入数据，更新数据。修改的前提是用户要清楚自己操作对数据库有何影响。当数据库插入数据时，序列表就会关联的发生变化。因为序列表的存在，加了AUTOINCREMENT的数据库要稍微慢一点。且序列表由数据库创建和删除，不允许用户自行创建和删除。</p>
+<p>其他注意事项：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ROWID, _ROWID_, OID都可以用来表示rowid</span><br></pre></td></tr></table></figure>
 
-<p>查阅API文档可知</p>
+<p>参考资料：</p>
 <ol>
-<li>check_*函数返回Option，一旦发生溢出则返回None</li>
-<li>saturating_*系列函数返回类型是整数，如果溢出，则给出该类型可表示范围的“最大/最小”值</li>
-<li>wrapping_*系列函数则是直接抛弃已经溢出的最高位，将剩下的部分返回</li>
+<li><a target="_blank" rel="noopener" href="https://sqlite.org/faq.html#q1">https://sqlite.org/faq.html#q1</a></li>
+<li><a target="_blank" rel="noopener" href="https://sqlite.org/autoinc.html">https://sqlite.org/autoinc.html</a></li>
 </ol>
-<p>如果你再进一步仔细查阅Rust源码，发现源码中大量的数据运算都采用这三个函数。当然了，如果你不使用这三类函数，你还可以使用std::num::Warping<T>的类型，他重载了基本运算符。溢出直接截断。这类包裹的用法，不受编译器溢出参数的影响，永远直接截断高位，不会panic.</p>
-<p>以上方法就是rust处理溢出的所有情况。</p>
 
     </div>
 
@@ -274,8 +262,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Rust/" rel="tag"># Rust</a>
-              <a href="/tags/%E6%95%B0%E6%8D%AE%E6%BA%A2%E5%87%BA/" rel="tag"># 数据溢出</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag"># 数据库</a>
           </div>
 
         
@@ -284,13 +271,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/posts/46484/" rel="prev" title="构建离线交易">
-      <i class="fa fa-chevron-left"></i> 构建离线交易
+    <a href="/posts/63616/" rel="prev" title="多线程原语ConVar">
+      <i class="fa fa-chevron-left"></i> 多线程原语ConVar
     </a></div>
-      <div class="post-nav-item">
-    <a href="/posts/51833/" rel="next" title="周报，软件构建和职业发展">
-      周报，软件构建和职业发展 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -349,6 +333,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Sqlite%E8%87%AA%E5%A2%9E%E5%AD%97%E6%AE%B5"><span class="nav-number">1.</span> <span class="nav-text">Sqlite自增字段</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E5%B7%B2%E7%BB%8F%E6%9C%89TEXT%E7%B1%BB%E5%9E%8B%E7%9A%84%E4%B8%BB%E9%94%AE%E5%90%8E%EF%BC%8Csqlite%E5%8F%AF%E4%BB%A5%E6%8B%A5%E6%9C%89%E5%88%AB%E7%9A%84%E8%87%AA%E5%A2%9E%E5%AD%97%E6%AE%B5%E5%90%97"><span class="nav-number">1.1.</span> <span class="nav-text">在已经有TEXT类型的主键后，sqlite可以拥有别的自增字段吗?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E5%B7%B2%E7%BB%8F%E6%9C%89TEXT%E7%B1%BB%E5%9E%8B%E7%9A%84%E4%B8%BB%E9%94%AE%E5%90%8E%EF%BC%8C%E4%B8%80%E5%AE%9A%E8%A6%81%E6%9C%89%E4%B8%80%E4%B8%AA%E8%87%AA%E5%A2%9E%E7%9A%84%E5%AD%97%E6%AE%B5%E6%9D%A5%E8%AE%B0%E5%BD%95%E5%BD%93%E5%89%8D%E6%89%80%E5%9C%A8%E7%9A%84%E8%A1%8C%E6%95%B0%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F"><span class="nav-number">1.2.</span> <span class="nav-text">在已经有TEXT类型的主键后，一定要有一个自增的字段来记录当前所在的行数怎么办？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rowid%E7%9A%84%E8%A1%8C%E4%B8%BA"><span class="nav-number">1.3.</span> <span class="nav-text">rowid的行为</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rowid%E5%92%8C%E5%BA%8F%E5%88%97"><span class="nav-number">1.4.</span> <span class="nav-text">rowid和序列</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
