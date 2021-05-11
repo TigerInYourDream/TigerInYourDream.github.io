@@ -34,7 +34,7 @@
 <meta property="og:image" content="https://img.imzlp.com/imgs/alvin/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%985.jpg">
 <meta property="og:image" content="https://img.imzlp.com/imgs/alvin/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%986.jpg">
 <meta property="article:published_time" content="2021-05-11T14:05:53.000Z">
-<meta property="article:modified_time" content="2021-05-11T14:15:06.252Z">
+<meta property="article:modified_time" content="2021-05-11T14:26:17.937Z">
 <meta property="article:author" content="TigerInYourDream">
 <meta property="article:tag" content="区块链">
 <meta name="twitter:card" content="summary">
@@ -202,7 +202,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-05-11 22:05:53 / 修改时间：22:15:06" itemprop="dateCreated datePublished" datetime="2021-05-11T22:05:53+08:00">2021-05-11</time>
+              <time title="创建时间：2021-05-11 22:05:53 / 修改时间：22:26:17" itemprop="dateCreated datePublished" datetime="2021-05-11T22:05:53+08:00">2021-05-11</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -220,7 +220,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>3.9k</span>
+              <span>4k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -294,7 +294,67 @@
 <p><img src="https://img.imzlp.com/imgs/alvin/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%986.jpg">情况较为复杂，就不在图上标注各位副官之间的信息交互情况，仅标注司令官给各位副官下达的命令。再描述这个情况情况之前，先强调一下这里分析需要的思路：递归。递归简单来说就是套娃，比如你照镜子的时候，再拿第二面精致对着镜子中的自己。或者你在直播的时候，用摄像头对着自己的屏幕。这里不是专门的算法分析介绍，不再强调递归。</p>
 <p>回到图上，我们假设司令官是忠诚的，其中5和6号副官是叛徒。他给每个副官都下达了进攻命令。</p>
 <p>下面我们来列一个表格表述现在的状况</p>
-<p><a target="_blank" rel="noopener" href="https://www.notion.so/1b4918f523744bc3855951675d296ef9">拜占庭将军问题 m=2</a></p>
+<p>拜占庭将军问题 m=2</p>
+<table>
+<thead>
+<tr>
+<th align="center">V1=A</th>
+<th align="center">V2</th>
+<th align="center">V3</th>
+<th align="center">V4</th>
+<th align="center">V5</th>
+<th align="center">V6</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">V2==A</td>
+<td align="center">A</td>
+<td align="center">A</td>
+<td align="center">A</td>
+<td align="center">a</td>
+<td align="center">b</td>
+</tr>
+<tr>
+<td align="center">V3==</td>
+<td align="center">A</td>
+<td align="center">A</td>
+<td align="center">A</td>
+<td align="center">c</td>
+<td align="center">d</td>
+</tr>
+<tr>
+<td align="center">V4==</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">V5==</td>
+<td align="center">g</td>
+<td align="center">h</td>
+<td align="center">i</td>
+<td align="center">j</td>
+<td align="center">k</td>
+</tr>
+<tr>
+<td align="center">V6==</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
 <p>我们从1出发来看这个表格，看看一号副官是如何决策的。1毫无疑问接到了将军的进攻命令。但是他不可能接受到将军的命令就进攻，还是要交流，确定别人都接受到的是什么命令。</p>
 <p>首先他要确定2接受的是什么命令。</p>
 <p>第一重分析，他直接问V2，V2接受到了什么命令。2是忠诚的自然是说：2接受的是进攻。然后1开始问V3：V2接受的是什么命令。依次类推。因为5号和6号是叛徒，他说什么都可能，随意用无关字母小写的a,b来表表示。根据多数原则，1可以确定一件事，2号接受的确实是进攻命令。</p>
