@@ -167,6 +167,105 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/58506/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="TigerInYourDream">
+      <meta itemprop="description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TID's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/posts/58506/" class="post-title-link" itemprop="url">比特币pow难度验证</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-06-19 15:58:46 / 修改时间：16:06:23" itemprop="dateCreated datePublished" datetime="2021-06-19T15:58:46+08:00">2021-06-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">技术笔记</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="比特币pow难度验证"><a href="#比特币pow难度验证" class="headerlink" title="比特币pow难度验证"></a>比特币pow难度验证</h1><h2 id="何为POW"><a href="#何为POW" class="headerlink" title="何为POW"></a>何为POW</h2><p>pow的全称为proof of work，即工作量证明。简单的解释为“做了多少工作”。抛开区块链的背景，pow就是对自己做了多少工作的一种说明：比如做了学习了50个小时的汽车驾驶。而他人很容易验证这个结果：你可能50个小时之后拿到了一本驾照。别人就知道你确实在学习驾驶上使用了50个小时。</p>
+<h2 id="Block-Header"><a href="#Block-Header" class="headerlink" title="Block Header"></a>Block Header</h2><p>在区块链的世界里，pow的数据可以体现在区块链的区块头中。当然一般来说，讲解POW的难度离不开挖矿问题。本文因为主要讨论方向的问题，不展开讲挖矿，主要从区块头入手。在阅读下面的内容之前，默认读者已经有了如下前置知识</p>
+<ol>
+<li>区块链常识</li>
+<li>比特币基本概念</li>
+<li>挖矿基本概念</li>
+</ol>
+<p>抛开前置知识之后，我们来看区块头的数据结构。</p>
+<p><a target="_blank" rel="noopener" href="https://en.bitcoin.it/wiki/Protocol_documentation#Block_Headers">https://en.bitcoin.it/wiki/Protocol_documentation#Block_Headers</a></p>
+<p>可以直接参考以上链接，当然可以可以直接查看比特币的源码，我们现在把数据列出来。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">header_structure</span> &#123;</span>      <span class="comment">// BYTES   NAME</span></span><br><span class="line"> <span class="keyword">uint32_t</span> nVersion;            <span class="comment">// 4       version</span></span><br><span class="line"> <span class="keyword">uint8_t</span> hashPrevBlock[<span class="number">32</span>];    <span class="comment">// 32      previous block header hash</span></span><br><span class="line"> <span class="keyword">uint8_t</span> hashMerkleRoot[<span class="number">32</span>];   <span class="comment">// 32      merkle root hash</span></span><br><span class="line"> <span class="keyword">uint32_t</span> nTime;               <span class="comment">// 4       time</span></span><br><span class="line"> <span class="keyword">uint32_t</span> nBits;               <span class="comment">// 4       target</span></span><br><span class="line"> <span class="keyword">uint32_t</span> nNonce;              <span class="comment">// 4       nonce</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/58506/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/27143/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -190,10 +289,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-05-11 22:05:53 / 修改时间：22:26:17" itemprop="dateCreated datePublished" datetime="2021-05-11T22:05:53+08:00">2021-05-11</time>
+              <time title="创建时间：2021-05-11 22:05:53" itemprop="dateCreated datePublished" datetime="2021-05-11T22:05:53+08:00">2021-05-11</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-06-19 16:06:23" itemprop="dateModified" datetime="2021-06-19T16:06:23+08:00">2021-06-19</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -297,7 +402,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-11 22:26:17" itemprop="dateModified" datetime="2021-05-11T22:26:17+08:00">2021-05-11</time>
+                <time title="修改时间：2021-06-19 16:06:23" itemprop="dateModified" datetime="2021-06-19T16:06:23+08:00">2021-06-19</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -404,7 +509,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-11 22:26:17" itemprop="dateModified" datetime="2021-05-11T22:26:17+08:00">2021-05-11</time>
+                <time title="修改时间：2021-06-19 16:06:23" itemprop="dateModified" datetime="2021-06-19T16:06:23+08:00">2021-06-19</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -509,7 +614,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-11 22:26:17" itemprop="dateModified" datetime="2021-05-11T22:26:17+08:00">2021-05-11</time>
+                <time title="修改时间：2021-06-19 16:06:23" itemprop="dateModified" datetime="2021-06-19T16:06:23+08:00">2021-06-19</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -617,7 +722,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-11 22:26:17" itemprop="dateModified" datetime="2021-05-11T22:26:17+08:00">2021-05-11</time>
+                <time title="修改时间：2021-06-19 16:06:23" itemprop="dateModified" datetime="2021-06-19T16:06:23+08:00">2021-06-19</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -714,7 +819,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-11 22:26:17" itemprop="dateModified" datetime="2021-05-11T22:26:17+08:00">2021-05-11</time>
+                <time title="修改时间：2021-06-19 16:06:23" itemprop="dateModified" datetime="2021-06-19T16:06:23+08:00">2021-06-19</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -809,7 +914,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-11 22:26:17" itemprop="dateModified" datetime="2021-05-11T22:26:17+08:00">2021-05-11</time>
+                <time title="修改时间：2021-06-19 16:06:23" itemprop="dateModified" datetime="2021-06-19T16:06:23+08:00">2021-06-19</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -904,7 +1009,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-11 22:26:17" itemprop="dateModified" datetime="2021-05-11T22:26:17+08:00">2021-05-11</time>
+                <time title="修改时间：2021-06-19 16:06:23" itemprop="dateModified" datetime="2021-06-19T16:06:23+08:00">2021-06-19</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -999,7 +1104,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-11 22:26:17" itemprop="dateModified" datetime="2021-05-11T22:26:17+08:00">2021-05-11</time>
+                <time title="修改时间：2021-06-19 16:06:23" itemprop="dateModified" datetime="2021-06-19T16:06:23+08:00">2021-06-19</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1040,101 +1145,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/posts/56817/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/10047/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="TigerInYourDream">
-      <meta itemprop="description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="TID's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/posts/10047/" class="post-title-link" itemprop="url">rust工程实践</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-02-16 21:22:27" itemprop="dateCreated datePublished" datetime="2020-02-16T21:22:27+08:00">2020-02-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-11 22:26:17" itemprop="dateModified" datetime="2021-05-11T22:26:17+08:00">2021-05-11</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">技术笔记</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>677</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="rust工程实践"><a href="#rust工程实践" class="headerlink" title="rust工程实践"></a>rust工程实践</h1><p>本文是rust的实践记录，主要用来记录rust写工程代码，和在tikv的talent-plan中学习到的代码常识。这里列出的是比较重要，但是不足以写一篇文章来讨论的。长期更新。以后考虑加个目录方便查询。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/10047/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1225,7 +1235,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-count">39</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1238,7 +1248,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-count">43</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1274,12 +1284,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">117k</span>
+    <span title="站点总字数">121k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:46</span>
+    <span title="站点阅读时长">1:50</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
