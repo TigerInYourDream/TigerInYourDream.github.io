@@ -167,6 +167,105 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/3102/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="TigerInYourDream">
+      <meta itemprop="description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TID's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/posts/3102/" class="post-title-link" itemprop="url">占星与星座计算  儒略历和恒星时计算</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-08-07 22:35:15 / 修改时间：22:39:16" itemprop="dateCreated datePublished" datetime="2021-08-07T22:35:15+08:00">2021-08-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A4%A9%E6%96%87/" itemprop="url" rel="index"><span itemprop="name">天文</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="占星与星座计算-儒略历和恒星时计算"><a href="#占星与星座计算-儒略历和恒星时计算" class="headerlink" title="占星与星座计算  儒略历和恒星时计算"></a>占星与星座计算  儒略历和恒星时计算</h1><p>在前两节的文章基础之上，我们开始进行真正的计算。在介绍计算星盘之前，我们需要一个预先准备的数据。儒略历和恒星时。网上的现成代码似乎没有说的很清楚，公式不够统一，结果也难以验证，为此参考了很多资料。其中有两个资料确定是对的。</p>
+<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%81%92%E6%98%9F%E6%97%B6">https://zh.wikipedia.org/wiki/恒星时</a></p>
+<p>上面公式中关于儒略历的转化公式是正确的，请注意其中的高斯符号。高斯符号相当于代码中的floor()函数。</p>
+<p>公式参考一份关于天文算法的论文，或者是一本翻译的PDF。感谢“冯剑和他的译友”翻译了这本天文算法，使我得到了确切的公式。使用了太多的时间。</p>
+<p>关于什么是恒星时可以也可以参考上面的wiki。</p>
+<p>关于结果，分别得到了多项式T，算出来以角度为单位的恒星时，以时间hour为单位的恒星时，以时分秒为单位的恒星时。</p>
+<blockquote>
+<p>现在公历纪元的年表示为Y、月为M、日为D、时为h、分为m、秒为s，1月、2月分别当做上一年的13月、14月。（例：2010年1月1日时Y=2009, M=13, D=1），然后求出儒略日</p>
+</blockquote>
+<p>计算儒略历请注意以上的重点。</p>
+<p>代码如下</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/3102/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/13704/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -190,10 +289,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-08-06 20:29:32 / 修改时间：20:32:55" itemprop="dateCreated datePublished" datetime="2021-08-06T20:29:32+08:00">2021-08-06</time>
+              <time title="创建时间：2021-08-06 20:29:32" itemprop="dateCreated datePublished" datetime="2021-08-06T20:29:32+08:00">2021-08-06</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-08-07 22:39:16" itemprop="dateModified" datetime="2021-08-07T22:39:16+08:00">2021-08-07</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -300,7 +405,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-06 20:32:55" itemprop="dateModified" datetime="2021-08-06T20:32:55+08:00">2021-08-06</time>
+                <time title="修改时间：2021-08-07 22:39:16" itemprop="dateModified" datetime="2021-08-07T22:39:16+08:00">2021-08-07</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -404,7 +509,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-06 20:32:55" itemprop="dateModified" datetime="2021-08-06T20:32:55+08:00">2021-08-06</time>
+                <time title="修改时间：2021-08-07 22:39:16" itemprop="dateModified" datetime="2021-08-07T22:39:16+08:00">2021-08-07</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -509,7 +614,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-06 20:32:55" itemprop="dateModified" datetime="2021-08-06T20:32:55+08:00">2021-08-06</time>
+                <time title="修改时间：2021-08-07 22:39:16" itemprop="dateModified" datetime="2021-08-07T22:39:16+08:00">2021-08-07</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -614,7 +719,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-06 20:32:55" itemprop="dateModified" datetime="2021-08-06T20:32:55+08:00">2021-08-06</time>
+                <time title="修改时间：2021-08-07 22:39:16" itemprop="dateModified" datetime="2021-08-07T22:39:16+08:00">2021-08-07</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -721,7 +826,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-06 20:32:55" itemprop="dateModified" datetime="2021-08-06T20:32:55+08:00">2021-08-06</time>
+                <time title="修改时间：2021-08-07 22:39:16" itemprop="dateModified" datetime="2021-08-07T22:39:16+08:00">2021-08-07</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -826,7 +931,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-06 20:32:55" itemprop="dateModified" datetime="2021-08-06T20:32:55+08:00">2021-08-06</time>
+                <time title="修改时间：2021-08-07 22:39:16" itemprop="dateModified" datetime="2021-08-07T22:39:16+08:00">2021-08-07</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -934,7 +1039,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-06 20:32:55" itemprop="dateModified" datetime="2021-08-06T20:32:55+08:00">2021-08-06</time>
+                <time title="修改时间：2021-08-07 22:39:16" itemprop="dateModified" datetime="2021-08-07T22:39:16+08:00">2021-08-07</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1031,7 +1136,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-06 20:32:55" itemprop="dateModified" datetime="2021-08-06T20:32:55+08:00">2021-08-06</time>
+                <time title="修改时间：2021-08-07 22:39:16" itemprop="dateModified" datetime="2021-08-07T22:39:16+08:00">2021-08-07</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1072,101 +1177,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/posts/182/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/19624/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="TigerInYourDream">
-      <meta itemprop="description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="TID's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/posts/19624/" class="post-title-link" itemprop="url">使用状态码加消息传递库状态</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-05-09 20:09:08" itemprop="dateCreated datePublished" datetime="2020-05-09T20:09:08+08:00">2020-05-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-06 20:32:55" itemprop="dateModified" datetime="2021-08-06T20:32:55+08:00">2021-08-06</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">技术笔记</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2.6k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>这篇文章是上一篇<a href="https://imzy.vip/posts/27183/">使用rust写安卓库</a>的续篇，本身按照上一篇文章的介绍已经完全基本讲清楚了使用rust给安卓写库的基本方面，这篇文章继续在之前的状态上补充，力求文章完备。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/19624/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1257,7 +1267,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">41</span>
+          <span class="site-state-item-count">42</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1306,12 +1316,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">124k</span>
+    <span title="站点总字数">126k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:53</span>
+    <span title="站点阅读时长">1:55</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
