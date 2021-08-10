@@ -20,17 +20,16 @@
     var CONFIG = {"hostname":"imzy.vip","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="占星与星座计算  儒略历和恒星时计算在前两节的文章基础之上，我们开始进行真正的计算。在介绍计算星盘之前，我们需要一个预先准备的数据。儒略历和恒星时。网上的现成代码似乎没有说的很清楚，公式不够统一，结果也难以验证，为此参考了很多资料。其中有两个资料确定是对的。 https:&#x2F;&#x2F;zh.wikipedia.org&#x2F;wiki&#x2F;恒星时 上面公式中关于儒略历的转化公式是正确的，请注意其中的高斯符号。高斯符号相">
+  <meta name="description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
 <meta property="og:type" content="article">
 <meta property="og:title" content="占星与星座计算  儒略历和恒星时计算">
 <meta property="og:url" content="https://imzy.vip/posts/3102/index.html">
 <meta property="og:site_name" content="TID&#39;s Blog">
-<meta property="og:description" content="占星与星座计算  儒略历和恒星时计算在前两节的文章基础之上，我们开始进行真正的计算。在介绍计算星盘之前，我们需要一个预先准备的数据。儒略历和恒星时。网上的现成代码似乎没有说的很清楚，公式不够统一，结果也难以验证，为此参考了很多资料。其中有两个资料确定是对的。 https:&#x2F;&#x2F;zh.wikipedia.org&#x2F;wiki&#x2F;恒星时 上面公式中关于儒略历的转化公式是正确的，请注意其中的高斯符号。高斯符号相">
+<meta property="og:description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-08-07T14:35:15.000Z">
-<meta property="article:modified_time" content="2021-08-07T14:39:16.969Z">
+<meta property="article:modified_time" content="2021-08-10T14:40:10.390Z">
 <meta property="article:author" content="TigerInYourDream">
-<meta property="article:tag" content="占星">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://imzy.vip/posts/3102/">
@@ -193,19 +192,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-08-07 22:35:15 / 修改时间：22:39:16" itemprop="dateCreated datePublished" datetime="2021-08-07T22:35:15+08:00">2021-08-07</time>
+              <time title="创建时间：2021-08-07 22:35:15" itemprop="dateCreated datePublished" datetime="2021-08-07T22:35:15+08:00">2021-08-07</time>
             </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%A4%A9%E6%96%87/" itemprop="url" rel="index"><span itemprop="name">天文</span></a>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
                 </span>
-            </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-08-10 22:40:10" itemprop="dateModified" datetime="2021-08-10T22:40:10+08:00">2021-08-10</time>
+              </span>
 
           <br>
             <span class="post-meta-item" title="本文字数">
@@ -213,14 +209,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.2k</span>
+              <span>0</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
+              <span>1 分钟</span>
             </span>
 
         </div>
@@ -232,28 +228,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="占星与星座计算-儒略历和恒星时计算"><a href="#占星与星座计算-儒略历和恒星时计算" class="headerlink" title="占星与星座计算  儒略历和恒星时计算"></a>占星与星座计算  儒略历和恒星时计算</h1><p>在前两节的文章基础之上，我们开始进行真正的计算。在介绍计算星盘之前，我们需要一个预先准备的数据。儒略历和恒星时。网上的现成代码似乎没有说的很清楚，公式不够统一，结果也难以验证，为此参考了很多资料。其中有两个资料确定是对的。</p>
-<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%81%92%E6%98%9F%E6%97%B6">https://zh.wikipedia.org/wiki/恒星时</a></p>
-<p>上面公式中关于儒略历的转化公式是正确的，请注意其中的高斯符号。高斯符号相当于代码中的floor()函数。</p>
-<p>公式参考一份关于天文算法的论文，或者是一本翻译的PDF。感谢“冯剑和他的译友”翻译了这本天文算法，使我得到了确切的公式。使用了太多的时间。</p>
-<p>关于什么是恒星时可以也可以参考上面的wiki。</p>
-<p>关于结果，分别得到了多项式T，算出来以角度为单位的恒星时，以时间hour为单位的恒星时，以时分秒为单位的恒星时。</p>
-<blockquote>
-<p>现在公历纪元的年表示为Y、月为M、日为D、时为h、分为m、秒为s，1月、2月分别当做上一年的13月、14月。（例：2010年1月1日时Y=2009, M=13, D=1），然后求出儒略日</p>
-</blockquote>
-<p>计算儒略历请注意以上的重点。</p>
-<p>代码如下</p>
-<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> chrono::&#123;Utc, TimeZone, FixedOffset, Datelike, Timelike&#125;;</span><br><span class="line"><span class="keyword">use</span> num::traits::pow;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;sidereal time!&quot;</span>);</span><br><span class="line">    <span class="keyword">let</span> birthday = Utc.ymd(<span class="number">1987</span>, <span class="number">4</span>, <span class="number">10</span>).and_hms(<span class="number">19</span>, <span class="number">21</span>, <span class="number">00</span>);</span><br><span class="line">    <span class="keyword">let</span> timezone = FixedOffset::east(<span class="number">0</span>);</span><br><span class="line">    birthday.with_timezone(&amp;timezone);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> year = birthday.year() <span class="keyword">as</span> <span class="built_in">f64</span>;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> month = birthday.month() <span class="keyword">as</span> <span class="built_in">f64</span>;</span><br><span class="line">    <span class="keyword">let</span> day = birthday.day() <span class="keyword">as</span> <span class="built_in">f64</span>;</span><br><span class="line">    <span class="keyword">let</span> hour = birthday.hour() <span class="keyword">as</span> <span class="built_in">f64</span>;</span><br><span class="line">    <span class="keyword">let</span> minute = birthday.minute() <span class="keyword">as</span> <span class="built_in">f64</span>;</span><br><span class="line">    <span class="keyword">let</span> second = birthday.second() <span class="keyword">as</span> <span class="built_in">f64</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> month &lt; <span class="number">2f64</span> &#123;</span><br><span class="line">        year = year - <span class="number">1f64</span>;</span><br><span class="line">        month = month + <span class="number">12f64</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> jd = (&amp;<span class="number">365.25</span> * year).floor() + (year / <span class="number">400f64</span>).floor() - (&amp;year / <span class="number">100f64</span>).floor() + (<span class="number">30.59</span> * (month - <span class="number">2f64</span>)).floor()</span><br><span class="line">        + day + <span class="number">1721088.5</span> + hour / <span class="number">24f64</span> + minute / <span class="number">1440f64</span> + second / <span class="number">86400f64</span>;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;jd: &#123;:?&#125;&quot;</span>, jd);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> t = (jd - <span class="number">2451545.0</span>) / <span class="number">36525f64</span>;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;t: &#123;:?&#125;&quot;</span>, t);</span><br><span class="line">    <span class="keyword">let</span> g = <span class="number">280.46061837</span> + <span class="number">360.98564736629</span> * (jd - <span class="number">2451545.0</span>) + <span class="number">0.000387933</span> * pow(t, <span class="number">2</span>) - pow(t, <span class="number">3</span>) / <span class="number">38710000f64</span>;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;g: &#123;:?&#125;&quot;</span>, g);</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> res = g % <span class="number">360f64</span>;</span><br><span class="line">    <span class="keyword">if</span> res &lt; <span class="number">0f64</span> &#123;</span><br><span class="line">        res = <span class="number">360f64</span> + res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;res &#123;:?&#125;°&quot;</span>, res);</span><br><span class="line"></span><br><span class="line">    res = res / <span class="number">15f64</span>;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;The sidereal hour is &#123;:?&#125;h&quot;</span>, res);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> hour = res.floor();</span><br><span class="line">    <span class="keyword">let</span> minute = ((res - hour) * <span class="number">60f64</span>).floor();</span><br><span class="line">    <span class="keyword">let</span> second = (((res - hour) * <span class="number">60f64</span>) - minute) * <span class="number">60f64</span>;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;The sidereal time is &#123;:?&#125;h&#123;:?&#125;m&#123;:?&#125;s&quot;</span>, hour, minute, second);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>其中jd代表儒略历时间。</p>
-<p>儒略历的计算结果可以对比</p>
-<p><a target="_blank" rel="noopener" href="https://www.aavso.org/jd-calculator">https://www.aavso.org/jd-calculator</a></p>
-<p>可以确定计算是一致的，也就验证了wiki中的公式的正确。后半部分则是引用了论文中的公式，计算结果和示例推导过程一致。所以计算结果可以确定是对的。顺便吐槽某个占星网站的计算，其中恒星时是错误的，伪学不靠谱啊。</p>
-<p>关于代码：代码使用rust，使用了chrono库表示时间。也使用了num，不过似乎也没用到什么特性，只用了一个pow。为了保证精度，所有数字全部使用f64</p>
-<p>另外本期计算的是平恒星时，非视恒星时。不考虑赤经章动修正。</p>
-<p>代码在github已上传。</p>
-<p><a target="_blank" rel="noopener" href="https://github.com/TigerInYourDream/sidereal-time">https://github.com/TigerInYourDream/sidereal-time</a></p>
-
+        
     </div>
 
     
@@ -261,9 +236,6 @@
     
 
       <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/%E5%8D%A0%E6%98%9F/" rel="tag"># 占星</a>
-          </div>
 
         
 
@@ -274,7 +246,10 @@
     <a href="/posts/13704/" rel="prev" title="占星与星座计算 黄道十二宫与分宫原理">
       <i class="fa fa-chevron-left"></i> 占星与星座计算 黄道十二宫与分宫原理
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/posts/26767/" rel="next" title="占星与星座计算 morinus house system">
+      占星与星座计算 morinus house system <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -333,7 +308,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%A0%E6%98%9F%E4%B8%8E%E6%98%9F%E5%BA%A7%E8%AE%A1%E7%AE%97-%E5%84%92%E7%95%A5%E5%8E%86%E5%92%8C%E6%81%92%E6%98%9F%E6%97%B6%E8%AE%A1%E7%AE%97"><span class="nav-number">1.</span> <span class="nav-text">占星与星座计算  儒略历和恒星时计算</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -349,14 +323,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-count">43</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -398,12 +372,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">126k</span>
+    <span title="站点总字数">125k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:55</span>
+    <span title="站点阅读时长">1:54</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
