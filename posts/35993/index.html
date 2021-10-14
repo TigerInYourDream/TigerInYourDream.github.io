@@ -20,24 +20,20 @@
     var CONFIG = {"hostname":"imzy.vip","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="​        根据Mastering Bitcoin梳理出的比特比交易过程，涉及公&#x2F;私钥生成，钱包，和真正的交易过程，涉及较多细节。">
+  <meta name="description" content="diesel使用的一些小知识点最近因为使用diesel，大致看了diesel的文档同时结合自己两天内写代码的经验，总结出下面几条要点，作为参考。严格来说，这些知识点比较琐碎不能够成为一篇文章，但是想到可以为自己以后使用diesel作参考还是写出来。  设置好.env之后 diesel setup   是创建数据库的   diesel migration generate create_posts">
 <meta property="og:type" content="article">
-<meta property="og:title" content="比特币交易过程一">
-<meta property="og:url" content="https://imzy.vip/posts/62625/index.html">
+<meta property="og:title" content="diesel使用小要点">
+<meta property="og:url" content="https://imzy.vip/posts/35993/index.html">
 <meta property="og:site_name" content="TID&#39;s Blog">
-<meta property="og:description" content="​        根据Mastering Bitcoin梳理出的比特比交易过程，涉及公&#x2F;私钥生成，钱包，和真正的交易过程，涉及较多细节。">
+<meta property="og:description" content="diesel使用的一些小知识点最近因为使用diesel，大致看了diesel的文档同时结合自己两天内写代码的经验，总结出下面几条要点，作为参考。严格来说，这些知识点比较琐碎不能够成为一篇文章，但是想到可以为自己以后使用diesel作参考还是写出来。  设置好.env之后 diesel setup   是创建数据库的   diesel migration generate create_posts">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://img.imzlp.com/imgs/alvin/eIEGOH.png">
-<meta property="article:published_time" content="2019-08-07T08:13:53.000Z">
-<meta property="article:modified_time" content="2021-10-14T11:30:55.270Z">
+<meta property="article:published_time" content="2021-10-14T10:39:14.000Z">
+<meta property="article:modified_time" content="2021-10-14T11:30:55.266Z">
 <meta property="article:author" content="TigerInYourDream">
-<meta property="article:tag" content="区块链">
-<meta property="article:tag" content="交易">
-<meta property="article:tag" content="bitcoin">
+<meta property="article:tag" content="rust">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://img.imzlp.com/imgs/alvin/eIEGOH.png">
 
-<link rel="canonical" href="https://imzy.vip/posts/62625/">
+<link rel="canonical" href="https://imzy.vip/posts/35993/">
 
 
 <script id="page-configurations">
@@ -50,7 +46,7 @@
   };
 </script>
 
-  <title>比特币交易过程一 | TID's Blog</title>
+  <title>diesel使用小要点 | TID's Blog</title>
   
 
 
@@ -175,7 +171,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/62625/">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/35993/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -188,7 +184,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          比特币交易过程一
+          diesel使用小要点
         </h1>
 
         <div class="post-meta">
@@ -197,16 +193,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2019-08-07 16:13:53" itemprop="dateCreated datePublished" datetime="2019-08-07T16:13:53+08:00">2019-08-07</time>
+              <time title="创建时间：2021-10-14 18:39:14 / 修改时间：19:30:55" itemprop="dateCreated datePublished" datetime="2021-10-14T18:39:14+08:00">2021-10-14</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-10-14 19:30:55" itemprop="dateModified" datetime="2021-10-14T19:30:55+08:00">2021-10-14</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -223,7 +213,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>166</span>
+              <span>1.6k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -242,10 +232,59 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p><img src="http://img.imzlp.com/imgs/alvin/eIEGOH.png" alt="比特币结构图"></p>
-<p>​        根据Mastering Bitcoin梳理出的比特比交易过程，涉及公/私钥生成，钱包，和真正的交易过程，涉及较多细节。</p>
-<a id="more"></a>
-<p>​        因为设计细节较多，单纯做一张图已经难以阅读，（同时也因为节点太多绘图工具太卡了…）所以拆分开来。本文章的图从三点钟方向开始阅读，顺时针方向阅读。这次的星图只到交易脚本构建结束，后续的文章将从交易脚本构建开始描述。</p>
+        <h1 id="diesel使用的一些小知识点"><a href="#diesel使用的一些小知识点" class="headerlink" title="diesel使用的一些小知识点"></a>diesel使用的一些小知识点</h1><p>最近因为使用diesel，大致看了diesel的文档同时结合自己两天内写代码的经验，总结出下面几条要点，作为参考。严格来说，这些知识点比较琐碎不能够成为一篇文章，但是想到可以为自己以后使用diesel作参考还是写出来。</p>
+<ol>
+<li><p>设置好.env之后 diesel setup   是创建数据库的 </p>
+</li>
+<li><p>diesel migration generate create_posts   最后一个参数是创建migration的文件夹名的 它会生成一个带时间的migration文件  里面有个up和down的sql up 里面负责创建数据库表的  down 里面负责撤回车操作的 </p>
+</li>
+<li><p>up 和 down 里面的sql要自己创建 </p>
+</li>
+<li><p>diesel migration run  执行migration里面的up.sql的操作的 确切的说就是建表 5. diesel migration redo 执行migration里面的down.sql的操作 确切的拉说是删除表 </p>
+</li>
+<li><p>注意了 setup是会创建数据库和直接运行migration run中的建表数据的 但是如果数据库存在是不会运行的。如果在  migration中添加，后续这个也是不会运行的 </p>
+</li>
+<li><p>这一步进行之后schema文件也会生成。这个文件是可以改的 ，但是不建议改 </p>
+</li>
+<li><p>如果升级数据库，请使用新的migration文件 </p>
+</li>
+<li><p>注意使用extern crate diesel 和#[marco use],不然schema下的东西又是找不到的</p>
+<p> 以上的条目中需要补充的还有如下</p>
+<blockquote>
+<p>本来以为在rust2018版本以后，就完全不使用extern crate了。但是事实证明还是需要extern crate diesel和#[marco_use]的，不然会有很多东西找不到</p>
+</blockquote>
+<blockquote>
+<p>使用diesel尽量引入prelude::*  虽然我不喜欢这样引入，但是自己精确引入会很麻烦</p>
+</blockquote>
+<blockquote>
+<p>一定要注意schema文件</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="如果使用只是使用diesel查询和写入如何简化代码"><a href="#如果使用只是使用diesel查询和写入如何简化代码" class="headerlink" title="如果使用只是使用diesel查询和写入如何简化代码"></a>如果使用只是使用diesel查询和写入如何简化代码</h2><p>这个问题会显的很奇怪，因为作为一个ORM，本来就是辅助我们进行增删改查的。其实我们看了diesel的官方指引之后就会觉得这个问题很合理。重新表述如下</p>
+<blockquote>
+<p>根据diesel的官方指引，我们是用建立连接，建立数据库，设计表这几个步骤一路走下来的。实际上，大多数时候，数据表并不是我们建立的。我们只需要使用diesel的库，连接数据库CRUD即可。这种情况下，如何简化操作呢？</p>
+</blockquote>
+<p>根据我的尝试大致需要如下</p>
+<ol>
+<li><p>引入库，这个是必须的</p>
+</li>
+<li><p>设置sql路径，这个是必须的</p>
+</li>
+<li><p>无需diesel setup因为我们不需要建立数据库，数据库是存在的</p>
+</li>
+<li><p>无需diesle migration run 因为表也不是我们建立的。</p>
+</li>
+<li><p>没有建表，没运行diesel migration run，则diesel不会为我们自动建立schema.rs文件，也不会在schema.rs中生成table宏的语法。所以我们需要手动去建立schema.rs的文件，src/schema.rs。就是必须建立的在src路径下面。这样才不会出错。然后我们在schema.rs中手动写入 table!宏。这样才可以正常使用。</p>
+</li>
+<li><p>以上的步骤是可以正常使用的，也是文件最少的情况。还有下面的情况补充</p>
+<blockquote>
+<p>如果我们运行了diesel set 如果数据库存在，是不会建立数据库的。会产生一个migrations文件。一个和Cargo.toml同级别的diesel.toml文件，里面配置了schema.rs文件的位置。  所以上一步中如果不运行diesel set，需要我们手动把schema文件放在指定的位置。</p>
+<p>同时，因为我们 不建表，所以不运行diesel migration run。schema里面是空的，为了正确使用orm的方便特性，我们得去手动补全这个文件，自己写table!宏。当然这个很容易。看example即可</p>
+</blockquote>
+<p> 一些零碎的知识，其他的正常使用参考文档即可。这个算是在文档之外的补充备查！</p>
+</li>
+</ol>
 
     </div>
 
@@ -255,9 +294,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" rel="tag"># 区块链</a>
-              <a href="/tags/%E4%BA%A4%E6%98%93/" rel="tag"># 交易</a>
-              <a href="/tags/bitcoin/" rel="tag"># bitcoin</a>
+              <a href="/tags/rust/" rel="tag"># rust</a>
           </div>
 
         
@@ -266,13 +303,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/posts/12108/" rel="prev" title="SPV">
-      <i class="fa fa-chevron-left"></i> SPV
+    <a href="/posts/26767/" rel="prev" title="占星与星座计算 morinus house system">
+      <i class="fa fa-chevron-left"></i> 占星与星座计算 morinus house system
     </a></div>
-      <div class="post-nav-item">
-    <a href="/posts/37280/" rel="next" title="比特币交易过程二">
-      比特币交易过程二 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -331,6 +365,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#diesel%E4%BD%BF%E7%94%A8%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="nav-number">1.</span> <span class="nav-text">diesel使用的一些小知识点</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E4%BD%BF%E7%94%A8%E5%8F%AA%E6%98%AF%E4%BD%BF%E7%94%A8diesel%E6%9F%A5%E8%AF%A2%E5%92%8C%E5%86%99%E5%85%A5%E5%A6%82%E4%BD%95%E7%AE%80%E5%8C%96%E4%BB%A3%E7%A0%81"><span class="nav-number">1.1.</span> <span class="nav-text">如果使用只是使用diesel查询和写入如何简化代码</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

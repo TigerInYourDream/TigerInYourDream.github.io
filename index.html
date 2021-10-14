@@ -167,6 +167,148 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/35993/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="TigerInYourDream">
+      <meta itemprop="description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TID's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/posts/35993/" class="post-title-link" itemprop="url">diesel使用小要点</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-10-14 18:39:14 / 修改时间：19:30:55" itemprop="dateCreated datePublished" datetime="2021-10-14T18:39:14+08:00">2021-10-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">技术笔记</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="diesel使用的一些小知识点"><a href="#diesel使用的一些小知识点" class="headerlink" title="diesel使用的一些小知识点"></a>diesel使用的一些小知识点</h1><p>最近因为使用diesel，大致看了diesel的文档同时结合自己两天内写代码的经验，总结出下面几条要点，作为参考。严格来说，这些知识点比较琐碎不能够成为一篇文章，但是想到可以为自己以后使用diesel作参考还是写出来。</p>
+<ol>
+<li><p>设置好.env之后 diesel setup   是创建数据库的 </p>
+</li>
+<li><p>diesel migration generate create_posts   最后一个参数是创建migration的文件夹名的 它会生成一个带时间的migration文件  里面有个up和down的sql up 里面负责创建数据库表的  down 里面负责撤回车操作的 </p>
+</li>
+<li><p>up 和 down 里面的sql要自己创建 </p>
+</li>
+<li><p>diesel migration run  执行migration里面的up.sql的操作的 确切的说就是建表 5. diesel migration redo 执行migration里面的down.sql的操作 确切的拉说是删除表 </p>
+</li>
+<li><p>注意了 setup是会创建数据库和直接运行migration run中的建表数据的 但是如果数据库存在是不会运行的。如果在  migration中添加，后续这个也是不会运行的 </p>
+</li>
+<li><p>这一步进行之后schema文件也会生成。这个文件是可以改的 ，但是不建议改 </p>
+</li>
+<li><p>如果升级数据库，请使用新的migration文件 </p>
+</li>
+<li><p>注意使用extern crate diesel 和#[marco use],不然schema下的东西又是找不到的</p>
+<p> 以上的条目中需要补充的还有如下</p>
+<blockquote>
+<p>本来以为在rust2018版本以后，就完全不使用extern crate了。但是事实证明还是需要extern crate diesel和#[marco_use]的，不然会有很多东西找不到</p>
+</blockquote>
+<blockquote>
+<p>使用diesel尽量引入prelude::*  虽然我不喜欢这样引入，但是自己精确引入会很麻烦</p>
+</blockquote>
+<blockquote>
+<p>一定要注意schema文件</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="如果使用只是使用diesel查询和写入如何简化代码"><a href="#如果使用只是使用diesel查询和写入如何简化代码" class="headerlink" title="如果使用只是使用diesel查询和写入如何简化代码"></a>如果使用只是使用diesel查询和写入如何简化代码</h2><p>这个问题会显的很奇怪，因为作为一个ORM，本来就是辅助我们进行增删改查的。其实我们看了diesel的官方指引之后就会觉得这个问题很合理。重新表述如下</p>
+<blockquote>
+<p>根据diesel的官方指引，我们是用建立连接，建立数据库，设计表这几个步骤一路走下来的。实际上，大多数时候，数据表并不是我们建立的。我们只需要使用diesel的库，连接数据库CRUD即可。这种情况下，如何简化操作呢？</p>
+</blockquote>
+<p>根据我的尝试大致需要如下</p>
+<ol>
+<li><p>引入库，这个是必须的</p>
+</li>
+<li><p>设置sql路径，这个是必须的</p>
+</li>
+<li><p>无需diesel setup因为我们不需要建立数据库，数据库是存在的</p>
+</li>
+<li><p>无需diesle migration run 因为表也不是我们建立的。</p>
+</li>
+<li><p>没有建表，没运行diesel migration run，则diesel不会为我们自动建立schema.rs文件，也不会在schema.rs中生成table宏的语法。所以我们需要手动去建立schema.rs的文件，src/schema.rs。就是必须建立的在src路径下面。这样才不会出错。然后我们在schema.rs中手动写入 table!宏。这样才可以正常使用。</p>
+</li>
+<li><p>以上的步骤是可以正常使用的，也是文件最少的情况。还有下面的情况补充</p>
+<blockquote>
+<p>如果我们运行了diesel set 如果数据库存在，是不会建立数据库的。会产生一个migrations文件。一个和Cargo.toml同级别的diesel.toml文件，里面配置了schema.rs文件的位置。  所以上一步中如果不运行diesel set，需要我们手动把schema文件放在指定的位置。</p>
+<p>同时，因为我们 不建表，所以不运行diesel migration run。schema里面是空的，为了正确使用orm的方便特性，我们得去手动补全这个文件，自己写table!宏。当然这个很容易。看example即可</p>
+</blockquote>
+<p> 一些零碎的知识，其他的正常使用参考文档即可。这个算是在文档之外的补充备查！</p>
+</li>
+</ol>
+
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/35993/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/26767/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -198,7 +340,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-13 09:15:03" itemprop="dateModified" datetime="2021-08-13T09:15:03+08:00">2021-08-13</time>
+                <time title="修改时间：2021-10-14 19:30:55" itemprop="dateModified" datetime="2021-10-14T19:30:55+08:00">2021-10-14</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -316,7 +458,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-13 09:15:03" itemprop="dateModified" datetime="2021-08-13T09:15:03+08:00">2021-08-13</time>
+                <time title="修改时间：2021-10-14 19:30:55" itemprop="dateModified" datetime="2021-10-14T19:30:55+08:00">2021-10-14</time>
               </span>
 
           <br>
@@ -394,7 +536,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-13 09:15:03" itemprop="dateModified" datetime="2021-08-13T09:15:03+08:00">2021-08-13</time>
+                <time title="修改时间：2021-10-14 19:30:55" itemprop="dateModified" datetime="2021-10-14T19:30:55+08:00">2021-10-14</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -502,7 +644,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-13 09:15:03" itemprop="dateModified" datetime="2021-08-13T09:15:03+08:00">2021-08-13</time>
+                <time title="修改时间：2021-10-14 19:30:55" itemprop="dateModified" datetime="2021-10-14T19:30:55+08:00">2021-10-14</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -606,7 +748,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-13 09:15:03" itemprop="dateModified" datetime="2021-08-13T09:15:03+08:00">2021-08-13</time>
+                <time title="修改时间：2021-10-14 19:30:55" itemprop="dateModified" datetime="2021-10-14T19:30:55+08:00">2021-10-14</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -711,7 +853,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-13 09:15:03" itemprop="dateModified" datetime="2021-08-13T09:15:03+08:00">2021-08-13</time>
+                <time title="修改时间：2021-10-14 19:30:55" itemprop="dateModified" datetime="2021-10-14T19:30:55+08:00">2021-10-14</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -816,7 +958,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-13 09:15:03" itemprop="dateModified" datetime="2021-08-13T09:15:03+08:00">2021-08-13</time>
+                <time title="修改时间：2021-10-14 19:30:55" itemprop="dateModified" datetime="2021-10-14T19:30:55+08:00">2021-10-14</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -923,7 +1065,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-13 09:15:03" itemprop="dateModified" datetime="2021-08-13T09:15:03+08:00">2021-08-13</time>
+                <time title="修改时间：2021-10-14 19:30:55" itemprop="dateModified" datetime="2021-10-14T19:30:55+08:00">2021-10-14</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1028,7 +1170,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-13 09:15:03" itemprop="dateModified" datetime="2021-08-13T09:15:03+08:00">2021-08-13</time>
+                <time title="修改时间：2021-10-14 19:30:55" itemprop="dateModified" datetime="2021-10-14T19:30:55+08:00">2021-10-14</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1082,103 +1224,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/posts/63616/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/55704/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="TigerInYourDream">
-      <meta itemprop="description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="TID's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/posts/55704/" class="post-title-link" itemprop="url">Jni符号对照</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-07-10 10:16:48" itemprop="dateCreated datePublished" datetime="2020-07-10T10:16:48+08:00">2020-07-10</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-13 09:15:03" itemprop="dateModified" datetime="2021-08-13T09:15:03+08:00">2021-08-13</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">技术笔记</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>3.2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Jni符号表"><a href="#Jni符号表" class="headerlink" title="Jni符号表"></a>Jni符号表</h1><p>本文是之前博客文章</p>
-<p><a href="https://imzy.vip/posts/27183/">《使用rust写安卓库》</a> </p>
-<p>的延续。之前的文章主题是如何利用rust-jni库提供便于java使用的rust jni代码。本文在之前的基础上继续提供后续关于jni符号，或者type的说明。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/55704/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1269,7 +1314,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-count">44</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1318,12 +1363,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">127k</span>
+    <span title="站点总字数">128k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:55</span>
+    <span title="站点阅读时长">1:57</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
