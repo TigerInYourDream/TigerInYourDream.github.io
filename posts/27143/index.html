@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Pacifico:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"imzy.vip","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="拜占庭将军问题简述拜占庭的简述本文将用于介绍著名的拜占庭将军问题。在介绍拜占庭将军问题之前，先简单说一下拜占庭。拜占庭帝国，在古代西欧也被称之为东罗马帝国。是一个位于欧亚交界处的封建君主制国家，其领土包括现在的欧洲南部，西亚和北非。公元四世纪左右，罗马帝国开始分列为罗马东部和罗马西部，这两个国家都被视为罗马正统，大概到公元十世纪，罗马西部陷落，随着神圣罗马帝国的建立，罗马东部失去了罗马这个单词的独">
+<meta property="og:type" content="article">
+<meta property="og:title" content="拜占庭将军问题简述">
+<meta property="og:url" content="https://imzy.vip/posts/27143/index.html">
+<meta property="og:site_name" content="TID&#39;s Blog">
+<meta property="og:description" content="拜占庭将军问题简述拜占庭的简述本文将用于介绍著名的拜占庭将军问题。在介绍拜占庭将军问题之前，先简单说一下拜占庭。拜占庭帝国，在古代西欧也被称之为东罗马帝国。是一个位于欧亚交界处的封建君主制国家，其领土包括现在的欧洲南部，西亚和北非。公元四世纪左右，罗马帝国开始分列为罗马东部和罗马西部，这两个国家都被视为罗马正统，大概到公元十世纪，罗马西部陷落，随着神圣罗马帝国的建立，罗马东部失去了罗马这个单词的独">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img.imzlp.com/imgs/alvin/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%981.jpg">
+<meta property="og:image" content="https://img.imzlp.com/imgs/alvin/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%982.jpg">
+<meta property="og:image" content="https://img.imzlp.com/imgs/alvin/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%983.jpg">
+<meta property="og:image" content="https://img.imzlp.com/imgs/alvin/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%984.jpg">
+<meta property="og:image" content="https://img.imzlp.com/imgs/alvin/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%985.jpg">
+<meta property="og:image" content="https://img.imzlp.com/imgs/alvin/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%986.jpg">
+<meta property="article:published_time" content="2021-05-11T22:05:53.000Z">
+<meta property="article:modified_time" content="2025-07-31T02:30:04.387Z">
+<meta property="article:author" content="TigerInYourDream">
+<meta property="article:tag" content="区块链">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img.imzlp.com/imgs/alvin/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%981.jpg">
+
+<link rel="canonical" href="https://imzy.vip/posts/27143/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>拜占庭将军问题简述 | TID's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">TID's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-一言">
+
+    <a href="/motto" rel="section"><i class="fa fa-camera fa-fw"></i>一言</a>
+
+  </li>
+        <li class="menu-item menu-item-友链">
+
+    <a href="/friends" rel="section"><i class="fa fa-american-sign-language-interpreting fa-fw"></i>友链</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/27143/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="TigerInYourDream">
+      <meta itemprop="description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TID's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          拜占庭将军问题简述
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-05-11 22:05:53" itemprop="dateCreated datePublished" datetime="2021-05-11T22:05:53+00:00">2021-05-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-07-31 02:30:04" itemprop="dateModified" datetime="2025-07-31T02:30:04+00:00">2025-07-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">技术笔记</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="拜占庭将军问题简述"><a href="#拜占庭将军问题简述" class="headerlink" title="拜占庭将军问题简述"></a>拜占庭将军问题简述</h1><h2 id="拜占庭的简述"><a href="#拜占庭的简述" class="headerlink" title="拜占庭的简述"></a>拜占庭的简述</h2><p>本文将用于介绍著名的拜占庭将军问题。在介绍拜占庭将军问题之前，先简单说一下拜占庭。拜占庭帝国，在古代西欧也被称之为东罗马帝国。是一个位于欧亚交界处的封建君主制国家，其领土包括现在的欧洲南部，西亚和北非。公元四世纪左右，罗马帝国开始分列为罗马东部和罗马西部，这两个国家都被视为罗马正统，大概到公元十世纪，罗马西部陷落，随着神圣罗马帝国的建立，罗马东部失去了罗马这个单词的独占权，开始被称之为东罗马帝国。大概在16世纪之后，开始出现了拜占庭帝国的说法。值得一提的是，拜占庭帝国的首府君士坦丁堡被第四次十字军东征攻陷，从此一蹶不振。1453年5月29日，君士坦丁堡被强大的奥斯曼帝国攻陷，末代皇帝君士坦丁十一世战死。东罗马帝国就此终结。当然，此文不是介绍东罗马帝国历史的文章，在此仅简述拜占庭帝国的历史。</p>
+<h2 id="拜占庭将军问题是什么"><a href="#拜占庭将军问题是什么" class="headerlink" title="拜占庭将军问题是什么"></a>拜占庭将军问题是什么</h2><p>拜占庭将军问题和拜占庭的历史其实并无关联，拜占庭将军问题也不是历史上真实存在的问题，他是著名计算机大神兰伯特于1982年提出的。拜占庭问题描述的是如下的场景</p>
+<blockquote>
+<p>假设有一座城堡，拜占庭帝国想攻陷这座城堡。所以派出了很多支军队，因为通讯条件很落后，军队和军队之间必须经过信使来传递作战命令。城堡十分坚固，可以抵御一两只军队的进攻。只有所有军队同时进攻，才可以攻陷城堡。为了保证作战命令的统一，提出一个办法，投票。超过半数投票决定作战命令。比如：决定明天早上进攻，如果有半数的军队同意这个作战计划。则在明日早晨开始一起进攻。反之，如果一大半人都不同意明天早上进攻，则明早就不进攻。</p>
+</blockquote>
+<blockquote>
+<p>现在存在的问题是：军队中有叛徒。叛徒会随意调整作战命令</p>
+</blockquote>
+<p>我们现在用图一来表示这种困境，在图示中，我们用黄色的小人代表正常的部队，粉色的小人代表判叛徒。A表示进攻Attack，R代表拒绝Reject。因为正直的的部队会忠实的执行命令，所以我们把A和R标记在他们身上。</p>
+<p><img src="https://img.imzlp.com/imgs/alvin/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%981.jpg"></p>
+<p>如图所示，身上标记A的三位将军表示他们决定“明早发动进攻”，身上标记R的三位将军决定明早不应该发动进攻，现在叛徒至关重要。叛徒的这一票将决定明早是否决定进攻。这时候叛徒给三位决定进攻的将军传递的消息是明早发动进攻，给三位不进攻的将军发送的消息是明早不发动进攻。所以三位决定进攻的将军知道了，有4票发动进攻的，那么大多数人决定进攻那我明早就发动攻势。三位不进攻的将军则知道，有四票不发动进攻的，那我明早不进攻。所以拜占庭难度就产生了，这些部队有的进攻有的撤退，战斗就失败了。</p>
+<p>以上的图示和背景就是拜占庭问题或者称之为拜占庭容错问题。</p>
+<h3 id="兰波特之问"><a href="#兰波特之问" class="headerlink" title="兰波特之问"></a>兰波特之问</h3><p>所以兰波特提出这个问题是为什么呢？</p>
+<p>兰波特描述的是：世界上有很多个计算机，分布在世界上不同的位置。这些分布在不同地理位置的计算机，就像是驻扎在不同城市的将军们一样。但是计算机会出故障，也有可能会有黑客攻击，或者直接加入恶意节点。这些坏掉的计算就相当于叛徒。在这种状况下，我们如何保持一致性，就是指这些忠诚的计算机，他们的结果是一样的。另外我们关心的问题是，如何保持正确性。这里对正确性作出解释：如果大多数将军说要进攻，那我们就应该进攻，如果大多数将军说撤退，那我们就该撤退。尽管系统中存在故障和恶意节点，但是我们大多数节点都可以保持一致性和正确性，我们的系提还是正常的。这个问题发展至今，已经有四十余年的历史了。</p>
+<p>为此也提出了分布式系统的原则</p>
+<ol>
+<li>一致性</li>
+<li>正确性</li>
+</ol>
+<p>兰波特针对这个问题提出了自己的解法。</p>
+<ol>
+<li>口头协议</li>
+<li>书面协议</li>
+</ol>
+<p>为了描述口头协议，我们提出了一个将军副官模型，其实哪个人是将军，哪个人是副官并不重要。所谓将军就是第一个发起命令的人：比如将军做出决定明早进攻，然后传递给其他人。其他人都叫做副官，副官可以执行将军的命令。为此我们需要两个假设</p>
+<ol>
+<li>忠诚副官，所有忠诚的副官必须执行同一个命令。比如一起进攻，一起撤退。</li>
+<li>忠诚将军，如果将军是忠诚的，所有忠诚的副官必须执行他的命令。</li>
+</ol>
+<p>以上的假设的前提是忠诚，因为无论是司令还是副官，他们都有可能是叛徒，叛徒的行为不可预测。以上两个原则分别对应分布式协议的基本原则，一致性，准确性。</p>
+<p>怎么做到这一点呢</p>
+<blockquote>
+<p>兰波特提出，假如一共有n个将军，其中有m个叛徒。当n&gt;3m时，这个问题是可解的。</p>
+</blockquote>
+<p>比如我们有10个将军，有2个是恶意的10&gt;3*2，这个问题是可解的。但是有三个人，其中有一个是叛徒，那这个问题是不可解的。因为没有满足n&gt;3m</p>
+<p>举个栗子：</p>
+<p>假定有3个将军1个叛徒，n = 3, m = 1</p>
+<p><img src="https://img.imzlp.com/imgs/alvin/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%982.jpg"></p>
+<p>如图所示，身上带有c标志的为commander，表示为发起命令的人。其他人副官，身上标记1，2。继续用粉色表示叛徒。现在将军给副官1，2发送进攻命令。忠诚副官1接到进攻命令之后并不会决定发起进攻，因为他也不知道将军是否是中忠诚的，所以他继续询问2，是否发动进攻。但是2是叛徒，他自己接受到c的进攻命令，他传递给1的命令是不进攻。这时1会收到两个消息，进攻和不进攻，1比1。所以他就没办法决定自己是进攻还是不进攻。</p>
+<p><img src="https://img.imzlp.com/imgs/alvin/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%983.jpg"></p>
+<p>接下来，我们转换视角，考虑将军是叛徒的问题。将军分别给1下达了进攻指令，给2下达了撤退指令。此时1收到进攻指令后，继续询问2。2忠诚的传递了自己收到的命令不进攻。此时1收到的信息又是一票进攻一票撤退，无法决定。2面临的也是同样的问题。所以在n=3，m=1的情况下，这个问题是无解的。</p>
+<p>下面我们来看有解的状况。</p>
+<p>下一种状况下，n=4，m=1。即一共有四个将军，一个叛徒。</p>
+<p><img src="https://img.imzlp.com/imgs/alvin/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%984.jpg"></p>
+<p>还是依照之前图例表示各种部队的性质。将军c给副官1，2，3，4发送进攻的通知。1接到进攻的通知之后再询问2，到底接了什么命令。因为2是忠诚的，所以如实的传递自己得到是进攻A。然后再询问副官3。副官3因为是叛徒，告诉1自己得到的是撤退。这时，1一共接到3个消息，两个进攻一个撤退。按照多数原则，他就可以确定第二天可以进行进攻。如果我们按照同样的方法去分析2，他得到结果是类似的。所以决策之后，所有忠诚的副官均进行一样的命令进攻，而且在司令官为忠诚的情况下，所有副官执行和司令官一样的命令进攻。刚好符合前面定下来的原则。</p>
+<p><img src="https://img.imzlp.com/imgs/alvin/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%985.jpg"></p>
+<p>接下来我们看更加复杂的状况，将军是叛徒的情况。假设将军给1，2，3号分别发送了进攻，进攻和撤退三个命令。</p>
+<p>我们站在1的角度，接受到司令的进攻命令，然后和2交换信息得到一个进攻，再和3交换信息。得到两个进攻和一个撤退，所以可以决定执行进攻。</p>
+<p>从2的视角出发，2接到司令官的进攻信息，从1得到进攻信息，从3得到撤退信息。所以可以执行进攻。</p>
+<p>从3的视角出发，3从司令官那里接到撤退信息，从1得到进攻，从2得到进攻。所以可以执行进攻。</p>
+<p>总体来看，因为司令官不是忠诚的，所以不用顾虑司令官忠诚的条理。同时123都是忠诚的，他木门同时执行进攻。也符合假设。所以这种情况下，是可解的。</p>
+<p>我们再次提升复杂度，探讨有两个叛徒的情况，即便m=2。根据公式，要向问题有解，我们必须要有七个人。n=7</p>
+<p><img src="https://img.imzlp.com/imgs/alvin/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%986.jpg">情况较为复杂，就不在图上标注各位副官之间的信息交互情况，仅标注司令官给各位副官下达的命令。再描述这个情况情况之前，先强调一下这里分析需要的思路：递归。递归简单来说就是套娃，比如你照镜子的时候，再拿第二面精致对着镜子中的自己。或者你在直播的时候，用摄像头对着自己的屏幕。这里不是专门的算法分析介绍，不再强调递归。</p>
+<p>回到图上，我们假设司令官是忠诚的，其中5和6号副官是叛徒。他给每个副官都下达了进攻命令。</p>
+<p>下面我们来列一个表格表述现在的状况</p>
+<p>拜占庭将军问题 m=2</p>
+<table>
+<thead>
+<tr>
+<th align="center">V1=A</th>
+<th align="center">V2</th>
+<th align="center">V3</th>
+<th align="center">V4</th>
+<th align="center">V5</th>
+<th align="center">V6</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">V2==A</td>
+<td align="center">A</td>
+<td align="center">A</td>
+<td align="center">A</td>
+<td align="center">a</td>
+<td align="center">b</td>
+</tr>
+<tr>
+<td align="center">V3==</td>
+<td align="center">A</td>
+<td align="center">A</td>
+<td align="center">A</td>
+<td align="center">c</td>
+<td align="center">d</td>
+</tr>
+<tr>
+<td align="center">V4==</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">V5==</td>
+<td align="center">g</td>
+<td align="center">h</td>
+<td align="center">i</td>
+<td align="center">j</td>
+<td align="center">k</td>
+</tr>
+<tr>
+<td align="center">V6==</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<p>我们从1出发来看这个表格，看看一号副官是如何决策的。1毫无疑问接到了将军的进攻命令。但是他不可能接受到将军的命令就进攻，还是要交流，确定别人都接受到的是什么命令。</p>
+<p>首先他要确定2接受的是什么命令。</p>
+<p>第一重分析，他直接问V2，V2接受到了什么命令。2是忠诚的自然是说：2接受的是进攻。然后1开始问V3：V2接受的是什么命令。依次类推。因为5号和6号是叛徒，他说什么都可能，随意用无关字母小写的a,b来表表示。根据多数原则，1可以确定一件事，2号接受的确实是进攻命令。</p>
+<p>接下来他开始确定v3到底接受的是什么命令。忠诚副官其实得到的信息分析都是类似的，我们不再重复。</p>
+<p>我们直接开始决策V5和V6，即开始确定5号和6号得到的是什么命令。以5为例，因为2是叛徒，所以我们直接用不同的字母表示他给别人说自己的到的是什么。最终我们其实不清楚他所说的大多数命令是什么，所以用X表示，他可能是进攻也可能是撤退。</p>
+<p>每一类的问题分析完之后，1不难得出结论，2，3，4号得到命令是进攻。至于5和6他们得到什么样的命令并不会影响最终决定。所以再分析完A的决策状况之后，他的决策就确定下来了：进攻。</p>
+<p>有兴趣的话们可以自行填充上面的表格，也可以站在2，3，4，5，6的角度上再次进行分析。总而言之，这种状况下，拜占庭将军问题是有解的。</p>
+<p>最终结论，1，2，3，4会选择进攻，而且忠诚的将军下发的进攻没命令也会被忠诚的副官执行。</p>
+<p>有兴趣的话，也可以推演一下将军和6号是叛徒的情况。</p>
+<p>通过以上的分析不难看出，这个算法的复杂度相当之高。而且波兰特提出这个问题的时候是不考虑网络延迟的，所以这个方法在计算机中并不会被使用。后来又有人提出了更加高效的PBFT算法。有兴趣的话可以阅读相关的论文。</p>
+<h3 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h3><p>拜占庭容错问题和区块链息息相关。区块链的问题也是要解决一致性问题。简单来说，以比特币为首的区块链提出了POW算例证明。需要节点都参与解决数学题，如果率先解决数学难题，则有记账的权利。无疑增加了恶意节点的从成本，你必须别其他节点做的更快才有作恶的权利。后来还有也陆续提出了POS算法，DPOS算法等。也是为了解决本文开始提到的一致性和正确性问题。希望本文可以帮大家建立对于拜占庭容错问题的基本概念。</p>
+<p>本文完！</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" rel="tag"># 区块链</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/31576/" rel="prev" title="在M1上编译substrate">
+      <i class="fa fa-chevron-left"></i> 在M1上编译substrate
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/58506/" rel="next" title="比特币pow难度验证">
+      比特币pow难度验证 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98%E7%AE%80%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">拜占庭将军问题简述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8B%9C%E5%8D%A0%E5%BA%AD%E7%9A%84%E7%AE%80%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">拜占庭的简述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.2.</span> <span class="nav-text">拜占庭将军问题是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B0%E6%B3%A2%E7%89%B9%E4%B9%8B%E9%97%AE"><span class="nav-number">1.2.1.</span> <span class="nav-text">兰波特之问</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E5%B0%BE"><span class="nav-number">1.2.2.</span> <span class="nav-text">结尾</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="TigerInYourDream"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">TigerInYourDream</p>
+  <div class="site-description" itemprop="description">每一篇文章都是一种进步，每一句感慨都是一次思考</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TigerInYourDream</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">163k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:28</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

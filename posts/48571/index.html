@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Pacifico:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"imzy.vip","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Sqlite自增字段起因：在使用数据库存储从区块链网络上取来的block_header时，block_header本身并不带自身的高度信息。不过取来的数据是经过筛选的，按照数据库存储的顺序就可以代表blockheader的高度。所以在数据库中增加一个id primiry key autoincrement 的自增主键。每次从数据库查询时获取id值来代表区块的高度。但后来重构，id被TEXT类型的逐">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sqlite自增小知识">
+<meta property="og:url" content="https://imzy.vip/posts/48571/index.html">
+<meta property="og:site_name" content="TID&#39;s Blog">
+<meta property="og:description" content="Sqlite自增字段起因：在使用数据库存储从区块链网络上取来的block_header时，block_header本身并不带自身的高度信息。不过取来的数据是经过筛选的，按照数据库存储的顺序就可以代表blockheader的高度。所以在数据库中增加一个id primiry key autoincrement 的自增主键。每次从数据库查询时获取id值来代表区块的高度。但后来重构，id被TEXT类型的逐">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-01-20T10:06:54.000Z">
+<meta property="article:modified_time" content="2025-07-31T02:30:04.385Z">
+<meta property="article:author" content="TigerInYourDream">
+<meta property="article:tag" content="数据库">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://imzy.vip/posts/48571/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>sqlite自增小知识 | TID's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">TID's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-一言">
+
+    <a href="/motto" rel="section"><i class="fa fa-camera fa-fw"></i>一言</a>
+
+  </li>
+        <li class="menu-item menu-item-友链">
+
+    <a href="/friends" rel="section"><i class="fa fa-american-sign-language-interpreting fa-fw"></i>友链</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/48571/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="TigerInYourDream">
+      <meta itemprop="description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TID's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          sqlite自增小知识
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-20 10:06:54" itemprop="dateCreated datePublished" datetime="2021-01-20T10:06:54+00:00">2021-01-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-07-31 02:30:04" itemprop="dateModified" datetime="2025-07-31T02:30:04+00:00">2025-07-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">技术笔记</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Sqlite自增字段"><a href="#Sqlite自增字段" class="headerlink" title="Sqlite自增字段"></a>Sqlite自增字段</h1><p>起因：在使用数据库存储从区块链网络上取来的block_header时，block_header本身并不带自身的高度信息。不过取来的数据是经过筛选的，按照数据库存储的顺序就可以代表blockheader的高度。所以在数据库中增加一个id primiry key autoincrement 的自增主键。每次从数据库查询时获取id值来代表区块的高度。但后来重构，id被TEXT类型的逐渐替代，所以这个功能无法正常实现。所以产生以下疑问</p>
+<h2 id="在已经有TEXT类型的主键后，sqlite可以拥有别的自增字段吗"><a href="#在已经有TEXT类型的主键后，sqlite可以拥有别的自增字段吗" class="headerlink" title="在已经有TEXT类型的主键后，sqlite可以拥有别的自增字段吗?"></a>在已经有TEXT类型的主键后，sqlite可以拥有别的自增字段吗?</h2><p>不可以！在sqlite的文档FAQ中第一个问题（文末给出参考链接）就是关于如何设置自增字段的。在sqlite中自增约束AUTOINCREMENT只可以跟在PRIMARY KEY后面。把AUTOINCREMENT放在主键以外的地方是不可以的。或者再明确一点，要想在sqlite中拥有一个自增字段必须这样写</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id INTEGER PRIMARY KEY AUTOINCREMENT,</span><br></pre></td></tr></table></figure>
+
+<p>要求id的类型必须是INTEGER。每次插入数据库的时候，不要插入id的数据，数据库会自动为我们的主键id实现自增。之前提到的情况：id已经是TEXT PRIMARY KEY的状态下，<strong>无法</strong>再拥有另一个自增字段了。</p>
+<p>题外：在sqlite以外的数据库中是可以的。以mysql为例，mysql的AUTOINCREMENT是可以加在主键之外的地方的。一个表中，只允许有一个自增字段，而且在mysql中需要给主键以外的字段实现自增，<strong>必须给该字段加上</strong>unique约束。</p>
+<p>注意点:</p>
+<ol>
+<li>在设定id INTEGER PRIMARY KEY，不加AUTOINCREMENT，只要不指定插入id的数据，id字段也可以实现自增。</li>
+</ol>
+<h2 id="在已经有TEXT类型的主键后，一定要有一个自增的字段来记录当前所在的行数怎么办？"><a href="#在已经有TEXT类型的主键后，一定要有一个自增的字段来记录当前所在的行数怎么办？" class="headerlink" title="在已经有TEXT类型的主键后，一定要有一个自增的字段来记录当前所在的行数怎么办？"></a>在已经有TEXT类型的主键后，一定要有一个自增的字段来记录当前所在的行数怎么办？</h2><p>sqlite数据库中自带一个字段叫做 rowid，rowid就是一个自增字段。我们查询的时候，直接查询rowid就可以知道当前行数。（但是sqlite有without rowid类型表，这种表不带rowid字段）。一旦我们在数据库中设定 id INTEGER PRIMARY KEY，id就相当于rowid的别名。在sqlite3中，rowid的大小为64-bit signed integer，大小范围为i64。rowid最大值为9223372036854775807。</p>
+<h2 id="rowid的行为"><a href="#rowid的行为" class="headerlink" title="rowid的行为"></a>rowid的行为</h2><p>rowid由数据库自行维护，只要用户不去主动干涉。rowid每行加一。当rowid超过以上的范围时刻，会在允许范围内随机找还没占用到的数字填充。当我们删除行之后，rowid所代表的数字是可以被复用的。如果所有数字确实用完之后数据库会抛出SQLITE_FULL error。</p>
+<h2 id="rowid和序列"><a href="#rowid和序列" class="headerlink" title="rowid和序列"></a>rowid和序列</h2><p>在sqlite数据库中，如果启用了AUTOINCREMENT，数据库会有一个内建的表叫做<a target="_blank" rel="noopener" href="https://sqlite.org/fileformat2.html#seqtab">sqlite_sequence</a>来记录rowid的变化。注意：这个序列表是可以正常操作的，比如插入数据，更新数据。修改的前提是用户要清楚自己操作对数据库有何影响。当数据库插入数据时，序列表就会关联的发生变化。因为序列表的存在，加了AUTOINCREMENT的数据库要稍微慢一点。且序列表由数据库创建和删除，不允许用户自行创建和删除。</p>
+<p>其他注意事项：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ROWID, _ROWID_, OID都可以用来表示rowid</span><br></pre></td></tr></table></figure>
+
+<p>参考资料：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://sqlite.org/faq.html#q1">https://sqlite.org/faq.html#q1</a></li>
+<li><a target="_blank" rel="noopener" href="https://sqlite.org/autoinc.html">https://sqlite.org/autoinc.html</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag"># 数据库</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/63616/" rel="prev" title="多线程原语ConVar">
+      <i class="fa fa-chevron-left"></i> 多线程原语ConVar
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/31576/" rel="next" title="在M1上编译substrate">
+      在M1上编译substrate <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Sqlite%E8%87%AA%E5%A2%9E%E5%AD%97%E6%AE%B5"><span class="nav-number">1.</span> <span class="nav-text">Sqlite自增字段</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E5%B7%B2%E7%BB%8F%E6%9C%89TEXT%E7%B1%BB%E5%9E%8B%E7%9A%84%E4%B8%BB%E9%94%AE%E5%90%8E%EF%BC%8Csqlite%E5%8F%AF%E4%BB%A5%E6%8B%A5%E6%9C%89%E5%88%AB%E7%9A%84%E8%87%AA%E5%A2%9E%E5%AD%97%E6%AE%B5%E5%90%97"><span class="nav-number">1.1.</span> <span class="nav-text">在已经有TEXT类型的主键后，sqlite可以拥有别的自增字段吗?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E5%B7%B2%E7%BB%8F%E6%9C%89TEXT%E7%B1%BB%E5%9E%8B%E7%9A%84%E4%B8%BB%E9%94%AE%E5%90%8E%EF%BC%8C%E4%B8%80%E5%AE%9A%E8%A6%81%E6%9C%89%E4%B8%80%E4%B8%AA%E8%87%AA%E5%A2%9E%E7%9A%84%E5%AD%97%E6%AE%B5%E6%9D%A5%E8%AE%B0%E5%BD%95%E5%BD%93%E5%89%8D%E6%89%80%E5%9C%A8%E7%9A%84%E8%A1%8C%E6%95%B0%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F"><span class="nav-number">1.2.</span> <span class="nav-text">在已经有TEXT类型的主键后，一定要有一个自增的字段来记录当前所在的行数怎么办？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rowid%E7%9A%84%E8%A1%8C%E4%B8%BA"><span class="nav-number">1.3.</span> <span class="nav-text">rowid的行为</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rowid%E5%92%8C%E5%BA%8F%E5%88%97"><span class="nav-number">1.4.</span> <span class="nav-text">rowid和序列</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="TigerInYourDream"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">TigerInYourDream</p>
+  <div class="site-description" itemprop="description">每一篇文章都是一种进步，每一句感慨都是一次思考</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TigerInYourDream</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">163k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:28</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

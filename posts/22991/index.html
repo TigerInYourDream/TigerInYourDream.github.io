@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Pacifico:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"imzy.vip","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="占星与星座计算 天球最近因为某些原因，有了一段空余的时间。当你空闲便有了一些奇思妙想。因为很多年前特别喜欢一个关于星座的故事，所以利用这一段空余时间写一个系列文章讲占星中的一个小知识。为了不使文章引起争议，特此声明：本人完全相信星座！不解释。文章的前面系列介绍和占星有关的天文基本概念，后面具体根据人的出生时间，地理位置（经纬度）来计算人的星座。可能读了这一系列的文章，大家可以更好的理解为什么星座归">
+<meta property="og:type" content="article">
+<meta property="og:title" content="占星与星座计算 天球">
+<meta property="og:url" content="https://imzy.vip/posts/22991/index.html">
+<meta property="og:site_name" content="TID&#39;s Blog">
+<meta property="og:description" content="占星与星座计算 天球最近因为某些原因，有了一段空余的时间。当你空闲便有了一些奇思妙想。因为很多年前特别喜欢一个关于星座的故事，所以利用这一段空余时间写一个系列文章讲占星中的一个小知识。为了不使文章引起争议，特此声明：本人完全相信星座！不解释。文章的前面系列介绍和占星有关的天文基本概念，后面具体根据人的出生时间，地理位置（经纬度）来计算人的星座。可能读了这一系列的文章，大家可以更好的理解为什么星座归">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://img.imzlp.com/imgs/alvin/%E5%A4%A9%E7%90%83%E7%A4%BA%E6%84%8F%E5%9B%BE.png">
+<meta property="article:published_time" content="2021-08-04T18:49:23.000Z">
+<meta property="article:modified_time" content="2025-07-31T02:30:04.386Z">
+<meta property="article:author" content="TigerInYourDream">
+<meta property="article:tag" content="占星">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://img.imzlp.com/imgs/alvin/%E5%A4%A9%E7%90%83%E7%A4%BA%E6%84%8F%E5%9B%BE.png">
+
+<link rel="canonical" href="https://imzy.vip/posts/22991/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>占星与星座计算 天球 | TID's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">TID's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-一言">
+
+    <a href="/motto" rel="section"><i class="fa fa-camera fa-fw"></i>一言</a>
+
+  </li>
+        <li class="menu-item menu-item-友链">
+
+    <a href="/friends" rel="section"><i class="fa fa-american-sign-language-interpreting fa-fw"></i>友链</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/22991/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="TigerInYourDream">
+      <meta itemprop="description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TID's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          占星与星座计算 天球
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-04 18:49:23" itemprop="dateCreated datePublished" datetime="2021-08-04T18:49:23+00:00">2021-08-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-07-31 02:30:04" itemprop="dateModified" datetime="2025-07-31T02:30:04+00:00">2025-07-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A4%A9%E6%96%87/" itemprop="url" rel="index"><span itemprop="name">天文</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="占星与星座计算-天球"><a href="#占星与星座计算-天球" class="headerlink" title="占星与星座计算 天球"></a>占星与星座计算 天球</h1><p>最近因为某些原因，有了一段空余的时间。当你空闲便有了一些奇思妙想。因为很多年前特别喜欢一个关于星座的故事，所以利用这一段空余时间写一个系列文章讲占星中的一个小知识。为了不使文章引起争议，特此声明：本人完全相信星座！不解释。文章的前面系列介绍和占星有关的天文基本概念，后面具体根据人的出生时间，地理位置（经纬度）来计算人的星座。可能读了这一系列的文章，大家可以更好的理解为什么星座归类于“占星学”，这样一个听起来非常正式的名字。另外因为不是撰写论文，本文不会详细列出各类依据。太累!</p>
+<h2 id="天球概念"><a href="#天球概念" class="headerlink" title="天球概念"></a>天球概念</h2><p><img src="http://img.imzlp.com/imgs/alvin/%E5%A4%A9%E7%90%83%E7%A4%BA%E6%84%8F%E5%9B%BE.png" alt="天球示意图"></p>
+<p>以上图片为完整的天球示意图</p>
+<p>和地球概念相对，古代天文学家提出了天球的概念。天球是一个想想的球体，他也是旋转的。理论上具有无限大的半径且和地心是同心的。如图所示：和地球有赤道和南北极的概念对应，天球也有对应的天球赤道和天球南北极。</p>
+<p>古代天文学家认为我们和星体是等距离的，尽管这并不正确。因为古代缺乏有效的天文观测手段。星球不是靠我们肉眼就可以判断出距离的。古代科学家克服了这种距离上的因素，使用角度来确定星球在天空中的位置。在当时观测条件受限的情况下，不失为一种很有效的天文抽象系统。</p>
+<p>地球会围绕地轴自转，相对应于地球不动的参照系下。天球也会围着天极旋转，24小时不停。这就形成了古代天文学家的眼中的昼夜交替原理。太阳，卫星，形星都是东升西落的，这种称为天球的周日实视运动。地球因为有其公转，一颗横行总是比前一天提前（约4min）上升。</p>
+<p>和地球对应的概念一样，天球也有自己的南北半球，对应也有南北回归线，南北极</p>
+<blockquote>
+<p>北回归线：北回归线是太阳在北半球能够垂直射到的离赤道最远的位置点，将该点之纬度线便叫“北回归线”，在公元2018年，其位置约在北纬23°26′11.3″ (或 23.43648°)。相反，南纬23°26′11.3″ (或 23.43648°)则为“南回归线”。</p>
+</blockquote>
+<p>因为地球是自西向东旋转，所以就把天球当做“自东向西旋转”。</p>
+<p>以天球为基本概念来量化分析天体的朝向。有了天球这个基本抽象，天文学家开始创造不一样的天体坐标系，比如黄道系，银道系。需要注意的是，天球仪是在天球外看天球。天文馆的模拟器是还在天球内看天球。所以这是两个看起来不一样的天球系统。</p>
+<blockquote>
+<p>黄道坐标系：黄道是由地球上观察太阳一年中在天球上的视运动所通过的路径，若以地球“不动”作参照的话就是太阳绕地球公转的轨道平面（黄道面）在天球上的投影。<br>黄道与天赤道相交于两点：春分点与秋分点（这两点称二分点）；而黄道对应的两个几何极是北黄极（在天龙座）、与南黄极 (在剑鱼座)。<br>在黄道上与黄道平行的小圆称黄纬，符号β，以由黄道面向北黄极方向为正值（0°至90°），向南黄极方向则为负值。垂直黄道的经度称黄经，符号为λ，由春分点起由西向东量度（0°至360°）。像赤道坐标系中的赤经一样，以春分点做为黄经的起点。</p>
+</blockquote>
+<p>注：本文不讨论地球进动现象。</p>
+<p>黄道面和春秋分点已经在示意图中标注出来。</p>
+<blockquote>
+<p>银道坐标系，是以太阳为中心，并且以银河系明显排列群星的平面为基准的天球坐标系统，它的“赤道”是银河平面。相似于地理坐标，银道坐标系的位置也有经度和纬度。</p>
+</blockquote>
+<p>根据观测者位置的不同，有不同的天球中心。在地面上观测，观测者的眼睛就是天球中心。这样建立的天球就是地面天球。</p>
+<p>如果从地心观测，则叫做地心天球。把地轴无限延长，就是假想的天轴，地球北极指的一点是北天极，地球南极指的一点就是南天极。通过地球中心和天轴垂直的平面叫做天赤道面，天赤道面和天球的会合处就是天赤道。</p>
+<p>太阳在天球上每天移动约1度，一年则移动一周，这称之为太阳周年视运动，太阳中心在天球上视运动的轨迹则是黄道。</p>
+<p>天赤道(celestial equator)是天球上假象的一个大圈，位于地球赤道的正上方；也可以说是垂直于地球地轴把天球平分成南北两半的大圆，理论上有无限长的半径。相对于黄道面，天赤道倾斜23.5°，是地轴倾斜的结果。当太阳在天赤道上时,白昼和黑夜到处都相等，因此天赤道也被称为昼夜中分线(equinoctial line)或昼夜平分圆；那时北半球和南半球都处于春分或者秋分。在一年当中，太阳有两次机会处于天赤道上。只要我们把地球赤道不断向外扩大，一直延伸到无限大，这个无限的圆就是天赤道。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%8D%A0%E6%98%9F/" rel="tag"># 占星</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/58506/" rel="prev" title="比特币pow难度验证">
+      <i class="fa fa-chevron-left"></i> 比特币pow难度验证
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/13704/" rel="next" title="占星与星座计算 黄道十二宫与分宫原理">
+      占星与星座计算 黄道十二宫与分宫原理 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%A0%E6%98%9F%E4%B8%8E%E6%98%9F%E5%BA%A7%E8%AE%A1%E7%AE%97-%E5%A4%A9%E7%90%83"><span class="nav-number">1.</span> <span class="nav-text">占星与星座计算 天球</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%A9%E7%90%83%E6%A6%82%E5%BF%B5"><span class="nav-number">1.1.</span> <span class="nav-text">天球概念</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="TigerInYourDream"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">TigerInYourDream</p>
+  <div class="site-description" itemprop="description">每一篇文章都是一种进步，每一句感慨都是一次思考</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TigerInYourDream</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">163k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:28</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

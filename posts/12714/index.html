@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Pacifico:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"imzy.vip","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="为 C++程序写 rustbindingAutoCxx 与 CWrapper+Bindgen为 c++程序写 ruts-binding 在代码的世界中，还是 c和 cpp站绝大多数，现在提一个比较常见的需求：提供一个 c++的程序，最终需要再 rust中调用 c++程序提供的接口。 一般来说有两个方法  直接使用 cxx autocxx为 rust代码生成一份 unsafe的代码，然后直接调用 第">
+<meta property="og:type" content="article">
+<meta property="og:title" content="为 C++程序写 rustbinding">
+<meta property="og:url" content="https://imzy.vip/posts/12714/index.html">
+<meta property="og:site_name" content="TID&#39;s Blog">
+<meta property="og:description" content="为 C++程序写 rustbindingAutoCxx 与 CWrapper+Bindgen为 c++程序写 ruts-binding 在代码的世界中，还是 c和 cpp站绝大多数，现在提一个比较常见的需求：提供一个 c++的程序，最终需要再 rust中调用 c++程序提供的接口。 一般来说有两个方法  直接使用 cxx autocxx为 rust代码生成一份 unsafe的代码，然后直接调用 第">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://image-bucket-for-alvin.oss-cn-beijing.aliyuncs.com/img/821723477517_.pic.jpg">
+<meta property="article:published_time" content="2024-08-12T23:24:49.000Z">
+<meta property="article:modified_time" content="2025-07-31T02:30:04.386Z">
+<meta property="article:author" content="TigerInYourDream">
+<meta property="article:tag" content="c++">
+<meta property="article:tag" content="bingen">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://image-bucket-for-alvin.oss-cn-beijing.aliyuncs.com/img/821723477517_.pic.jpg">
+
+<link rel="canonical" href="https://imzy.vip/posts/12714/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>为 C++程序写 rustbinding | TID's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">TID's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-一言">
+
+    <a href="/motto" rel="section"><i class="fa fa-camera fa-fw"></i>一言</a>
+
+  </li>
+        <li class="menu-item menu-item-友链">
+
+    <a href="/friends" rel="section"><i class="fa fa-american-sign-language-interpreting fa-fw"></i>友链</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/12714/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="TigerInYourDream">
+      <meta itemprop="description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TID's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          为 C++程序写 rustbinding
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-08-12 23:24:49" itemprop="dateCreated datePublished" datetime="2024-08-12T23:24:49+00:00">2024-08-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-07-31 02:30:04" itemprop="dateModified" datetime="2025-07-31T02:30:04+00:00">2025-07-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/rust/" itemprop="url" rel="index"><span itemprop="name">rust</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="为-C-程序写-rustbinding"><a href="#为-C-程序写-rustbinding" class="headerlink" title="为 C++程序写 rustbinding"></a>为 C++程序写 rustbinding</h1><h2 id="AutoCxx-与-CWrapper-Bindgen"><a href="#AutoCxx-与-CWrapper-Bindgen" class="headerlink" title="AutoCxx 与 CWrapper+Bindgen"></a>AutoCxx 与 CWrapper+Bindgen</h2><p><a target="_blank" rel="noopener" href="https://www.notion.so/c-ruts-binding-d617fe66712241ca830107a1c2020761?pvs=21">为 c++程序写 ruts-binding</a></p>
+<p>在代码的世界中，还是 c和 cpp站绝大多数，现在提一个比较常见的需求：提供一个 c++的程序，最终需要再 rust中调用 c++程序提供的接口。</p>
+<p>一般来说有两个方法</p>
+<ol>
+<li>直接使用 cxx autocxx为 rust代码生成一份 unsafe的代码，然后直接调用</li>
+<li>第二种方法比较路径稍长，先针对 c++代码的 header 写一份 c风格的头文件cwrapper，然后针对 c的头文件写一份 c头文件的实现。接下来编译自己的cwrapper，生成一份新的动态库。接下来使用 bindgen 根据 cwrapper生成一份 unsafe rust。最后在 rust代码中调用。</li>
+</ol>
+<p>总体来说 cxx 或者 autocxx 可能性能会更好一些，但是 autocxx并不能搞定一切。第二种方法胜在稳定，毕竟 c的 abi比较稳定。本文将采用后一种方法。</p>
+<h2 id="速成材料"><a href="#速成材料" class="headerlink" title="速成材料"></a>速成材料</h2><p>技术基础是：会 rust，不会 c++或者 c。所以需要速成，了解 c和 c++。如果彻底不会 c++，写 bingen 无从谈起。</p>
+<p>下面是一些材料</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=KJgsSFOSQv0&amp;t=76s">https://www.youtube.com/watch?v=KJgsSFOSQv0&amp;t=76s</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=ZzaPdXTrSb8">https://www.youtube.com/watch?v=ZzaPdXTrSb8</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.runoob.com/cplusplus/cpp-variable-scope.html">https://www.runoob.com/cplusplus/cpp-variable-scope.html</a></li>
+</ol>
+<p>第一个为 feeCodeCamp的 c课程，三小时速成。</p>
+<p>因为 c++比较难，可以学习第二个教程一小时速成，接下来看菜鸟教程的文档。注意不要纠结细节，否则无法速成。学成 C++已经数年以后 🥳，毕竟最终目的并非写 c++。</p>
+<p>或者也可以看 freecodecamp的 c++教程，大概四小时看完。</p>
+<h2 id="CPP部分"><a href="#CPP部分" class="headerlink" title="CPP部分"></a>CPP部分</h2><h3 id="库文件准备"><a href="#库文件准备" class="headerlink" title="库文件准备"></a>库文件准备</h3><p><a target="_blank" rel="noopener" href="https://github.com/TigerInYourDream/cppExample">https://github.com/TigerInYourDream/cppExample</a></p>
+<p>c++部分代码已经上传 github。常见的c++项目大概使用 cmake编译，因为速成材料中没有讲 cmake，所以直接用 g++或者 clang编译。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ctime&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">namespace</span> MyNamespace &#123;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> &#123;</span></span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        MyClass();</span><br><span class="line">        ~MyClass();</span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">myMethod</span><span class="params">()</span></span>;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line">MyNamespace::MyClass::MyClass() &#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Constructor called&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line">MyNamespace::MyClass::~MyClass() &#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Destructor called&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">void</span> MyNamespace::MyClass::myMethod() &#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;myMethod called&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// int main() &#123;</span></span><br><span class="line"><span class="comment">//     MyNamespace::MyClass obj;</span></span><br><span class="line"><span class="comment">//     obj.myMethod();</span></span><br><span class="line"><span class="comment">//     return 0;</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//下面的是头文件</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> MYCLASS_HPP</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MYCLASS_HPP</span></span><br><span class="line"><span class="keyword">namespace</span> MyNamespace &#123;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> &#123;</span></span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        MyClass();</span><br><span class="line">        ~MyClass();</span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">myMethod</span><span class="params">()</span></span>;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">// MYCLASS_HPP</span></span></span><br></pre></td></tr></table></figure>
+
+<p>c++源文件和头文件在此。一个非常简单的代码，为了在后续使用 c风格的 wrapper。特意使用了 namespace class这些 c没有的特性。大致解释下代码 分别有构造函数，析构函数（类似与 rust的 Drop）和一个成员函数（或者这个称为方法）。</p>
+<blockquote>
+<p>clang++ -c -fPIC MyClass.cpp -o MyClass.o</p>
+<p>clang++ -dynamiclib -o libMyClass.dylib MyClass.o</p>
+<p>​    -dynamiclib 选项表示生成动态库。</p>
+<p>​    -o libMyClass.dylib 指定输出文件的名称为 libMyClass.dylib。</p>
+</blockquote>
+<p>c++的二进制产物生成分两步 </p>
+<ol>
+<li>编译</li>
+<li>链接</li>
+</ol>
+<p>编译生成 .o的编译产物，然后链接生成动态库。因为我的编程环境为 mac，所以我使用 clang++ 且选择生成 dylib。如果是 linux考虑使用 g++和生成 so(这一类更常见)</p>
+<h3 id="C包装"><a href="#C包装" class="headerlink" title="C包装"></a>C包装</h3><p>首先根据暴露的库文件包装一个 c风格的头</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> MYCLASSWRAPPER_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MYCLASSWRAPPER_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> &#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">MyClassOpaque</span> <span class="title">MyClassOpaque</span>;</span></span><br><span class="line"><span class="comment">/* typedef (struct MyClassOpaque) MyClassOpaque; */</span></span><br><span class="line"><span class="keyword">typedef</span> MyClassOpaque* MyClassHandle;</span><br><span class="line"><span class="function">MyClassHandle <span class="title">MyClass_create</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MyClass_destroy</span><span class="params">(MyClassHandle handle)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MyClass_myMethod</span><span class="params">(MyClassHandle handle)</span></span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">// MYCLASSWRAPPER_Htypedef struct MyClassOpaque MyClassOpaque;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>c的头文件如上所示，关键是使用不透明指针</p>
+<blockquote>
+<p>不透明指针(Opaque Pointer)是一种特殊类型的指针,它隐藏了所指向的具体数据类型的详细信息。不透明指针只提供了指针的操作,而不暴露指针所指向的数据的类型和结构。</p>
+<p> typedef struct MyClassOpaque MyClassOpaque; 是一种特别的写法 实质相当于 对 struct MyClassQpaque 的别名，以后用MyClassOpaque 不用带 Struct关键字。</p>
+<p> typedef MyClassOpaque* MyClassHandle;</p>
+<p>直接定义不透明指针</p>
+</blockquote>
+<p>有了这个C风格的头还不够，还需要一份实现代码</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;MyClassWrapper.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;myclass.hpp&quot;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> MyNamespace;</span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> &#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">MyClassOpaque</span> &#123;</span></span><br><span class="line">        MyClass* instance;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="function">MyClassHandle <span class="title">MyClass_create</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        MyClassOpaque* opaque = <span class="keyword">new</span> MyClassOpaque;</span><br><span class="line">        opaque-&gt;instance = <span class="keyword">new</span> MyClass();</span><br><span class="line">        <span class="keyword">return</span> opaque;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">MyClass_destroy</span><span class="params">(MyClassHandle handle)</span> </span>&#123;</span><br><span class="line">        MyClassOpaque* opaque = <span class="keyword">static_cast</span>&lt;MyClassOpaque*&gt;(handle);</span><br><span class="line">        <span class="keyword">delete</span> opaque-&gt;instance;</span><br><span class="line">        <span class="keyword">delete</span> opaque;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">MyClass_myMethod</span><span class="params">(MyClassHandle handle)</span> </span>&#123;</span><br><span class="line">        MyClassOpaque* opaque = <span class="keyword">static_cast</span>&lt;MyClassOpaque*&gt;(handle);</span><br><span class="line">        opaque-&gt;instance-&gt;myMethod();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实际实现的代码如上。使用 exrern “C” 包装 相当于 rust的 extern “C” 和 nomangle。注意对应实现析构函数的 destroy函数，注意 delete内存。</p>
+<p>接下来</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">clang++ -c -fPIC MyClassWrapper.cpp -o MyClassWrapper.o</span><br><span class="line">clang++ -dynamiclib -o libMyClassWrapper.dylib MyClassWrapper.o -L . -lMyClass</span><br><span class="line">-dynamiclib 选项表示生成动态库。</span><br><span class="line">-o libMyCombined.dylib 指定输出文件的名称为 libMyCombined.dylib。</span><br><span class="line">-L. 选项告诉链接器在当前目录中查找库文件。</span><br><span class="line">-lMyClass 选项告诉链接器链接到 libMyClass.dylib 库文件。</span><br></pre></td></tr></table></figure>
+
+<p>就是编译 接下来链接第一次生成c++的动态库 MyClass。 注意生成的动态库有 lib前缀。他们的依赖关系如下MyClassWrapper 链接 MyClass. 这个库的链接非常重要。</p>
+<p>现在就有了一份 c风格的头文件和两个动态库 MyClass MyClassWrapper</p>
+<p>本人对 c++并不熟悉如果有其他注意的点好改进，欢迎提出改进</p>
+<h2 id="Rust部分"><a href="#Rust部分" class="headerlink" title="Rust部分"></a>Rust部分</h2><p><a target="_blank" rel="noopener" href="https://github.com/TigerInYourDream/bindexample">https://github.com/TigerInYourDream/bindexample</a></p>
+<p>rust部分直接选择使用 bindgen.生成 rust代码</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">├── Cargo.lock</span><br><span class="line">├── Cargo.toml</span><br><span class="line">├── build.rs</span><br><span class="line">├── include</span><br><span class="line">│   └── MyClassWrapper.h</span><br><span class="line">├── lib</span><br><span class="line">│   ├── libMyClass.dylib</span><br><span class="line">│   └── libMyClassWrapper.dylib</span><br><span class="line">├── src</span><br><span class="line">│   ├── bindings.rs</span><br><span class="line">│   └── main.rs</span><br><span class="line">├── target</span><br></pre></td></tr></table></figure>
+
+<p>rust项目的结构如上所示。include中为 c风格的头文件。主要注意的点存在于 build.rs中</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> crate bindgen;</span><br><span class="line">use <span class="built_in">std</span>::path::PathBuf;</span><br><span class="line">use bindgen::CargoCallbacks;</span><br><span class="line"><span class="function">fn <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    println!(<span class="string">&quot;cargo:rustc-link-search=native=./lib&quot;</span>);</span><br><span class="line">    println!(<span class="string">&quot;cargo:rustc-link-lib=dylib=MyClassWrapper&quot;</span>);</span><br><span class="line">    println!(<span class="string">&quot;cargo:rustc-link-lib=dylib=MyClass&quot;</span>);</span><br><span class="line">    <span class="comment">// 生成 Rust 绑定</span></span><br><span class="line">    let bindings = bindgen::Builder::<span class="keyword">default</span>()</span><br><span class="line">        .header(<span class="string">&quot;wrapper.h&quot;</span>)</span><br><span class="line">        .parse_callbacks(Box::<span class="keyword">new</span>(CargoCallbacks::<span class="keyword">new</span>()))</span><br><span class="line">        .generate()</span><br><span class="line">        .expect(<span class="string">&quot;Unable to generate bindings&quot;</span>);</span><br><span class="line">    <span class="comment">// 将生成的绑定写入 src/bindings.rs 文件</span></span><br><span class="line">    let out_path = PathBuf::from(<span class="string">&quot;./src/&quot;</span>);   </span><br><span class="line">    bindings</span><br><span class="line">        .write_to_file(out_path.join(<span class="string">&quot;bindings.rs&quot;</span>))</span><br><span class="line">        .expect(<span class="string">&quot;Couldn&#x27;t write bindings!&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>技巧 </p>
+<ol>
+<li>生成代码可以直接生成到 src目录下，否则会直接生成到 build目录下，也就是环境变量 OUT_DIR输出的环境的。可以生成到src 手动引用。这样生成的代码可以像正常代码一样可以被正常引用，也可以直接使用 rust analysis 分析。 如果使用 cspell记得单独排除这个文件。</li>
+<li>可以在根目录下外加一个 wrapper.h文件，在 wrapper中指定外部的头文件。或者也可以参考 bingen的最佳实践。目前个人最佳实践是这样。</li>
+<li>三个打印分别是 link-search 目录，下面两个是具体搜索的库，不要带前缀和后缀。</li>
+</ol>
+<h3 id="运行的注意点"><a href="#运行的注意点" class="headerlink" title="运行的注意点"></a>运行的注意点</h3><ol>
+<li>注意 build.rs只会管 build时刻的链接目录，运行的时候并不会管。如果编译的时候提示找不到动态库，可以修改 search目录，或者仔细观察目录，把库的目录直接移动到项目根目录下（因为根目录也是默认的库搜索路径），还有很多其他路径，可以可以删除观察。</li>
+<li>cargo r氛围两阶段，一个是 build阶段，build阶段 build.rs中的设置是有用的。第二个阶段为运行，相当于执行 ./xxxx。  所以直接 cargo r -r 会找不到库路径</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> DYLD_LIBRARY_PATH=/path/to/dylib:$DYLD_LIBRARY_PATH</span><br><span class="line">直接使用上面的环境变量设置动态库的文件目录  </span><br><span class="line">注意上面的适用于 MAC的 dylib</span><br><span class="line">linux 则是设定LD_LIBRARY_PATH</span><br></pre></td></tr></table></figure>
+
+<p>可以使用 just来设置环境变量 和 一组编译运行计划来简化命令行。因为 just和和编写 bindgen 无关，随意不在本文提起。</p>
+<p>然后就可以执行了</p>
+<p><img src="https://image-bucket-for-alvin.oss-cn-beijing.aliyuncs.com/img/821723477517_.pic.jpg"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/c/" rel="tag"># c++</a>
+              <a href="/tags/bingen/" rel="tag"># bingen</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/43396/" rel="prev" title="sonala合约">
+      <i class="fa fa-chevron-left"></i> sonala合约
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/64160/" rel="next" title="Logout Issue">
+      Logout Issue <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA-C-%E7%A8%8B%E5%BA%8F%E5%86%99-rustbinding"><span class="nav-number">1.</span> <span class="nav-text">为 C++程序写 rustbinding</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#AutoCxx-%E4%B8%8E-CWrapper-Bindgen"><span class="nav-number">1.1.</span> <span class="nav-text">AutoCxx 与 CWrapper+Bindgen</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9F%E6%88%90%E6%9D%90%E6%96%99"><span class="nav-number">1.2.</span> <span class="nav-text">速成材料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CPP%E9%83%A8%E5%88%86"><span class="nav-number">1.3.</span> <span class="nav-text">CPP部分</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%93%E6%96%87%E4%BB%B6%E5%87%86%E5%A4%87"><span class="nav-number">1.3.1.</span> <span class="nav-text">库文件准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C%E5%8C%85%E8%A3%85"><span class="nav-number">1.3.2.</span> <span class="nav-text">C包装</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rust%E9%83%A8%E5%88%86"><span class="nav-number">1.4.</span> <span class="nav-text">Rust部分</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E7%9A%84%E6%B3%A8%E6%84%8F%E7%82%B9"><span class="nav-number">1.4.1.</span> <span class="nav-text">运行的注意点</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="TigerInYourDream"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">TigerInYourDream</p>
+  <div class="site-description" itemprop="description">每一篇文章都是一种进步，每一句感慨都是一次思考</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TigerInYourDream</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">163k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:28</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

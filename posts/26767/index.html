@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Pacifico:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"imzy.vip","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="占星与星座计算 morinus house system在系列前三节，已经基本介绍了和占星有关的模型，基本的分宫制的原理和占星以及天文中所出现的术语，这一节将带大家进行一次实际的占星计算。本文仅涉及星盘的计算，不涉及其他。 本文的重点是星盘的计算。本文将采用莫林分宫制morinus house system！至于为什么选择莫林分宫制，是因为莫林分宫制可以找到具体的数学计算公式，便于计算。且莫林分宫">
+<meta property="og:type" content="article">
+<meta property="og:title" content="占星与星座计算 morinus house system">
+<meta property="og:url" content="https://imzy.vip/posts/26767/index.html">
+<meta property="og:site_name" content="TID&#39;s Blog">
+<meta property="og:description" content="占星与星座计算 morinus house system在系列前三节，已经基本介绍了和占星有关的模型，基本的分宫制的原理和占星以及天文中所出现的术语，这一节将带大家进行一次实际的占星计算。本文仅涉及星盘的计算，不涉及其他。 本文的重点是星盘的计算。本文将采用莫林分宫制morinus house system！至于为什么选择莫林分宫制，是因为莫林分宫制可以找到具体的数学计算公式，便于计算。且莫林分宫">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-08-10T22:37:53.000Z">
+<meta property="article:modified_time" content="2025-07-31T02:30:04.386Z">
+<meta property="article:author" content="TigerInYourDream">
+<meta property="article:tag" content="占星">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://imzy.vip/posts/26767/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>占星与星座计算 morinus house system | TID's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">TID's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-一言">
+
+    <a href="/motto" rel="section"><i class="fa fa-camera fa-fw"></i>一言</a>
+
+  </li>
+        <li class="menu-item menu-item-友链">
+
+    <a href="/friends" rel="section"><i class="fa fa-american-sign-language-interpreting fa-fw"></i>友链</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/26767/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="TigerInYourDream">
+      <meta itemprop="description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TID's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          占星与星座计算 morinus house system
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-10 22:37:53" itemprop="dateCreated datePublished" datetime="2021-08-10T22:37:53+00:00">2021-08-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-07-31 02:30:04" itemprop="dateModified" datetime="2025-07-31T02:30:04+00:00">2025-07-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A4%A9%E6%96%87%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">天文学</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="占星与星座计算-morinus-house-system"><a href="#占星与星座计算-morinus-house-system" class="headerlink" title="占星与星座计算 morinus house system"></a>占星与星座计算 morinus house system</h1><p>在系列前三节，已经基本介绍了和占星有关的模型，基本的分宫制的原理和占星以及天文中所出现的术语，这一节将带大家进行一次实际的占星计算。本文仅涉及星盘的计算，不涉及其他。</p>
+<p>本文的重点是星盘的计算。本文将采用莫林分宫制morinus house system！至于为什么选择莫林分宫制，是因为莫林分宫制可以找到具体的数学计算公式，便于计算。且莫林分宫制在高纬度地区受到的扭曲小。至于分宫制的基本原理，可以查看上一节分宫制基本原理。</p>
+<blockquote>
+<p>对于“morinus house system”是有专门的计算方法，通过一系列的加减乘除算出一个人出生时的MC、Asc以及每个宫头所在得度数，就可以排出一个近乎完整的星图了。</p>
+</blockquote>
+<blockquote>
+<p>ASC：东升点是在诞生时刻在诞生地点的东面地平与黄道交接的一点</p>
+</blockquote>
+<blockquote>
+<p>MC：天顶</p>
+</blockquote>
+<p>我们在计算的时候需要以下参数</p>
+<ol>
+<li>当事人的出生位置，需要从具体地点转化成经纬度</li>
+<li>出生时间，需要转化为恒星时</li>
+<li>黄赤交角，这个是固定值。关于黄赤交角可以看第一节天球部分。23°27′</li>
+<li>以及如下公式</li>
+</ol>
+<blockquote>
+<p>MC = arctan(tan(RAMC) / cos(e))</p>
+</blockquote>
+<blockquote>
+<p>RAMC为上中天的赤经度数</p>
+</blockquote>
+<blockquote>
+<p>星表上专门有栏目是星星的赤经(希腊字母α)的一般格式是XhXXminXXs.其实概念和地球的东经西经差不多,但不分东西两个方向,就是从0度开始按一定方向到360度(就是开始的地方),更简单了.<br>关于换算,先从角度上看<br>赤经是在天球赤道自西向东由0小时至24 小时。把赤经的一周360度划成24份,一份就是15度.那么很简单了,<br>1小时=15度.<br>时间上的小时和角度上的度的下面的小单位都叫分,秒,换算也都是60.为了不混淆,用时分,时秒和角分,角秒来表示.<br>根据那个原始的换算公式,可以得到1时分=15角分,1时秒=15角秒 。赤经计算的起点为春分点，春分点是太阳在每年的春分（3月21日前后）所处的位置。</p>
+</blockquote>
+<p>注1：所有的数字都要转化为时间</p>
+<p>注2：RAMC需要恒星时间换算。</p>
+<p>做了概念的准备之后，我们开始选取一个具体的例子进行计算</p>
+<p>首先，假设当事人出生得地理位置为（52o 13′ N and 6o 54′ E），荷兰恩斯科德。时间：2016年11月2日（公历），21:17:30（格林尼治时间），恒星时：0:35:23.6，黄赤交角e：23°27′。</p>
+<p>想知道什么是恒星时：<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%81%92%E6%98%9F%E6%97%B6">点这个</a></p>
+<p>然后把数据代入儒略历和恒星时计算准备的程序中。得到结果</p>
+<blockquote>
+<p>res 1.9485282441601157°<br>The sidereal hour is 0.1299018829440077h<br>The sidereal time is 0.0h7.0m47.646778598427716s</p>
+</blockquote>
+<p>得到当时的恒星时为1.95度，转换成时间为0.1299小时。0时7分47秒。</p>
+<p>这里的度数就是RAMC 为1.95.</p>
+<p>黄赤交角e=23度27分，转化为时间为23.45时（27/60=0.45）</p>
+<p>MC= arctan ( TAN (1.95) ÷ COS 23.45 )</p>
+<p>计算代码使用rust自带的三角函数，rust中的三角使用的是弧度，我们需要在弧度和角度之间互相转化。</p>
+<p>得到中天数为2.12度。根据之前分宫制的计算，三十度为一个宫位。2.12度为一个首宫位白羊座。所以我们可以这样说：MC在白羊座2.12处。</p>
+<p>接下来我们计算上升点ASC</p>
+<blockquote>
+<p>ASC= ARCCOT (- ( (TAN f x SIN e) + (SIN RAMC x COS e) ) ÷ COS RAMC)</p>
+</blockquote>
+<p>因为计算机上没有反余切函数，我们需要换算：</p>
+<p>ARCCOT = (π/2) - ARCTAN,这是弧度，角度是90度- ARCTAN。</p>
+<p>所以公式可以转换为下面</p>
+<blockquote>
+<p>ARCTAN(- ( (TAN f x SIN e) + (SIN RAMC x COS e) ) ÷ COS RAMC)</p>
+</blockquote>
+<p>其中f为出生纬度52.21时，已换算.</p>
+<p>最终的结果为 119.28330880864735</p>
+<p>进入第四宫位的末尾119.2833 - 30*3 = 29.283308808647348度。即便是巨蟹座的29.28度。巨蟹座的尾巴。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> std::<span class="built_in">f64</span>::consts::PI;</span><br><span class="line"><span class="keyword">use</span> std::<span class="built_in">f64</span>::consts::E;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">to_radians</span></span>(x: <span class="built_in">f64</span>) -&gt; <span class="built_in">f64</span> &#123;</span><br><span class="line">    x * PI / <span class="number">180f64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">to_angle</span></span>(x: <span class="built_in">f64</span>) -&gt; <span class="built_in">f64</span> &#123;</span><br><span class="line">    x * <span class="number">180f64</span> / PI</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">houses_system</span></span>() &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;houses_system!&quot;</span>);</span><br><span class="line">    <span class="keyword">let</span> a = to_radians(<span class="number">1.95f64</span>).tan() / to_radians(<span class="number">23.45f64</span>).cos();</span><br><span class="line">    <span class="keyword">let</span> mc = a.atan();</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, to_angle(mc));</span><br><span class="line"></span><br><span class="line">    <span class="comment">//ARCTAN(- ( (TAN f x SIN e) + (SIN RAMC x COS e) ) ÷ COS RAMC)</span></span><br><span class="line">    <span class="keyword">let</span> f = -to_radians(<span class="number">52.21f64</span>).tan() * E.sin() + to_radians(<span class="number">1.95f64</span>).sin() * E.cos();</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, f);</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> asc = to_angle(f.atan());</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;asc &#123;:?&#125;&quot;</span>, asc);</span><br><span class="line">    <span class="keyword">if</span> asc &lt; <span class="number">0f64</span> &#123;</span><br><span class="line">        asc = <span class="number">90f64</span> - asc</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;asc &#123;:?&#125;&quot;</span>, asc);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>具体的代码还是在上一节的代码中。为了清晰，改变了代码结构。因为展示的是计算过程，代码风格较差。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/TigerInYourDream/sidereal-time">https://github.com/TigerInYourDream/sidereal-time</a></p>
+<p>对应的相应的各种占星计算也是根据如上的公式进行一步步计算和推演得出的。本文和一些成熟的星盘数据进行了对比，发现有一定的角度偏差。发现主要的差别在恒星时的换算上。但是误差较小，最终导致了最后的ASC上升星座偏差了三度。因为本文查看了相对应的天文论文，对占星的具体算法也有一定争议。需要进一步讨论这个偏差。不过也看出来在古代占星的计算和推演相当的繁复，借助现代计算机对这种计算有了很好的辅助作用。本系列文章只谈论占星中涉及的具体的天文和星盘宫位的计算。</p>
+<p>永远仰望天空，永远保持旺盛的好奇心！</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%8D%A0%E6%98%9F/" rel="tag"># 占星</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/3102/" rel="prev" title="占星与星座计算  儒略历和恒星时计算">
+      <i class="fa fa-chevron-left"></i> 占星与星座计算  儒略历和恒星时计算
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/35993/" rel="next" title="diesel使用小要点">
+      diesel使用小要点 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%A0%E6%98%9F%E4%B8%8E%E6%98%9F%E5%BA%A7%E8%AE%A1%E7%AE%97-morinus-house-system"><span class="nav-number">1.</span> <span class="nav-text">占星与星座计算 morinus house system</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="TigerInYourDream"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">TigerInYourDream</p>
+  <div class="site-description" itemprop="description">每一篇文章都是一种进步，每一句感慨都是一次思考</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TigerInYourDream</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">163k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:28</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Pacifico:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"imzy.vip","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="solana合约学习本文是对 solan相关问题介绍，主要用于记录solana合约的学习过程。因为现阶段还没有十分深入的学习 solana的细节，所以目标限定在 solana的简单合约编写，环境搭建，测试。 基础因为是学习指南，所以会先强调学习的基础。本文的基础建立在会 rust基础上，明白 rust的语法，可以达到 rust编写简单代码的基础之上。因为 solana 合约是直接使用 rust编写">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sonala合约">
+<meta property="og:url" content="https://imzy.vip/posts/43396/index.html">
+<meta property="og:site_name" content="TID&#39;s Blog">
+<meta property="og:description" content="solana合约学习本文是对 solan相关问题介绍，主要用于记录solana合约的学习过程。因为现阶段还没有十分深入的学习 solana的细节，所以目标限定在 solana的简单合约编写，环境搭建，测试。 基础因为是学习指南，所以会先强调学习的基础。本文的基础建立在会 rust基础上，明白 rust的语法，可以达到 rust编写简单代码的基础之上。因为 solana 合约是直接使用 rust编写">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://image-bucket-for-alvin.oss-cn-beijing.aliyuncs.com/img/solana_example.png">
+<meta property="article:published_time" content="2024-06-12T20:00:49.000Z">
+<meta property="article:modified_time" content="2025-07-31T02:30:04.385Z">
+<meta property="article:author" content="TigerInYourDream">
+<meta property="article:tag" content="合约">
+<meta property="article:tag" content="solana">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://image-bucket-for-alvin.oss-cn-beijing.aliyuncs.com/img/solana_example.png">
+
+<link rel="canonical" href="https://imzy.vip/posts/43396/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>sonala合约 | TID's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">TID's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-一言">
+
+    <a href="/motto" rel="section"><i class="fa fa-camera fa-fw"></i>一言</a>
+
+  </li>
+        <li class="menu-item menu-item-友链">
+
+    <a href="/friends" rel="section"><i class="fa fa-american-sign-language-interpreting fa-fw"></i>友链</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/43396/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="TigerInYourDream">
+      <meta itemprop="description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TID's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          sonala合约
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-06-12 20:00:49" itemprop="dateCreated datePublished" datetime="2024-06-12T20:00:49+00:00">2024-06-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-07-31 02:30:04" itemprop="dateModified" datetime="2025-07-31T02:30:04+00:00">2025-07-31</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="solana合约学习"><a href="#solana合约学习" class="headerlink" title="solana合约学习"></a>solana合约学习</h1><p>本文是对 solan相关问题介绍，主要用于记录solana合约的学习过程。因为现阶段还没有十分深入的学习 solana的细节，所以目标限定在 solana的简单合约编写，环境搭建，测试。</p>
+<h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><p>因为是学习指南，所以会先强调学习的基础。本文的基础建立在会 rust基础上，明白 rust的语法，可以达到 rust编写简单代码的基础之上。因为 solana 合约是直接使用 rust编写的。如果不具备简单的 rust基础，请先学习 rust book，至少了解 rust的基本语法。</p>
+<h2 id="solana环境"><a href="#solana环境" class="headerlink" title="solana环境"></a>solana环境</h2><p>因为 solana有自己的介绍文档，不再重复介绍solana概念。下面主要讲剩余部分。</p>
+<ol>
+<li>开发环境<ol>
+<li>主要就是 rust环境，可以去 rust官网上直接安装 rust环境。因为 rust已经比较成熟，没有特别的问题，直接安装最新环境。</li>
+<li>编辑器，因为是直接使用 rust开发solana 合约的，所以主流的 VSCODE Rustrover vim zed emacs都可以。选择自己喜欢的就好。</li>
+<li>solana cli工具。<a target="_blank" rel="noopener" href="https://solana.com/developers/guides/getstarted/local-rust-hello-world">https://solana.com/developers/guides/getstarted/local-rust-hello-world</a></li>
+<li>cli工具是生成地址，链接 solana节点，部署合约的基础。后面会继续提到一些注意事项，请务必参考安装的的注意事项。</li>
+<li>anchor  anchor是 solana 的“框架”，可以去 anchor官网安装 solana框架。后面也有注意事项。</li>
+<li>以上的套件理论上是全部需要的。如果你只是使用solana native开发，可以不使用 anchor。也就可以不用安装 anchor 套件。</li>
+</ol>
+</li>
+</ol>
+<h2 id="环境安装中的特殊问题"><a href="#环境安装中的特殊问题" class="headerlink" title="环境安装中的特殊问题"></a>环境安装中的特殊问题</h2><ol>
+<li>根据目前 2024年06月08日20:17:14 时间 solana 是 v1.18.15。 solana 本身并不是直接安装最新版本就好了。最新版本可能出现编译不过，获取有一些更加具体的字节超量的编译问题。这时候就需要回退到历史版本。可以看下面的链接。当然如果你非常幸运，安装之后完全没有问题就不必折腾。事实是，我安装了最新版之后一直无法通过编译，然后不得不安装下面的方案回退。</li>
+<li><a target="_blank" rel="noopener" href="https://www.notion.so/cd22ecfe315d4acbb83c68ca8a3d7b30?pvs=21">https://www.notion.so/alvinvip/cd22ecfe315d4acbb83c68ca8a3d7b30?pvs=4#14fa26df7432402ebf18529fecf20e40</a></li>
+<li>anchor也存在以上问题，最新版无法运行。这样采用上面的办法即可，直接退版本。</li>
+<li><a target="_blank" rel="noopener" href="https://book.anchor-lang.com/getting_started/installation.html">https://book.anchor-lang.com/getting_started/installation.html</a></li>
+<li>注意查看版本关系 anchor 0.30需要使用最新的 solana v1.18.15（务必注意时间，后续升级必须兼顾 solana版本和 anchor版本）</li>
+</ol>
+<h3 id="测试问题"><a href="#测试问题" class="headerlink" title="测试问题"></a>测试问题</h3><ol>
+<li>solana是使用 rust写的合约，完全可以使用 rust代码来测试。但是，务必记住，如果你使用 anchor的话，直接使用 TS测试。TS包提供了完整的测试环境和方法，非常方便。在 solana的世界中，使用 TS测试是常态。使用 rust测试反而是异类。应该还是 TS程序员更加普遍的原因，优先支持更流行的语言。</li>
+<li>所以在会 rust的基础上可以，快速学习一下 js语法，然后学一点 TS即可。</li>
+<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=vDNw0FWL8zw&ab_channel=%E8%B5%B0%E6%AD%AA%E7%9A%84%E5%B7%A5%E7%A8%8B%E5%B8%ABJames">https://www.youtube.com/watch?v=vDNw0FWL8zw&amp;ab_channel=走歪的工程師James</a></li>
+<li>在 youtube上随意找到一个 js教学视频，大概两小时可以了解 js用法。然后再花 20 分钟学习一点 TS和 js的不同之处即可。所以没错，这个学习过程中包括两个半小时的 js/ts基础的学习。学习到可以写代码即可。</li>
+<li>如果一定要用 rust测试也没有问题</li>
+</ol>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">anchor init —test-template rust &lt;xxxxx&gt;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>使用以上命令可以生成 带rust测试模板的 anchor 代码。</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/coral-xyz/anchor/pull/2805">https://github.com/coral-xyz/anchor/pull/2805</a></li>
+<li>上面的 PR也是关于 rust测试的，可以看出来anchor对于 rust测试支持也是最近才有一定的进展。所以建议还是现学TS测试比较快。</li>
+</ol>
+<h3 id="节点"><a href="#节点" class="headerlink" title="节点"></a>节点</h3><p>大部分时候节点使用不应该成为一个问题，但是 solana的 devnet似乎很不稳定，所以最好使用本地网络部署的和测试</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">solana-test-validator </span><br><span class="line"></span><br><span class="line">solana-test-validator -r</span><br></pre></td></tr></table></figure>
+
+<p>上面的两个命令是启动本地节点和 重启本地节点。如果你在启动节点的时候 7 遇到问题可以考虑这个。主要的症状是再次重启，节点状态不对。</p>
+<h3 id="和同等类型合约的差别"><a href="#和同等类型合约的差别" class="headerlink" title="和同等类型合约的差别"></a>和同等类型合约的差别</h3><p>众所周知，使用 rust编写的区块链还有 sui和 aptos。在 solana合约之前，我还学习了 move合约</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/TigerInYourDream/letsmove">https://github.com/TigerInYourDream/letsmove</a></p>
+<p>上面是我参与 sui 合约的代码。sui的合约使用 move编写。和 anchor不一样，move的环境安装没有上面的特殊问题。直接安装最新就可以。move是一个简易版本的 rust，学习难度显著降低。</p>
+<p>另外 sui的主要交互可以使用命令行实现，主要参数就是部署时刻生成的各种 hash id。可能对于后端程序员这这种方式更加直接。</p>
+<p>但是 sui move目前支持的功能相对少一点。所以两种合约各有优缺点。</p>
+<h3 id="solana的抽象层次"><a href="#solana的抽象层次" class="headerlink" title="solana的抽象层次"></a>solana的抽象层次</h3><p>和所有的区块链编程模型一样 solana划分为下面的结构</p>
+<p><img src="https://image-bucket-for-alvin.oss-cn-beijing.aliyuncs.com/img/solana_example.png"></p>
+<p>solana使用合约直接使用 rust编写。写好的合约可以直接部署到 solana的节点上。这个过程称之为发布合约。solana因为使用 rust，和其他区块链稍有不同，把编程部分成为 program。他也确实是个完备的 program。为了和其他区块链中的概念统一，也可以把它称为智能合约。</p>
+<p>部署节点上的合约，就相当于给 solana节点增加了新的“接口”。可以调用 solana client sdk直接调用合约实现交互。最直接的使用 solana js sdk就可以实现前端网页与合约交互。使用 sdk与节点交互的这个应用就是 dapp。</p>
+<p>和金融里面合约不一样，区块链世界的“合约”就是一段可以执行的代码。所以有的区块链也把自己称之为“互联网计算机”。能执行代码，也能被调用，的确是是一个“计算机”。</p>
+<p>此外，让链上数据发生变化的操作叫做交易。无论是通过 dapps 或者 rust js 客户端或者其他方式和链上信息进行交互的过程都叫做交易。</p>
+<h3 id="anchor和-solana的关系"><a href="#anchor和-solana的关系" class="headerlink" title="anchor和 solana的关系"></a>anchor和 solana的关系</h3><p>在 solana链上实现编程主要有两种方法</p>
+<ol>
+<li>native program </li>
+<li>anchor</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://solana.com/developers/guides/getstarted/local-rust-hello-world">https://solana.com/developers/guides/getstarted/local-rust-hello-world</a> </p>
+<p>使用以上代码， 引入 solana-program crates就可以进行 native solana program。如果你仔细查看代码， 你会发现指令 Instration是个 u8数组，也就是说进行网路传输的数据，你需要在合约段解码u8，相应的你需要在客户端进行编码。没错，你还需要了解编解码和 rust的 layout 的细节。否则无法解析出正确的数据。</p>
+<p>anchor在solana-program的基础上套了一层，最主要的就是解决数据编解码的问题。这个就是原生编码和 anchor 编码的差别。anchor 也是 solana官网推荐的写合约的方式。当然，如果你无畏 layout细节，native 合约也是可以的。</p>
+<h3 id="一些其他的推荐"><a href="#一些其他的推荐" class="headerlink" title="一些其他的推荐"></a>一些其他的推荐</h3><p>可以使用 just工具，预先写好合约编译，发布和测试命令。然后使用just运行。生成自己的流水线，是我个人推荐的方式。如果有一些其他复杂的命令行，可以再花 20 分钟学习 amber。可以设计出一些比较复杂的合约部署流程。丰俭由人。</p>
+<h3 id="教学视频"><a href="#教学视频" class="headerlink" title="教学视频"></a>教学视频</h3><p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=3GHlk6vosQw&list=PL53JxaGwWUqCr3xm4qvqbgpJ4Xbs4lCs7&index=12&ab_channel=Josh%27sDevBox">https://www.youtube.com/watch?v=3GHlk6vosQw&amp;list=PL53JxaGwWUqCr3xm4qvqbgpJ4Xbs4lCs7&amp;index=12&amp;ab_channel=Josh’sDevBox</a></p>
+<p>solana已经有较多的编程实践了，课程很多。可以看上面的视频进行学习。也是一个比较不错路径。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%90%88%E7%BA%A6/" rel="tag"># 合约</a>
+              <a href="/tags/solana/" rel="tag"># solana</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/44402/" rel="prev" title="REVM代码阅读 02">
+      <i class="fa fa-chevron-left"></i> REVM代码阅读 02
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/12714/" rel="next" title="为 C++程序写 rustbinding">
+      为 C++程序写 rustbinding <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#solana%E5%90%88%E7%BA%A6%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.</span> <span class="nav-text">solana合约学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80"><span class="nav-number">1.1.</span> <span class="nav-text">基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#solana%E7%8E%AF%E5%A2%83"><span class="nav-number">1.2.</span> <span class="nav-text">solana环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85%E4%B8%AD%E7%9A%84%E7%89%B9%E6%AE%8A%E9%97%AE%E9%A2%98"><span class="nav-number">1.3.</span> <span class="nav-text">环境安装中的特殊问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E9%97%AE%E9%A2%98"><span class="nav-number">1.3.1.</span> <span class="nav-text">测试问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8A%82%E7%82%B9"><span class="nav-number">1.3.2.</span> <span class="nav-text">节点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%92%8C%E5%90%8C%E7%AD%89%E7%B1%BB%E5%9E%8B%E5%90%88%E7%BA%A6%E7%9A%84%E5%B7%AE%E5%88%AB"><span class="nav-number">1.3.3.</span> <span class="nav-text">和同等类型合约的差别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#solana%E7%9A%84%E6%8A%BD%E8%B1%A1%E5%B1%82%E6%AC%A1"><span class="nav-number">1.3.4.</span> <span class="nav-text">solana的抽象层次</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#anchor%E5%92%8C-solana%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">1.3.5.</span> <span class="nav-text">anchor和 solana的关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E5%85%B6%E4%BB%96%E7%9A%84%E6%8E%A8%E8%8D%90"><span class="nav-number">1.3.6.</span> <span class="nav-text">一些其他的推荐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%99%E5%AD%A6%E8%A7%86%E9%A2%91"><span class="nav-number">1.3.7.</span> <span class="nav-text">教学视频</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="TigerInYourDream"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">TigerInYourDream</p>
+  <div class="site-description" itemprop="description">每一篇文章都是一种进步，每一句感慨都是一次思考</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TigerInYourDream</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">163k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:28</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

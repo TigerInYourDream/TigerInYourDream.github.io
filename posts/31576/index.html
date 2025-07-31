@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Pacifico:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"imzy.vip","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="之前已经在x86的mac电脑上编译过substrate，按照官方指南上的操作就可以正常编译。但是在新款m1电脑上并没有编译通过，现在重新尝试在m1上编译substrate。 主要的准备过程参考如下文章 https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;337224781 不过参考文章写于2020年12月16日，到现在（2021年3月10日）有部分状况已经发生了变化。针对和文章中不一样的状况">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在M1上编译substrate">
+<meta property="og:url" content="https://imzy.vip/posts/31576/index.html">
+<meta property="og:site_name" content="TID&#39;s Blog">
+<meta property="og:description" content="之前已经在x86的mac电脑上编译过substrate，按照官方指南上的操作就可以正常编译。但是在新款m1电脑上并没有编译通过，现在重新尝试在m1上编译substrate。 主要的准备过程参考如下文章 https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;337224781 不过参考文章写于2020年12月16日，到现在（2021年3月10日）有部分状况已经发生了变化。针对和文章中不一样的状况">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-03-11T10:01:02.000Z">
+<meta property="article:modified_time" content="2025-07-31T02:30:04.386Z">
+<meta property="article:author" content="TigerInYourDream">
+<meta property="article:tag" content="区块链">
+<meta property="article:tag" content="substrate">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://imzy.vip/posts/31576/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>在M1上编译substrate | TID's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">TID's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-一言">
+
+    <a href="/motto" rel="section"><i class="fa fa-camera fa-fw"></i>一言</a>
+
+  </li>
+        <li class="menu-item menu-item-友链">
+
+    <a href="/friends" rel="section"><i class="fa fa-american-sign-language-interpreting fa-fw"></i>友链</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/31576/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="TigerInYourDream">
+      <meta itemprop="description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TID's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          在M1上编译substrate
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-11 10:01:02" itemprop="dateCreated datePublished" datetime="2021-03-11T10:01:02+00:00">2021-03-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-07-31 02:30:04" itemprop="dateModified" datetime="2025-07-31T02:30:04+00:00">2025-07-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">技术笔记</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>之前已经在x86的mac电脑上编译过substrate，按照官方指南上的操作就可以正常编译。但是在新款m1电脑上并没有编译通过，现在重新尝试在m1上编译substrate。</p>
+<p>主要的准备过程参考如下文章</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/337224781">https://zhuanlan.zhihu.com/p/337224781</a></p>
+<p>不过参考文章写于2020年12月16日，到现在（2021年3月10日）有部分状况已经发生了变化。针对和文章中不一样的状况稍作说明。</p>
+<h2 id="RUST"><a href="#RUST" class="headerlink" title="RUST"></a>RUST</h2><p>rust环境现在可以直接支持m1。所以使用rustup脚本可以直接安装rust，不需要额外设置。安装完成之后使用</p>
+<blockquote>
+<p>rustup show</p>
+</blockquote>
+<p>查看toolchain。则会发现是以aarch64开头的，原来的x86下面的tool-chain是</p>
+<blockquote>
+<p>stable-x86_64-apple-darwin (default)</p>
+</blockquote>
+<p>注意差别。</p>
+<h2 id="brew"><a href="#brew" class="headerlink" title="brew"></a>brew</h2><p>mac上的包管理离不开brew，所以一定需要安装brew。brew现在也已经官方支持m1，不再需要像参考文章中的特殊设置，直接使用官方脚本安装即可。brew在mac下有两个目录，我们暂时只关心在m1下的原生文件目录。可以cd到一下目录查看</p>
+<blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/opt/homebrew</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>确保文件存在，如果你使用的是zsh，则在.zshrc中设置如下，如果你使用bash则在~/.bash_profile添加如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> PATH=<span class="string">&quot;/opt/homebrew/bin/:<span class="variable">$PATH</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="substrate-配套环境"><a href="#substrate-配套环境" class="headerlink" title="substrate 配套环境"></a>substrate 配套环境</h2><p>安装好brew之后，你需要下面四个依赖</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">brew install -s cmake</span><br><span class="line">brew install -s gcc</span><br><span class="line">brew install protobuf</span><br><span class="line">brew install -s llvm</span><br></pre></td></tr></table></figure>
+
+<p>依次安装即可。注意设置llvm的环境变量中。比如我使用zsh. 就在~/.zshrc中写入</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> PATH=<span class="string">&quot;/opt/homebrew/opt/llvm/bin:<span class="variable">$PATH</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>以上安装注意看brew的提示。brew也会提示你设置以上环境变量。</p>
+<p>每次写入环境变量记得source.</p>
+<h2 id="编译substrate"><a href="#编译substrate" class="headerlink" title="编译substrate"></a>编译substrate</h2><p>本文以官方教程为例</p>
+<p><a target="_blank" rel="noopener" href="https://substrate.dev/docs/en/tutorials/create-your-first-substrate-chain/setup">https://substrate.dev/docs/en/tutorials/create-your-first-substrate-chain/setup</a></p>
+<p>我们使用2.0.1版本的substrate.截止目前（2020.3.10）substrate已经有3.0版本，但是本文以教程为准，使用2.01版本</p>
+<p>在合适的目录克隆</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone -b v2.0.1 --depth 1 https:&#x2F;&#x2F;github.com&#x2F;substrate-developer-hub&#x2F;substrate-node-template</span><br></pre></td></tr></table></figure>
+
+<p>进入到node-temple目录后，需要升级如下两个依赖库</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cargo update -p fs-swap</span><br><span class="line">cargo update -p ring</span><br></pre></td></tr></table></figure>
+
+<p>substrate还需要依赖rustrocksdb</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> <span class="variable">$&#123;anywhere&#125;</span></span><br><span class="line">$ git <span class="built_in">clone</span> https://github.com/hdevalence/rust-rocksdb.git</span><br><span class="line">$ <span class="built_in">cd</span> rust-rocksdb</span><br><span class="line">$ git submodule update --init --recursive</span><br></pre></td></tr></table></figure>
+
+<p>我和参考文章一样把rust-rocksdb放在了如下位置</p>
+<blockquote>
+<p>/opt/homebrew/opt/</p>
+</blockquote>
+<p>然后去修改~/.cargo目录下的config，注意默认情况下config文件是不存在的，首次设置之前你需要自己创建该文件。</p>
+<p>然后在config文件中写入如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">paths = [<span class="string">&quot;/opt/homebrew/opt/rust-rocksdb/&quot;</span>]</span><br></pre></td></tr></table></figure>
+
+<p>之所以修改是因为原本依赖中的三个问题。</p>
+<blockquote>
+<ol>
+<li>fs-swap原本的依赖在m1下无法编译，新版本解决了这个问题，所以需要使用cargo update升级</li>
+<li>ring同理</li>
+<li>rust-rocksdb也无法在m1下编译，所以感谢hdevalence，自己fork出来修改了问题。我们依赖这个fork出来的rocksdb</li>
+</ol>
+</blockquote>
+<p>说明：在.cargp/config中使用这种path依赖并非最优选择，在项目本身中使用patch是更好的做法，稍后编译中会出现相应的警告提示这一点。关于如何使用patch请参考《cargo book》，本文不做讨论。此外提示，对于substrate这种以workspace组织起来的项目，patch信息写在根目录下面的Cargo.toml中。</p>
+<p>接下来编译还会出现一个问题，报错的形式如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">error[E0609]: no field &#96;__rip&#96; on type &#96;__darwin_arm_thread_state64&#96;</span><br><span class="line">   --&gt; crates&#x2F;runtime&#x2F;src&#x2F;traphandlers.rs:169:44</span><br><span class="line">    |</span><br><span class="line">169 |                     (*cx.uc_mcontext).__ss.__rip as *const u8</span><br><span class="line">    |                                            ^^^^^ unknown field</span><br><span class="line">    |</span><br><span class="line">    &#x3D; note: available fields are: &#96;__x&#96;, &#96;__fp&#96;, &#96;__lr&#96;, &#96;__sp&#96;, &#96;__pc&#96; ... and 2 others</span><br></pre></td></tr></table></figure>
+
+<p>关于这个错，我们可以参考</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/bytecodealliance/wasmtime/issues/2575">https://github.com/bytecodealliance/wasmtime/issues/2575</a></p>
+<p>讨论中已经提到了这个问题的解决办法，所以我们直接把__ rip换成__ pc即可。提供一个最快捷的修改办法</p>
+<blockquote>
+<p>直接进入到错误提示的源码处，直接修改依赖库的源码，把_ _ rip改成 _ _ pc。</p>
+<p>注意：这么改是为了快捷，绝非良策。因为rust库的构建依赖cargo管理，我们直接去修改了库的源码，如果使用cargo update，或者其他触发了Cargo.lock变动的操作，依然可能编译不过。 好的办法还是fork下来使用patch依赖。</p>
+</blockquote>
+<p>所有准备工作做完之后就可以</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cargo build --release</span><br></pre></td></tr></table></figure>
+
+<p>大概七分钟左右就可以编译完成。比原本的x86 mac快很多。</p>
+<h2 id="本文的编译的环境汇总"><a href="#本文的编译的环境汇总" class="headerlink" title="本文的编译的环境汇总"></a>本文的编译的环境汇总</h2><ol>
+<li>Rustc 使用1.50.0版本，可以使用rustup show查看</li>
+<li>Substrat-node-template 使用v2.0.1版本</li>
+<li>硬件环境为 m1 mac</li>
+<li>操作系统 macOS Big Sur 11.2.3</li>
+</ol>
+<h2 id="一些建议"><a href="#一些建议" class="headerlink" title="一些建议"></a>一些建议</h2><p>经常看到讨论substrate编译不过问题的。经常面对这种问题可以做一个详细的文档来记录这些，文档中可以包含以下内容</p>
+<blockquote>
+<ol>
+<li>rust tool-chain的版本</li>
+<li>可以编译操作系统信息 比如linux某版本  windows某版本，mac有m1版本和x86版本也需要额外说明</li>
+<li>需要额外安装的依赖，比如这里提到的llvm protobuf</li>
+<li>基于某个substrate版本开发的  比如本文基于v2.0.1</li>
+<li>基于当前版本substrate需要做的某些调整，比如本文中提到的ring fs-swap升级 wasmtime的修改等。</li>
+<li>如果版本升级了，需要配套更新以上这一套信息（这里的版本升级包含rust升级和substrate升级）</li>
+<li>如果有必要可在项目下专门建立一个patch文件，来管理需要patch的包。</li>
+</ol>
+</blockquote>
+<p>相信做到以上的7点，就不用反复的去解决编译不通过的问题。</p>
+<p>本文完。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" rel="tag"># 区块链</a>
+              <a href="/tags/substrate/" rel="tag"># substrate</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/48571/" rel="prev" title="sqlite自增小知识">
+      <i class="fa fa-chevron-left"></i> sqlite自增小知识
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/27143/" rel="next" title="拜占庭将军问题简述">
+      拜占庭将军问题简述 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#RUST"><span class="nav-number">1.</span> <span class="nav-text">RUST</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#brew"><span class="nav-number">2.</span> <span class="nav-text">brew</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#substrate-%E9%85%8D%E5%A5%97%E7%8E%AF%E5%A2%83"><span class="nav-number">3.</span> <span class="nav-text">substrate 配套环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91substrate"><span class="nav-number">4.</span> <span class="nav-text">编译substrate</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E6%96%87%E7%9A%84%E7%BC%96%E8%AF%91%E7%9A%84%E7%8E%AF%E5%A2%83%E6%B1%87%E6%80%BB"><span class="nav-number">5.</span> <span class="nav-text">本文的编译的环境汇总</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E5%BB%BA%E8%AE%AE"><span class="nav-number">6.</span> <span class="nav-text">一些建议</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="TigerInYourDream"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">TigerInYourDream</p>
+  <div class="site-description" itemprop="description">每一篇文章都是一种进步，每一句感慨都是一次思考</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TigerInYourDream</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">163k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:28</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

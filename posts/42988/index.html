@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Pacifico:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"imzy.vip","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="比特币节点远程访问在上一篇文章中详细描述了比特币节点的配置，其中诸多参数的意义可以在上文中找到解释，也可以使用 -help 或者 -？来查看说明。本文讲是配置一台运行比特币的服务器（我的环境是乌班图），远程访问比特币核心。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="比特币节点远程访问">
+<meta property="og:url" content="https://imzy.vip/posts/42988/index.html">
+<meta property="og:site_name" content="TID&#39;s Blog">
+<meta property="og:description" content="比特币节点远程访问在上一篇文章中详细描述了比特币节点的配置，其中诸多参数的意义可以在上文中找到解释，也可以使用 -help 或者 -？来查看说明。本文讲是配置一台运行比特币的服务器（我的环境是乌班图），远程访问比特币核心。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-09-03T15:05:11.000Z">
+<meta property="article:modified_time" content="2025-07-31T02:30:04.387Z">
+<meta property="article:author" content="TigerInYourDream">
+<meta property="article:tag" content="区块链">
+<meta property="article:tag" content="比特币">
+<meta property="article:tag" content="RPC">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://imzy.vip/posts/42988/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>比特币节点远程访问 | TID's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">TID's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-一言">
+
+    <a href="/motto" rel="section"><i class="fa fa-camera fa-fw"></i>一言</a>
+
+  </li>
+        <li class="menu-item menu-item-友链">
+
+    <a href="/friends" rel="section"><i class="fa fa-american-sign-language-interpreting fa-fw"></i>友链</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/42988/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="TigerInYourDream">
+      <meta itemprop="description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TID's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          比特币节点远程访问
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-09-03 15:05:11" itemprop="dateCreated datePublished" datetime="2019-09-03T15:05:11+00:00">2019-09-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-07-31 02:30:04" itemprop="dateModified" datetime="2025-07-31T02:30:04+00:00">2025-07-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">技术笔记</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="比特币节点远程访问"><a href="#比特币节点远程访问" class="headerlink" title="比特币节点远程访问"></a>比特币节点远程访问</h2><p>在上一篇文章中详细描述了比特币节点的配置，其中诸多参数的意义可以在上文中找到解释，也可以使用 -help 或者 -？来查看说明。本文讲是配置一台运行比特币的服务器（我的环境是乌班图），<strong>远程访问比特币核心</strong>。</p>
+<a id="more"></a>
+<p>通过比特币核心提供的RPC服务来和比特币核心进行交互。在网上用配置比特币远程服务等关键字搜索得到的信息好多都是过时的，因为比特币版本升级迭代的比较快。请注意本文配置的时间节点是 <strong>2019-9-1</strong>，后续参考本文请注意时间节点。</p>
+<p>在默认的状态下，bitcoind(以后统称为bitcoind)，监听的是本地回环地址 127.0.0.1 。默认监听的正式地址的端口是 8332</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> netstat -alpn | grep 8332</span></span><br><span class="line">tcp     0   0 127.0.0.1:8332     0.0.0.0:*    LISTEN      18787/bitcoind</span><br><span class="line">tcp6    0   0 ::1:8332           :::*         LISTEN      18787/bitcoind</span><br></pre></td></tr></table></figure>
+
+<p>在本地节点使用 bitcoin-cli 或者本地（same machine）访问节点是没问题的，使用 localhost 即可（可以不要用户名和密码）。但是<strong>无法</strong>远程访问。</p>
+<p>在linux系统下，配置放在 ~/.bitcoin/bitcoin.conf 中，如果你要远程访问，配置参考如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 1代表开启rpc服务 0代表关闭</span></span><br><span class="line">server=1</span><br><span class="line">rpcbind=10.0.1.5</span><br><span class="line">rpcallowip=0.0.0.0/0</span><br><span class="line">rpcport=8332</span><br><span class="line">rpcuser=bitcoin</span><br><span class="line">rpcpassword=password</span><br></pre></td></tr></table></figure>
+
+<p>需要注意的是</p>
+<blockquote>
+<p>当开启 rpc 服务时刻，直接访问运行 bitcoind 主机的 ip 会看到</p>
+<p>JSONRPC server handles only POST</p>
+<p>以上这句话代表 rpc 服务是开启的。</p>
+</blockquote>
+<p>如果你用以上的配置去启动 bitcoind ，就会把 rpc 服务绑定在 ip “10.0.1.5” 上，同时使用了 port 8332。当然，为了授权 user 和 password 也是必须的。</p>
+<p>比特币 rpc 服务使用的是白名单模式，你要指定允许访问的 ip <strong>必须</strong>在配置 rpcallowip 指定，不然的话 rpcbind 是无法生效的。也就是说 rpcallowip 和 rpcbind 需要<strong>同时设定</strong>，你可以看到这句话</p>
+<blockquote>
+<p><em>-rpcbind=</em>[:port]<br>Bind to given address to listen for JSON-RPC connections. Do not expose<br>the RPC server to untrusted networks such as the public internet!<br>This option is ignored unless -rpcallowip is also passed. Port is<br>optional and overrides -rpcport. Use [host]:port notation for<br>IPv6. This option can be specified multiple times (default:<br>127.0.0.1 and ::1 i.e., localhost)</p>
+</blockquote>
+<p>想允许更多的 ip 访问 bitcoind 可以参考我的配置。网上很多文章中提到的 使用 * 做通配符，<strong>是过时的</strong>。这么做会导致 bitcoind <strong>无法正常启动</strong> 。具体可以参考比特币官网文档。</p>
+<p><strong>注意：我这种配置是极度不安全的，强烈不建议这么做，为了安全起见请合理使用白名单。</strong></p>
+<p>然后可以找一台白名单中的机器调用服务端的 rpc 接口</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl --user bitcoin --data-binary &#x27;&#123;&quot;jsonrpc&quot;: &quot;1.0&quot;, &quot;id&quot;:&quot;curltest&quot;, &quot;method&quot;: &quot;getnetworkinfo&quot;, &quot;params&quot;: [] &#125;&#x27; -H &#x27;content-type: text/plain;&#x27; http://10.0.1.5:8332/</span><br></pre></td></tr></table></figure>
+
+<p>能正确获取 json 就好了。</p>
+<p>如果不会 curl 请参考这一篇 <a target="_blank" rel="noopener" href="https://man.linuxde.net/curl">https://man.linuxde.net/curl</a></p>
+<p>参考文章</p>
+<p><a target="_blank" rel="noopener" href="https://ma.ttias.be/enable-the-rpc-json-api-with-password-authentication-in-bitcoin-core/">https://ma.ttias.be/enable-the-rpc-json-api-with-password-authentication-in-bitcoin-core/</a></p>
+<p>关于 rpcbind 的说明请参考（我 checkout 版本为0.18）</p>
+<p><a target="_blank" rel="noopener" href="https://bitcoin.org/en/release/v0.18.0#configuration-option-changes">https://bitcoin.org/en/release/v0.18.0#configuration-option-changes</a></p>
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><p>网络上资料都有时效性，目前很多资料都没提到 rpcbind ，请多阅读比特币官方说明和检索外文资料。这类资料价值相对更高，利于快速解决问题。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" rel="tag"># 区块链</a>
+              <a href="/tags/%E6%AF%94%E7%89%B9%E5%B8%81/" rel="tag"># 比特币</a>
+              <a href="/tags/RPC/" rel="tag"># RPC</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/55622/" rel="prev" title="比特币客户端的设置">
+      <i class="fa fa-chevron-left"></i> 比特币客户端的设置
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/60903/" rel="next" title="使用比特币节点进行交易">
+      使用比特币节点进行交易 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AF%94%E7%89%B9%E5%B8%81%E8%8A%82%E7%82%B9%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE"><span class="nav-number">1.</span> <span class="nav-text">比特币节点远程访问</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">1.0.1.</span> <span class="nav-text">小结</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="TigerInYourDream"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">TigerInYourDream</p>
+  <div class="site-description" itemprop="description">每一篇文章都是一种进步，每一句感慨都是一次思考</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TigerInYourDream</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">163k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:28</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

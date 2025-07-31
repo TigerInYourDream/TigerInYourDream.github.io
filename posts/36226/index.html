@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Pacifico:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"imzy.vip","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="​        之前一段时间，阅读了计算机网络，对于每个章节都做了一个相应的思维导图来描绘计算机网络的七层模型(或者说5层模型)，现在写一篇简答的博文来来回答一个简单的问题：当我们浏览网页的过程中发生了什么？一个典型的浏览的过程是什么呢？简单的感受就是，在浏览器的地址栏输入网址，比如www.imzy.vip ,然后呈现的出该网站的界面。当然访问每一个网页，抽象出来的过程都是一致的主要简单划分为以">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浏览网页时,发生了什么">
+<meta property="og:url" content="https://imzy.vip/posts/36226/index.html">
+<meta property="og:site_name" content="TID&#39;s Blog">
+<meta property="og:description" content="​        之前一段时间，阅读了计算机网络，对于每个章节都做了一个相应的思维导图来描绘计算机网络的七层模型(或者说5层模型)，现在写一篇简答的博文来来回答一个简单的问题：当我们浏览网页的过程中发生了什么？一个典型的浏览的过程是什么呢？简单的感受就是，在浏览器的地址栏输入网址，比如www.imzy.vip ,然后呈现的出该网站的界面。当然访问每一个网页，抽象出来的过程都是一致的主要简单划分为以">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-05-11T16:03:41.000Z">
+<meta property="article:modified_time" content="2025-07-31T02:30:04.387Z">
+<meta property="article:author" content="TigerInYourDream">
+<meta property="article:tag" content="前端">
+<meta property="article:tag" content="网络">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://imzy.vip/posts/36226/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>浏览网页时,发生了什么 | TID's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">TID's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-一言">
+
+    <a href="/motto" rel="section"><i class="fa fa-camera fa-fw"></i>一言</a>
+
+  </li>
+        <li class="menu-item menu-item-友链">
+
+    <a href="/friends" rel="section"><i class="fa fa-american-sign-language-interpreting fa-fw"></i>友链</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/36226/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="TigerInYourDream">
+      <meta itemprop="description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TID's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          浏览网页时,发生了什么
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-05-11 16:03:41" itemprop="dateCreated datePublished" datetime="2019-05-11T16:03:41+00:00">2019-05-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-07-31 02:30:04" itemprop="dateModified" datetime="2025-07-31T02:30:04+00:00">2025-07-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>​        之前一段时间，阅读了计算机网络，对于每个章节都做了一个相应的思维导图来描绘计算机网络的七层模型(或者说5层模型)，现在写一篇简答的博文来来回答一个简单的问题：当我们浏览网页的过程中发生了什么？<br>一个典型的浏览的过程是什么呢？简单的感受就是，在浏览器的地址栏输入网址，比如<a target="_blank" rel="noopener" href="http://www.imzy.vip/">www.imzy.vip</a> ,然后呈现的出该网站的界面。当然访问每一个网页，抽象出来的过程都是一致的主要简单划分为以下几个过程。</p>
+<a id="more"></a>
+
+<h4 id="网址和协议"><a href="#网址和协议" class="headerlink" title="网址和协议"></a>网址和协议</h4><p>​        在浏览器界面上的地址栏输入的东西，比如<a target="_blank" rel="noopener" href="http://www.imzy.vip,整个地址就叫做网址,网址的构成如下/">http://www.imzy.vip，整个地址就叫做网址，网址的构成如下</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">协议:<span class="comment">//域名::端口号/资源地址</span></span><br></pre></td></tr></table></figure>
+
+<p>形如http的部分就是协议名称，http协议被称为超文本传输协议，对应的还有file协议，如果用浏览器打开本地计算机上的对应文件，html之类的就会用到file协议。另外一种常见的协议就是ftp协议，在http协议之前，ftp是网络时间上最常见的协议，用于文件的传输。</p>
+<p>端口号是指::8080这种形式，其中http默认的端口号是80，这种默认的端口号可以不用填写。</p>
+<p>之后用斜杠跟着的是资源位置，不再赘述。</p>
+<h4 id="DNS的解析"><a href="#DNS的解析" class="headerlink" title="DNS的解析"></a>DNS的解析</h4><p>浏览器中输入的域名经过寻址，才能找到指定的服务器，但是服务器的地址是ip地址，形如xx.xx.xx.xx  这里的xx指的10进制的数字。这种是典型的ipv4地址。从域名<a target="_blank" rel="noopener" href="http://www.imzy.vip/">www.imzy.vip</a> 到xx.xx.xx.xx的转换就称之为域名的解析。域名的解析，简单来说就是需要域名解析服务来解析，根据网络建设的架构，全球分布着数台顶级域名解析器。需要注意的是，域名用点分发记录，越高级的域名排在最后。比如我的域名vip是顶级域名，常见的顶级域名还有 .cn  .com .org .gov等。详细的知识可以参考谢希成的计算机网络一书，截止目前这本书已经发布了第七版。堪称与时俱进。</p>
+<p>DNS的解析是按顺序的，不是所有的网络请求都直接去顶级域名服务器申请解析的，主要的解析按照以下顺序进行</p>
+<ol>
+<li>浏览器缓存</li>
+<li>系统(指计算机操作系统OS)的HOST</li>
+<li>路由器(按照计算机网络一书，路由器也算是网络世界中的计算机，不过他承担的任务特殊罢了)</li>
+<li>ISP服务商，既提供给你网络服务的电信服务商的缓存，比如中国电信提供的DNS解析服务</li>
+<li>根域名服务器</li>
+</ol>
+<p>从上到下六个部分都可以进行域名的解析，哪一步能完成就到哪一步进行，域名和ip的转换就在那里进行，不去下一步。这样也减小了域名解析的压力。</p>
+<p>由此产生了两个小问题如下</p>
+<ol>
+<li>为什么不直接用ip，减少域名解析的步骤呢？</li>
+<li>DNS劫持指什么</li>
+</ol>
+<p>关于两个问题的回答如下</p>
+<p>其一，使用域名的解析是为了语义化，所谓的语义化，简单理解就是贴近自然语义，方便人的理解。比如我们访问百度，直接说访问百度，或者说访问<a href="http://www.baidu.com，如果没有域名，直接说访问202.108.22.5。">www.baidu.com，如果没有域名，直接说访问202.108.22.5。</a> 直接对比一下，那个好记录呢。可以说域名是人记忆力的妥协，毕竟对于人来说，词才是有意义的，数字并无直接意义。对于计算机来说，点分十进制和域名的记录都是一样的。工具为人服务，自然要向人妥协</p>
+<p>其二，DNS劫持。DNS的解析就是拿到域名之后解析成为ip的过程，所谓劫持，就是扰乱这个过程，访问百度域名，给了你一个非百度的ip，用户这边看到地址栏还是百度的域名，背后发生了什么一无所知。DNS劫持是一种后果非常严重的不安全行为，假如你要访问淘宝买东西，但是你的DNS被劫持了，指向了非淘宝的地址。这个过程一想，就会造成非常严重的经济损失。当然，还有其他的损失。一般的DNS劫持都发生在路由器，当然ISP服务商也有可能会劫持DNS。之前闹的沸沸扬扬的小米路由器DNS劫持事件，也是一个非常热门的话题。</p>
+<p>补充一点，我们平时填写的DNS服务器，8.8.8.8 或者 114.114.114.114以及最近比较火的1.1.1.1都是域名解析器的地址。</p>
+<h4 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h4><p>网络请求经过DNS解析，找到对应的服务器ip，通过路由器的层层转发，到达了服务器，算是真正进入了后端控制的部分了。一般把用于web服务的服务器都叫做 Web Server。后文把它简称为WS。WS简单来说就是安装了服务器软件的电脑，常见的Web服务器的操作系统主要是Linux和Windows Server。对应的服务器的软件有Apache，Nginx，IIS，Lighttpd等。这种OS+软件，就称之为WS。WS主要是为了接受请求，或者反向代理到其他的WS。一台WS上可能运行有不同的服务器程序(这个就是程序开发者自己写的)，这些软件也负责吧不同的请求分发到对应的处理程序上去。</p>
+<h4 id="网站的处理流程"><a href="#网站的处理流程" class="headerlink" title="网站的处理流程"></a>网站的处理流程</h4><p>经过长时间的游荡，请求终于到了程序猿自己掌控的时间了。以常用的Ruby on rails为例。我也在之前的博文中写过，如何使用Actix-web来写一个web程序，之前也参考过Ruby on rails。典型的网路处理流程是MVC模式的。这里的Modle指数据部分。V指view，显示层简单来书哦就是html界面。C就是控制层，controller，用来粘合这两个层层面，直白的说就是根据不用的请求从model拿数据，交给view层渲染(view需要数据来渲染)。</p>
+<p>更具体点的过程是这样的，一个请求过来，经过router，分配给对应的controller。controller处理对应的逻辑，从model拿数据，交给view层来生成界面。最后把生成好的界面交给用户。一个题外话，一个合理的架构中，处理逻辑的controller和处理数据的model，应该是独立的。也就是说Data Server应该独立于单独web服务之外。更多对于mvc的理解是基于编程理解的。也不是本文的主要讨论过程。有兴趣的可以去看我用rust写的Actix-web博客，麻雀虽小，但是整个框架是完整的。</p>
+<h4 id="浏览器解析"><a href="#浏览器解析" class="headerlink" title="浏览器解析"></a>浏览器解析</h4><p>服务器处理之后，终于交给用户了。简单来说就是说吧html交给浏览器。浏览器就会解析html和css，生成我们看到的界面。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag"># 前端</a>
+              <a href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag"># 网络</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/13602/" rel="prev" title="思维导图心得">
+      <i class="fa fa-chevron-left"></i> 思维导图心得
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/4005/" rel="next" title="关于em和line-height的备忘录">
+      关于em和line-height的备忘录 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BD%91%E5%9D%80%E5%92%8C%E5%8D%8F%E8%AE%AE"><span class="nav-number">1.</span> <span class="nav-text">网址和协议</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DNS%E7%9A%84%E8%A7%A3%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text">DNS的解析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">3.</span> <span class="nav-text">服务器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BD%91%E7%AB%99%E7%9A%84%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B"><span class="nav-number">4.</span> <span class="nav-text">网站的处理流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E8%A7%A3%E6%9E%90"><span class="nav-number">5.</span> <span class="nav-text">浏览器解析</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="TigerInYourDream"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">TigerInYourDream</p>
+  <div class="site-description" itemprop="description">每一篇文章都是一种进步，每一句感慨都是一次思考</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TigerInYourDream</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">163k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:28</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

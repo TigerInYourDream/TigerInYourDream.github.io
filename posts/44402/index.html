@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Pacifico:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"imzy.vip","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="REVM代码阅读 02前文介绍在 01章节，对阅读 revm做了一些预先的准备工作，主要包括了解solidity语言，学习 OPCODES以及自顶向下了解 evm的基本结构三部分。其中第三部分最好大致实现征战虚拟机栈的运行过程加深理解。现在开始阅读 revm代码。阅读代码的过程比较枯燥，请保持耐心。 针对单独实现的 evm不在少数，使用 rust编写的 evm也不是唯一的。有下面的两个 https">
+<meta property="og:type" content="article">
+<meta property="og:title" content="REVM代码阅读 02">
+<meta property="og:url" content="https://imzy.vip/posts/44402/index.html">
+<meta property="og:site_name" content="TID&#39;s Blog">
+<meta property="og:description" content="REVM代码阅读 02前文介绍在 01章节，对阅读 revm做了一些预先的准备工作，主要包括了解solidity语言，学习 OPCODES以及自顶向下了解 evm的基本结构三部分。其中第三部分最好大致实现征战虚拟机栈的运行过程加深理解。现在开始阅读 revm代码。阅读代码的过程比较枯燥，请保持耐心。 针对单独实现的 evm不在少数，使用 rust编写的 evm也不是唯一的。有下面的两个 https">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://image-bucket-for-alvin.oss-cn-beijing.aliyuncs.com/img/evm_loop.png">
+<meta property="article:published_time" content="2024-05-28T20:23:51.000Z">
+<meta property="article:modified_time" content="2025-07-31T02:30:04.385Z">
+<meta property="article:author" content="TigerInYourDream">
+<meta property="article:tag" content="eve">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://image-bucket-for-alvin.oss-cn-beijing.aliyuncs.com/img/evm_loop.png">
+
+<link rel="canonical" href="https://imzy.vip/posts/44402/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>REVM代码阅读 02 | TID's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">TID's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-一言">
+
+    <a href="/motto" rel="section"><i class="fa fa-camera fa-fw"></i>一言</a>
+
+  </li>
+        <li class="menu-item menu-item-友链">
+
+    <a href="/friends" rel="section"><i class="fa fa-american-sign-language-interpreting fa-fw"></i>友链</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/44402/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="TigerInYourDream">
+      <meta itemprop="description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TID's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          REVM代码阅读 02
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-05-28 20:23:51" itemprop="dateCreated datePublished" datetime="2024-05-28T20:23:51+00:00">2024-05-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-07-31 02:30:04" itemprop="dateModified" datetime="2025-07-31T02:30:04+00:00">2025-07-31</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="REVM代码阅读-02"><a href="#REVM代码阅读-02" class="headerlink" title="REVM代码阅读 02"></a>REVM代码阅读 02</h1><h2 id="前文介绍"><a href="#前文介绍" class="headerlink" title="前文介绍"></a>前文介绍</h2><p>在 01章节，对阅读 revm做了一些预先的准备工作，主要包括了解solidity语言，学习 OPCODES以及自顶向下了解 evm的基本结构三部分。其中第三部分最好大致实现征战虚拟机栈的运行过程加深理解。现在开始阅读 revm代码。阅读代码的过程比较枯燥，请保持耐心。</p>
+<p>针对单独实现的 evm不在少数，使用 rust编写的 evm也不是唯一的。有下面的两个</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/rust-ethereum/evm">https://github.com/rust-ethereum/evm</a></p>
+<p>以上是 rust-ethereum名下的 evm项目，他是 parity名下的项目，在项目中提到 polkdot项目就使用该虚拟机。</p>
+<p>另外一个就是我们看的 evm revm</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/bluealloy/revm">https://github.com/bluealloy/revm</a></p>
+<p>也有众多的以太坊生态项目使用该虚拟机。该项目拥有一本 books来介绍虚拟机的设计思路。在初步阅读代码之前，我们先阅读文档来了解 revm的整体设计思路。</p>
+<p><a target="_blank" rel="noopener" href="https://bluealloy.github.io/revm/">https://bluealloy.github.io/revm/</a></p>
+<p>revm是一个存粹的以太坊运行环境，没有任何网络以及共识的部分，也有降低简化阅读难度。</p>
+<h2 id="Revm-Books"><a href="#Revm-Books" class="headerlink" title="Revm Books"></a>Revm Books</h2><h3 id="Evm"><a href="#Evm" class="headerlink" title="Evm"></a>Evm</h3><p>根据 revm books的介绍，revm主要分四部分</p>
+<ol>
+<li>revm: revm核心代码。</li>
+<li>interpreter: 翻译为解释器。执行带有指令的循环。在上一节中已经提到，revm就是一个栈数据结构，依次弹出栈中的数据和指令（opcodes）进行和执行。</li>
+<li>primitives: 以太坊的原始数据类型。比如U256。是对于 rust数据类型的包装。</li>
+<li>precompile: 以太坊虚拟机预编译。在执行之前做一些数据的检查。</li>
+</ol>
+<p>每个 crates内部都有也有很多细分模块，这里只是介绍 revm中主要的部分。</p>
+<ol>
+<li>EVM部分。evm包含两大部分 Context和 handler. Context翻译为上下文，是一种编写二进制应用程序的常见方法，主要包含执行所需的状态。Handler包含作为执行逻辑的函数。Context分为两种具体的 EvmContext和 external context。external context翻译为外部 context。只要是为了外部调用执行的 Hook钩子。EvmContext为内部 Context，有database，environment，journaled state，precompiles四部分。</li>
+<li>运行时 Runtime。包含从 handler中调用函数。参考以下示意图</li>
+</ol>
+<p><img src="https://image-bucket-for-alvin.oss-cn-beijing.aliyuncs.com/img/evm_loop.png" alt="https://image-bucket-for-alvin.oss-cn-beijing.aliyuncs.com/img/evm_loop.png"></p>
+<p>所有的函数按照以上的四个类别进行分组，且按照对应的顺序运行。其中 Execution阶段包含两个循环。 call loop和 interpreter loop。</p>
+<p>第一个循环是调用循环，循环中的每一步被称为 Frame，帧。Frame生成 Interpreter loop。Interpreter 负责遍历执行字节码操作（opcodes）。相当于在 call loop中嵌套 Interpreter loop。Interpreter 执行的结果是 InterpreterAction。InterpreterAction 相当于一个枚举，分别指示 Interpreter是否执行完成。传导到“父”级别 Frame中。</p>
+<p>其中 Evm是负责运行的模块，在 Evm模块“之前”，有一个 EvmBuilder，会“设置”Evm需要执行的功能。Evmbuilder相当于一个“菜单”。</p>
+<h3 id="Interpreter"><a href="#Interpreter" class="headerlink" title="Interpreter"></a><a target="_blank" rel="noopener" href="https://bluealloy.github.io/revm/crates/interpreter.html#interpreter"><strong>Interpreter</strong></a></h3><p>evm是最核心的模块，也是程序的“启动点”。在上一小节中介绍的 evm中会开启两个两个循环，在  call loop中会嵌套执行 Interpreter循环。解释器循环直接涉及以太坊字节码操作，解释器直接充当事件循环逐步执行操作码。它设置 gas计算，合约本身，内存，栈堆操作，且返回执行结果。</p>
+<p>Interprete’r crates中的 gas和 mememory简单介绍就是gas费计算，以太坊内存操作。大致介绍下其中的Host 部分：</p>
+<ol>
+<li>Host是一个 trait</li>
+<li>因为 EVM操作是需要一定“链上信息的”，所以 Host中包含一些链上信息<ol>
+<li>env 包含当前区块和交易信息</li>
+<li>load_account: 查询给定以太坊账户的信息</li>
+<li>block_hash：检索给定区块号的哈希信息</li>
+<li>balance code code_hash …  用于检索给定账号的余额 代码 代码 hash之类的信息</li>
+<li>selfdestruct </li>
+</ol>
+</li>
+<li>Host部分维护了一个线上数据获取的统一接口，可以使得虚拟机链接到不同的以太坊网络，比如 mainnet, 测试网等。所以这部分被命名为“主机”。</li>
+</ol>
+<h3 id="interpreter-action"><a href="#interpreter-action" class="headerlink" title="interpreter_action"></a>interpreter_action</h3><p>interpreter action主要定义了一些解释器执行过程中的数据结构。有 strcuct和 enum主要包含了evm操作的方方面面。比如调用和创建输入，调用上下文（context)，价值转移（以太坊合约合约很多都是围绕转账展开的），以及自毁操作</p>
+<p>其他结构略过。以上大致分散的介绍了revm中的前两部分。</p>
+<p>待续。。</p>
+<p>2024年05月28日20:23:10</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/eve/" rel="tag"># eve</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/44082/" rel="prev" title="REVM代码阅读 01">
+      <i class="fa fa-chevron-left"></i> REVM代码阅读 01
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/43396/" rel="next" title="sonala合约">
+      sonala合约 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#REVM%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB-02"><span class="nav-number">1.</span> <span class="nav-text">REVM代码阅读 02</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E6%96%87%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">前文介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Revm-Books"><span class="nav-number">1.2.</span> <span class="nav-text">Revm Books</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Evm"><span class="nav-number">1.2.1.</span> <span class="nav-text">Evm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Interpreter"><span class="nav-number">1.2.2.</span> <span class="nav-text">Interpreter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#interpreter-action"><span class="nav-number">1.2.3.</span> <span class="nav-text">interpreter_action</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="TigerInYourDream"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">TigerInYourDream</p>
+  <div class="site-description" itemprop="description">每一篇文章都是一种进步，每一句感慨都是一次思考</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TigerInYourDream</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">163k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:28</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

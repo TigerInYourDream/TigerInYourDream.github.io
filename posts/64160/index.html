@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Pacifico:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"imzy.vip","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Logout IssuesLogout IssuesBefore describing the logout issues, let’s define two concepts:  logout: Clicking the logout button to exit robrix by interacting with matrix shut down: Clicking x to exit th">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Logout Issue">
+<meta property="og:url" content="https://imzy.vip/posts/64160/index.html">
+<meta property="og:site_name" content="TID&#39;s Blog">
+<meta property="og:description" content="Logout IssuesLogout IssuesBefore describing the logout issues, let’s define two concepts:  logout: Clicking the logout button to exit robrix by interacting with matrix shut down: Clicking x to exit th">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-07-31T10:22:47.000Z">
+<meta property="article:modified_time" content="2025-07-31T02:30:04.385Z">
+<meta property="article:author" content="TigerInYourDream">
+<meta property="article:tag" content="Rubric">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://imzy.vip/posts/64160/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Logout Issue | TID's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">TID's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-一言">
+
+    <a href="/motto" rel="section"><i class="fa fa-camera fa-fw"></i>一言</a>
+
+  </li>
+        <li class="menu-item menu-item-友链">
+
+    <a href="/friends" rel="section"><i class="fa fa-american-sign-language-interpreting fa-fw"></i>友链</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/64160/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="TigerInYourDream">
+      <meta itemprop="description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TID's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Logout Issue
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-07-31 10:22:47 / 修改时间：02:30:04" itemprop="dateCreated datePublished" datetime="2025-07-31T10:22:47+00:00">2025-07-31</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>20k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>18 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Logout-Issues"><a href="#Logout-Issues" class="headerlink" title="Logout Issues"></a>Logout Issues</h1><h2 id="Logout-Issues-1"><a href="#Logout-Issues-1" class="headerlink" title="Logout Issues"></a>Logout Issues</h2><p>Before describing the logout issues, let’s define two concepts:</p>
+<ul>
+<li>logout: Clicking the logout button to exit robrix by interacting with matrix</li>
+<li>shut down: Clicking x to exit the robrix processS</li>
+</ul>
+<h3 id="The-Earliest-‘Dead-Pool’-Issue-in-Logout"><a href="#The-Earliest-‘Dead-Pool’-Issue-in-Logout" class="headerlink" title="The Earliest ‘Dead-Pool’ Issue in Logout"></a>The Earliest ‘Dead-Pool’ Issue in Logout</h3><p><a target="_blank" rel="noopener" href="https://github.com/project-robius/robrix/pull/432#discussion%5C%5C_r2171202111">https://github.com/project-robius/robrix/pull/432#discussion\_r2171202111</a><br>The commit hash at that time was e1f80ea<br>The key code was as follows:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// Logs out the current user and prepares the application for a new login session.</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// Performs server-side logout, cleans up client state, closes all tabs,</span></span><br><span class="line"><span class="comment">/// and restarts the Matrix runtime. Reports success or failure via LoginAction.</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// # Parameters</span></span><br><span class="line"><span class="comment">/// - is_desktop - Boolean indicating if the current UI mode is desktop (true) or mobile (false).</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// # Returns</span></span><br><span class="line"><span class="comment">/// - Ok(()) - Logout succeeded (possibly with cleanup warnings)</span></span><br><span class="line"><span class="comment">/// - Err(...) - Logout failed with detailed error</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">fn</span> <span class="title">logout_and_refresh</span></span>(is_desktop :<span class="built_in">bool</span>) -&gt; <span class="built_in">Result</span>&lt;()&gt; &#123;</span><br><span class="line">    <span class="comment">// Collect all errors encountered during the logout process</span></span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> errors = <span class="built_in">Vec</span>::new();</span><br><span class="line">    log!(<span class="string">&quot;Starting logout process...&quot;</span>);</span><br><span class="line">    <span class="keyword">let</span> <span class="literal">Some</span>(client) = get_client() <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> error_msg = <span class="string">&quot;Logout failed: No active client found&quot;</span>;</span><br><span class="line">        log!(<span class="string">&quot;Error: &#123;&#125;&quot;</span>, error_msg);</span><br><span class="line">        Cx::post_action(LogoutAction::LogoutFailure(error_msg.to_string()));</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">Err</span>(anyhow::anyhow!(error_msg));</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">if</span> !client.matrix_auth().logged_in() &#123;</span><br><span class="line">        <span class="keyword">let</span> error_msg = <span class="string">&quot;Client not logged in, skipping server-side logout&quot;</span>;</span><br><span class="line">        log!(<span class="string">&quot;Error: &#123;&#125;&quot;</span>, error_msg);</span><br><span class="line">        Cx::post_action(LogoutAction::LogoutFailure(error_msg.to_string()));</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">Err</span>(anyhow::anyhow!(error_msg));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    get_sync_service().unwrap().stop().<span class="keyword">await</span>;</span><br><span class="line"></span><br><span class="line">    log!(<span class="string">&quot;Performing server-side logout...&quot;</span>);</span><br><span class="line">    <span class="keyword">match</span> tokio::time::timeout(tokio::time::Duration::from_secs(<span class="number">5</span>), client.matrix_auth().logout()).<span class="keyword">await</span> &#123;</span><br><span class="line">        <span class="literal">Ok</span>(<span class="literal">Ok</span>(_)) =&gt; &#123;</span><br><span class="line">            log!(<span class="string">&quot;Server-side logout successful.&quot;</span>)</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="literal">Ok</span>(<span class="literal">Err</span>(e)) =&gt; &#123;</span><br><span class="line">            <span class="keyword">let</span> error_msg = <span class="built_in">format!</span>(<span class="string">&quot;Server-side logout failed: &#123;&#125;. Please try again later&quot;</span>, e);</span><br><span class="line">            log!(<span class="string">&quot;Error :&#123;&#125;&quot;</span>, error_msg);</span><br><span class="line">            Cx::post_action(LogoutAction::LogoutFailure(error_msg.to_string()));</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">Err</span>(anyhow::anyhow!(error_msg));</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="literal">Err</span>(_) =&gt; &#123;</span><br><span class="line">            <span class="keyword">let</span> error_msg = <span class="string">&quot;Server-side logout timed out after 5 seconds. Please try again later&quot;</span>;</span><br><span class="line">            log!(<span class="string">&quot;Error: &#123;&#125;&quot;</span>, error_msg);</span><br><span class="line">            Cx::post_action(LogoutAction::LogoutFailure(error_msg.to_string()));</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">Err</span>(anyhow::anyhow!(error_msg));</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Clean up client state and caches</span></span><br><span class="line">    log!(<span class="string">&quot;Cleaning up client state and caches...&quot;</span>);</span><br><span class="line">    CLIENT.lock().unwrap().take();</span><br><span class="line">    SYNC_SERVICE.lock().unwrap().take();</span><br><span class="line">    TOMBSTONED_ROOMS.lock().unwrap().clear();</span><br><span class="line">    IGNORED_USERS.lock().unwrap().clear();</span><br><span class="line">    DEFAULT_SSO_CLIENT.lock().unwrap().take();</span><br><span class="line">    <span class="comment">// Note: Taking REQUEST_SENDER closes the channel sender, causing the async_worker task to exit its loop</span></span><br><span class="line">    <span class="comment">// This triggers the &quot;async_worker task ended unexpectedly&quot; error in the monitor task, but this is expected during logout</span></span><br><span class="line">    REQUEST_SENDER.lock().unwrap().take();</span><br><span class="line">    log!(<span class="string">&quot;Client state and caches cleared after successful server logout.&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Desktop UI has tabs that must be properly closed, while mobile UI has no tabs concept.</span></span><br><span class="line">    <span class="keyword">if</span> is_desktop &#123;</span><br><span class="line">        log!(<span class="string">&quot;Requesting to close all tabs in desktop&quot;</span>);</span><br><span class="line">        <span class="keyword">let</span> (tx, rx)  = oneshot::channel::&lt;<span class="built_in">bool</span>&gt;();</span><br><span class="line">        Cx::post_action(MainDesktopUiAction::CloseAllTabs &#123; on_close_all: tx &#125;);</span><br><span class="line">        <span class="keyword">match</span> rx.<span class="keyword">await</span> &#123;</span><br><span class="line">            <span class="literal">Ok</span>(_) =&gt; &#123;</span><br><span class="line">                log!(<span class="string">&quot;Received signal that the MainDesktopUI successfully closed all tabs&quot;</span>);</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="literal">Err</span>(e)=&gt; &#123;</span><br><span class="line">                <span class="keyword">let</span> error_msg = <span class="built_in">format!</span>(<span class="string">&quot;Close all tab failed &#123;e&#125;&quot;</span>);</span><br><span class="line">                log!(<span class="string">&quot;Error :&#123;&#125;&quot;</span>, error_msg);</span><br><span class="line">                Cx::post_action(LogoutAction::LogoutFailure(error_msg.to_string()));</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">Err</span>(anyhow::anyhow!(error_msg));</span><br><span class="line">            &#125;,</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    log!(<span class="string">&quot;Deleting latest user ID file...&quot;</span>);</span><br><span class="line">    <span class="comment">// We delete latest_user_id here for the following reasons:</span></span><br><span class="line">    <span class="comment">// 1. we delete the latest user ID such that Robrix won&#x27;t auto-login the next time it starts,</span></span><br><span class="line">    <span class="comment">// 2. we don&#x27;t delete the session file, such that the user could re-login using that session in the future.</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> <span class="literal">Err</span>(e) = delete_latest_user_id().<span class="keyword">await</span> &#123;</span><br><span class="line">        errors.push(e.to_string());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    shutdown_background_tasks().<span class="keyword">await</span>;</span><br><span class="line">    <span class="comment">// Restart the Matrix tokio runtime</span></span><br><span class="line">    <span class="comment">// This is a critical step; failure might prevent future logins</span></span><br><span class="line">    log!(<span class="string">&quot;Restarting Matrix tokio runtime...&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> start_matrix_tokio().is_err() &#123;</span><br><span class="line">        <span class="comment">// Send failure notification and return immediately, as the runtime is fundamental</span></span><br><span class="line">        <span class="keyword">let</span> final_error_msg = <span class="built_in">String</span>::from(<span class="string">&quot;Logout succeeded, but Robrix could not re-connect to the Matrix backend. Please exit and restart Robrix&quot;</span>);</span><br><span class="line">        Cx::post_action(LogoutAction::LogoutFailure(final_error_msg.clone()));</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">Err</span>(anyhow::anyhow!(final_error_msg));</span><br><span class="line">    &#125;</span><br><span class="line">    log!(<span class="string">&quot;Matrix tokio runtime restarted successfully.&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// --- Final result handling ---</span></span><br><span class="line">    <span class="keyword">if</span> errors.is_empty() &#123;</span><br><span class="line">        <span class="comment">// Complete success</span></span><br><span class="line">        log!(<span class="string">&quot;Logout process completed successfully.&quot;</span>);</span><br><span class="line">        Cx::post_action(LogoutAction::LogoutSuccess);</span><br><span class="line">        <span class="literal">Ok</span>(())</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// Partial success (server logout ok, but cleanup errors)</span></span><br><span class="line">        <span class="keyword">let</span> warning_msg = <span class="built_in">format!</span>(</span><br><span class="line">            <span class="string">&quot;Logout completed, but some cleanup operations failed: &#123;&#125;&quot;</span>,</span><br><span class="line">            errors.join(<span class="string">&quot;; &quot;</span>)</span><br><span class="line">        );</span><br><span class="line">        log!(<span class="string">&quot;Warning: &#123;&#125;&quot;</span>, warning_msg);</span><br><span class="line">        Cx::post_action(LogoutAction::LogoutSuccess);</span><br><span class="line">        <span class="literal">Ok</span>(())</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">fn</span> <span class="title">shutdown_background_tasks</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> rt_guard = TOKIO_RUNTIME.lock().unwrap();</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> <span class="literal">Some</span>(existing_rt) = rt_guard.take() &#123;</span><br><span class="line">        existing_rt.shutdown_background();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>The operations that triggered the panic were:</p>
+<ol>
+<li>Desktop mode open multiple rooms.</li>
+<li>Switch to mobile.</li>
+<li>Logout in mobile.</li>
+<li>Enlarge the window large enough for desktop.</li>
+<li>Login again.</li>
+<li>(panic)</li>
+</ol>
+<p>At that time, two issues were identified:</p>
+<ul>
+<li>The memory state left by desktop was not properly handled during the logout process in mobile mode</li>
+<li>According to the initial report, we can see that the program’s backtrace showed: thread ‘main’ panicked at /Users/alanpoon/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/deadpool-runtime-0.1.4/src/lib.rs:101:22: there is no reactor running, must be called from the context of a Tokio 1.x runtime<br>The matrix-sdk version at that time was 9676daee5ab864088993f869de52ec5d8b72cce9<br>Question 1 is not very relevant to the current analysis, as the handling omission was fixed in subsequent versions. We’ll mainly discuss issue 2.</li>
+</ul>
+<h3 id="The-core-issues-are-as-follows"><a href="#The-core-issues-are-as-follows" class="headerlink" title="The core issues are as follows:"></a>The core issues are as follows:</h3><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>. The most <span class="string">&quot;dangerous&quot;</span> operation <span class="keyword">in</span> the entire process is closing the tokio-runtime and then restarting a brand new runtime</span><br><span class="line"><span class="number">2</span>. The panic message appears <span class="keyword">in</span> deadpool-runtime-<span class="number">0.1</span>.<span class="number">4</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>Using cargo.lock for analysis, we get a dependency chain: matrix-sdk -&gt; matrix-sdk-sqlite -&gt; rusqlite -&gt; deadpool-sqlite -&gt; deadpool-runtime<br>Since it’s a tokio-related issue, <strong>we use tokio-console to analyze the problem</strong><br>Note: Frame 77 in <a target="_blank" rel="noopener" href="https://github.com/project-robius/robrix/pull/432#discussion%5C%5C_r2171202111">https://github.com/project-robius/robrix/pull/432#discussion\_r2171202111</a> is related to the room_member_manager in the version at that time. (Alex later updated the code to remove room_member_manager, so this issue no longer exists in subsequent versions)<br>I added a relatively long sleep after shutdown_background and before restart, observing the asynchronous tasks in tokio-console. I found that after calling shutdown_background, there were still many deadpool-related asynchronous tasks existing.</p>
+<p>This is consistent with the tokio documentation, as shutdown_background will close the tokio-runtime but won’t wait for the asynchronous tasks within it to finish. So we conclude that <strong>this panic occurs because we closed the tokio-runtime but the asynchronous tasks within it still exist, and when there’s no runtime, the asynchronous tasks still try to execute, causing the panic.</strong></p>
+<p>So our problematic code is:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CLIENT.lock().unwrap().take();</span><br><span class="line">.....</span><br><span class="line">shutdown_background_tasks().<span class="keyword">await</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>When we CLIENT.lock().unwrap().take();, the matrix client starts to destruct, but before shutdown_background_tasks, there’s no guarantee that all asynchronous tasks in the client have been fully processed, leading to panic.</p>
+<p>Since the issue occurs in matrix-sdk, I read the matrix API trying to find corresponding cleanup logic to reclaim deadpool-runtime in advance, as the crash happens in deadpool-runtime. Unfortunately, matrix doesn’t proactively provide an API to reclaim deadpool-runtime.</p>
+<h3 id="Design-of-the-Logout-State-Machine"><a href="#Design-of-the-Logout-State-Machine" class="headerlink" title="Design of the Logout State Machine"></a>Design of the Logout State Machine</h3><p>Note: Strictly speaking, the design of the state machine is not directly related to the crash, but the handling of this crash issue benefits from the design of the logout state machine.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//! The logout process is complex and error-prone due to:</span></span><br><span class="line"><span class="comment">//! - Network operations that can fail or timeout</span></span><br><span class="line"><span class="comment">//! - Resource cleanup that must happen in specific order</span></span><br><span class="line"><span class="comment">//! - UI synchronization across desktop tabs</span></span><br><span class="line"><span class="comment">//! - Matrix SDK objects that can panic during destruction</span></span><br><span class="line"><span class="comment">//! - Need for progress feedback and cancellation support</span></span><br><span class="line"><span class="comment">//!</span></span><br><span class="line"><span class="comment">//! ## State Flow</span></span><br><span class="line"><span class="comment">//!</span></span><br><span class="line"><span class="comment">//!</span></span><br><span class="line"><span class="comment">//! Idle (0%) → PreChecking (10%) → StoppingSyncService (20%) → LoggingOutFromServer (30%)</span></span><br><span class="line"><span class="comment">//!     ↓                                                                    ↓</span></span><br><span class="line"><span class="comment">//!   Failed ←─────────────────────────────────────────────────────── PointOfNoReturn (50%) ⚠️</span></span><br><span class="line"><span class="comment">//!                                                                           ↓</span></span><br><span class="line"><span class="comment">//!                                                                   ClosingTabs (60%) [Desktop Only]</span></span><br><span class="line"><span class="comment">//!                                                                           ↓</span></span><br><span class="line"><span class="comment">//!                                                                   CleaningAppState (70%)</span></span><br><span class="line"><span class="comment">//!                                                                           ↓</span></span><br><span class="line"><span class="comment">//!                                                                   ShuttingDownTasks (80%)</span></span><br><span class="line"><span class="comment">//!                                                                           ↓</span></span><br><span class="line"><span class="comment">//!                                                                   RestartingRuntime (90%)</span></span><br><span class="line"><span class="comment">//!                                                                           ↓</span></span><br><span class="line"><span class="comment">//!                                                                     Completed (100%)</span></span><br><span class="line"><span class="comment">//!                                                                           ↓</span></span><br><span class="line"><span class="comment">//!                                                                        Failed</span></span><br><span class="line"><span class="comment">//! ```</span></span><br><span class="line"><span class="comment">//!</span></span><br><span class="line"><span class="comment">//! ## Critical Design Points</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>The code above illustrates the state transition diagram of the state machine.</p>
+<p>Now the core logout code is as follows:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// Execute the logout process</span></span><br><span class="line">    <span class="keyword">pub</span> <span class="keyword">async</span> <span class="function"><span class="keyword">fn</span> <span class="title">execute</span></span>(&amp;<span class="keyword">self</span>) -&gt; <span class="built_in">Result</span>&lt;()&gt; &#123;</span><br><span class="line">        log!(<span class="string">&quot;LogoutStateMachine::execute() started&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Set logout in progress flag</span></span><br><span class="line">        LOGOUT_IN_PROGRESS.store(<span class="literal">true</span>, Ordering::Relaxed);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Reset global point of no return flag</span></span><br><span class="line">        LOGOUT_POINT_OF_NO_RETURN.store(<span class="literal">false</span>, Ordering::Relaxed);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Start from Idle state</span></span><br><span class="line">        <span class="keyword">self</span>.transition_to(</span><br><span class="line">            LogoutState::PreChecking,</span><br><span class="line">            <span class="string">&quot;Checking prerequisites...&quot;</span>.to_string(),</span><br><span class="line">            <span class="number">10</span></span><br><span class="line">        ).<span class="keyword">await</span>?;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Pre-checks</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">let</span> <span class="literal">Err</span>(e) = <span class="keyword">self</span>.perform_prechecks().<span class="keyword">await</span> &#123;</span><br><span class="line">            <span class="keyword">self</span>.transition_to(</span><br><span class="line">                LogoutState::Failed(e.clone()),</span><br><span class="line">                <span class="built_in">format!</span>(<span class="string">&quot;Precheck failed: &#123;&#125;&quot;</span>, e),</span><br><span class="line">                <span class="number">0</span></span><br><span class="line">            ).<span class="keyword">await</span>?;</span><br><span class="line">            <span class="keyword">self</span>.handle_error(&amp;e).<span class="keyword">await</span>;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">Err</span>(anyhow!(e));</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Stop sync service</span></span><br><span class="line">        <span class="keyword">self</span>.transition_to(</span><br><span class="line">            LogoutState::StoppingSyncService,</span><br><span class="line">            <span class="string">&quot;Stopping sync service...&quot;</span>.to_string(),</span><br><span class="line">            <span class="number">20</span></span><br><span class="line">        ).<span class="keyword">await</span>?;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">let</span> <span class="literal">Err</span>(e) = <span class="keyword">self</span>.stop_sync_service().<span class="keyword">await</span> &#123;</span><br><span class="line">            <span class="keyword">self</span>.transition_to(</span><br><span class="line">                LogoutState::Failed(e.clone()),</span><br><span class="line">                <span class="built_in">format!</span>(<span class="string">&quot;Failed to stop sync service: &#123;&#125;&quot;</span>, e),</span><br><span class="line">                <span class="number">0</span></span><br><span class="line">            ).<span class="keyword">await</span>?;</span><br><span class="line">            <span class="keyword">self</span>.handle_error(&amp;e).<span class="keyword">await</span>;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">Err</span>(anyhow!(e));</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Server logout</span></span><br><span class="line">        <span class="keyword">self</span>.transition_to(</span><br><span class="line">            LogoutState::LoggingOutFromServer,</span><br><span class="line">            <span class="string">&quot;Logging out from server...&quot;</span>.to_string(),</span><br><span class="line">            <span class="number">30</span></span><br><span class="line">        ).<span class="keyword">await</span>?;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">match</span> <span class="keyword">self</span>.perform_server_logout().<span class="keyword">await</span> &#123;</span><br><span class="line">            <span class="literal">Ok</span>(_) =&gt; &#123;</span><br><span class="line">                <span class="keyword">self</span>.point_of_no_return.store(<span class="literal">true</span>, Ordering::Release);</span><br><span class="line">                LOGOUT_POINT_OF_NO_RETURN.store(<span class="literal">true</span>, Ordering::Release);</span><br><span class="line">                <span class="keyword">self</span>.transition_to(</span><br><span class="line">                    LogoutState::PointOfNoReturn,</span><br><span class="line">                    <span class="string">&quot;Point of no return reached&quot;</span>.to_string(),</span><br><span class="line">                    <span class="number">50</span></span><br><span class="line">                ).<span class="keyword">await</span>?;</span><br><span class="line">                </span><br><span class="line">                <span class="comment">// We delete latest_user_id after reaching LOGOUT_POINT_OF_NO_RETURN:</span></span><br><span class="line">                <span class="comment">// 1. To prevent auto-login with invalid session on next start</span></span><br><span class="line">                <span class="comment">// 2. While keeping session file intact for potential future login</span></span><br><span class="line">                <span class="keyword">if</span> <span class="keyword">let</span> <span class="literal">Err</span>(e) = delete_latest_user_id().<span class="keyword">await</span> &#123;</span><br><span class="line">                    log!(<span class="string">&quot;Warning: Failed to delete latest user ID: &#123;&#125;&quot;</span>, e);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="literal">Err</span>(e) =&gt; &#123;</span><br><span class="line">                <span class="comment">// Check if it&#x27;s an M_UNKNOWN_TOKEN error</span></span><br><span class="line">                <span class="keyword">if</span> matches!(&amp;e, LogoutError::Recoverable(RecoverableError::ServerLogoutFailed(msg)) <span class="keyword">if</span> msg.contains(<span class="string">&quot;M_UNKNOWN_TOKEN&quot;</span>)) &#123;</span><br><span class="line">                    log!(<span class="string">&quot;Token already invalidated, continuing with logout&quot;</span>);</span><br><span class="line">                    <span class="keyword">self</span>.point_of_no_return.store(<span class="literal">true</span>, Ordering::Release);</span><br><span class="line">                    LOGOUT_POINT_OF_NO_RETURN.store(<span class="literal">true</span>, Ordering::Release);</span><br><span class="line">                    <span class="keyword">self</span>.transition_to(</span><br><span class="line">                        LogoutState::PointOfNoReturn,</span><br><span class="line">                        <span class="string">&quot;Token already invalidated&quot;</span>.to_string(),</span><br><span class="line">                        <span class="number">50</span></span><br><span class="line">                    ).<span class="keyword">await</span>?;</span><br><span class="line">                    </span><br><span class="line">                    <span class="comment">// Same delete operation as in the success case above</span></span><br><span class="line">                    <span class="keyword">if</span> <span class="keyword">let</span> <span class="literal">Err</span>(e) = delete_latest_user_id().<span class="keyword">await</span> &#123;</span><br><span class="line">                        log!(<span class="string">&quot;Warning: Failed to delete latest user ID: &#123;&#125;&quot;</span>, e);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="comment">// Restart sync service since we haven&#x27;t reached point of no return</span></span><br><span class="line">                    <span class="keyword">if</span> <span class="keyword">let</span> <span class="literal">Some</span>(sync_service) = get_sync_service() &#123;</span><br><span class="line">                        sync_service.start().<span class="keyword">await</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    </span><br><span class="line">                    <span class="keyword">self</span>.transition_to(</span><br><span class="line">                        LogoutState::Failed(e.clone()),</span><br><span class="line">                        <span class="built_in">format!</span>(<span class="string">&quot;Server logout failed: &#123;&#125;&quot;</span>, e),</span><br><span class="line">                        <span class="number">0</span></span><br><span class="line">                    ).<span class="keyword">await</span>?;</span><br><span class="line">                    <span class="keyword">self</span>.handle_error(&amp;e).<span class="keyword">await</span>;</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">Err</span>(anyhow!(e));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// From here on, all failures are unrecoverable</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Close tabs (desktop only)</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">self</span>.config.is_desktop &#123;</span><br><span class="line">            <span class="keyword">self</span>.transition_to(</span><br><span class="line">                LogoutState::ClosingTabs,</span><br><span class="line">                <span class="string">&quot;Closing all tabs...&quot;</span>.to_string(),</span><br><span class="line">                <span class="number">60</span></span><br><span class="line">            ).<span class="keyword">await</span>?;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">let</span> <span class="literal">Err</span>(e) = <span class="keyword">self</span>.close_all_tabs().<span class="keyword">await</span> &#123;</span><br><span class="line">                <span class="keyword">let</span> error = LogoutError::Unrecoverable(UnrecoverableError::PostPointOfNoReturnFailure(e.to_string()));</span><br><span class="line">                <span class="keyword">self</span>.transition_to(</span><br><span class="line">                    LogoutState::Failed(error.clone()),</span><br><span class="line">                    <span class="string">&quot;Failed to close tabs&quot;</span>.to_string(),</span><br><span class="line">                    <span class="number">0</span></span><br><span class="line">                ).<span class="keyword">await</span>?;</span><br><span class="line">                <span class="keyword">self</span>.handle_error(&amp;error).<span class="keyword">await</span>;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">Err</span>(anyhow!(error));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Clean app state</span></span><br><span class="line">        <span class="keyword">self</span>.transition_to(</span><br><span class="line">            LogoutState::CleaningAppState,</span><br><span class="line">            <span class="string">&quot;Cleaning up application state...&quot;</span>.to_string(),</span><br><span class="line">            <span class="number">70</span></span><br><span class="line">        ).<span class="keyword">await</span>?;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// All static resources (CLIENT, SYNC_SERVICE, etc.) are defined in the sliding_sync module,</span></span><br><span class="line">        <span class="comment">// so the state machine delegates the cleanup operation to sliding_sync&#x27;s clean_app_state function</span></span><br><span class="line">        <span class="comment">// rather than accessing these static variables directly from outside the module.</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">let</span> <span class="literal">Err</span>(e) = clean_app_state(&amp;<span class="keyword">self</span>.config).<span class="keyword">await</span> &#123;</span><br><span class="line">            <span class="keyword">let</span> error = LogoutError::Unrecoverable(UnrecoverableError::PostPointOfNoReturnFailure(e.to_string()));</span><br><span class="line">            <span class="keyword">self</span>.transition_to(</span><br><span class="line">                LogoutState::Failed(error.clone()),</span><br><span class="line">                <span class="string">&quot;Failed to clean app state&quot;</span>.to_string(),</span><br><span class="line">                <span class="number">0</span></span><br><span class="line">            ).<span class="keyword">await</span>?;</span><br><span class="line">            <span class="keyword">self</span>.handle_error(&amp;error).<span class="keyword">await</span>;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">Err</span>(anyhow!(error));</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Shutdown tasks</span></span><br><span class="line">        <span class="keyword">self</span>.transition_to(</span><br><span class="line">            LogoutState::ShuttingDownTasks,</span><br><span class="line">            <span class="string">&quot;Shutting down background tasks...&quot;</span>.to_string(),</span><br><span class="line">            <span class="number">80</span></span><br><span class="line">        ).<span class="keyword">await</span>?;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">self</span>.shutdown_background_tasks().<span class="keyword">await</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Restart runtime</span></span><br><span class="line">        <span class="keyword">self</span>.transition_to(</span><br><span class="line">            LogoutState::RestartingRuntime,</span><br><span class="line">            <span class="string">&quot;Restarting Matrix runtime...&quot;</span>.to_string(),</span><br><span class="line">            <span class="number">90</span></span><br><span class="line">        ).<span class="keyword">await</span>?;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">let</span> <span class="literal">Err</span>(e) = <span class="keyword">self</span>.restart_runtime().<span class="keyword">await</span> &#123;</span><br><span class="line">            <span class="keyword">let</span> error = LogoutError::Unrecoverable(UnrecoverableError::RuntimeRestartFailed);</span><br><span class="line">            <span class="keyword">self</span>.transition_to(</span><br><span class="line">                LogoutState::Failed(error.clone()),</span><br><span class="line">                <span class="built_in">format!</span>(<span class="string">&quot;Failed to restart runtime: &#123;&#125;&quot;</span>, e),</span><br><span class="line">                <span class="number">0</span></span><br><span class="line">            ).<span class="keyword">await</span>?;</span><br><span class="line">            <span class="keyword">self</span>.handle_error(&amp;error).<span class="keyword">await</span>;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">Err</span>(anyhow!(error));</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Success!</span></span><br><span class="line">        <span class="keyword">self</span>.transition_to(</span><br><span class="line">            LogoutState::Completed,</span><br><span class="line">            <span class="string">&quot;Logout completed successfully&quot;</span>.to_string(),</span><br><span class="line">            <span class="number">100</span></span><br><span class="line">        ).<span class="keyword">await</span>?;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// CloseSetting after logout</span></span><br><span class="line">        Cx::post_action(SettingsAction::CloseSettings);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Reset logout in progress flag</span></span><br><span class="line">        LOGOUT_IN_PROGRESS.store(<span class="literal">false</span>, Ordering::Relaxed);</span><br><span class="line">        Cx::post_action(LogoutAction::LogoutSuccess);</span><br><span class="line">        <span class="literal">Ok</span>(())</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>Additionally, here’s the supplementary code:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">pub</span> <span class="keyword">async</span> <span class="function"><span class="keyword">fn</span> <span class="title">clean_app_state</span></span>(config: &amp;LogoutConfig) -&gt; <span class="built_in">Result</span>&lt;()&gt; &#123;</span><br><span class="line">    <span class="comment">// Clear resources normally, allowing them to be properly dropped</span></span><br><span class="line">    <span class="comment">// This prevents memory leaks when users logout and login again without closing the app</span></span><br><span class="line">    CLIENT.lock().unwrap().take();</span><br><span class="line">    log!(<span class="string">&quot;Client cleared during logout&quot;</span>);</span><br><span class="line"></span><br><span class="line">    SYNC_SERVICE.lock().unwrap().take();</span><br><span class="line">    log!(<span class="string">&quot;Sync service cleared during logout&quot;</span>);</span><br><span class="line"></span><br><span class="line">    REQUEST_SENDER.lock().unwrap().take();</span><br><span class="line">    log!(<span class="string">&quot;Request sender cleared during logout&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Only clear collections that don&#x27;t contain Matrix SDK objects</span></span><br><span class="line">    TOMBSTONED_ROOMS.lock().unwrap().clear();</span><br><span class="line">    IGNORED_USERS.lock().unwrap().clear();</span><br><span class="line">    ALL_JOINED_ROOMS.lock().unwrap().clear();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> (tx, rx) = oneshot::channel::&lt;<span class="built_in">bool</span>&gt;();</span><br><span class="line">    Cx::post_action(LogoutAction::CleanAppState &#123; on_clean_appstate: tx &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">match</span> tokio::time::timeout(config.app_state_cleanup_timeout, rx).<span class="keyword">await</span> &#123;</span><br><span class="line">        <span class="literal">Ok</span>(<span class="literal">Ok</span>(_)) =&gt; &#123;</span><br><span class="line">            log!(<span class="string">&quot;Received signal that app state was cleaned successfully&quot;</span>);</span><br><span class="line">            <span class="literal">Ok</span>(())</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="literal">Ok</span>(<span class="literal">Err</span>(e)) =&gt; <span class="literal">Err</span>(anyhow!(<span class="string">&quot;Failed to clean app state: &#123;&#125;&quot;</span>, e)),</span><br><span class="line">        <span class="literal">Err</span>(_) =&gt; <span class="literal">Err</span>(anyhow!(<span class="string">&quot;Timed out waiting for app state cleanup&quot;</span>)),</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>Now, the reclamation of tokio asynchronous tasks, especially regarding deadpool-runtime in matrix, is handled between clean_app_state and shutdown_background_tasks. In the new state machine, we have more operations between CLIENT.lock().unwrap().take(); (start destructing asynchronous tasks in matrix) and shutdown_background_tasks, giving the program more time for destruction. <strong>Note: We still don’t have an API to actively handle deadpool-runtime in matrix.</strong></p>
+<p>Now, there are no more panics related to deadpool in the code.</p>
+<p>As a comparison:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">pub</span> <span class="keyword">async</span> <span class="function"><span class="keyword">fn</span> <span class="title">clean_app_state</span></span>(config: &amp;LogoutConfig) -&gt; <span class="built_in">Result</span>&lt;()&gt; &#123;</span><br><span class="line">    <span class="comment">// Clear resources normally, allowing them to be properly dropped</span></span><br><span class="line">    <span class="comment">// This prevents memory leaks when users logout and login again without closing the app</span></span><br><span class="line">    CLIENT.lock().unwrap().take();</span><br><span class="line">    log!(<span class="string">&quot;Client cleared during logout&quot;</span>);</span><br><span class="line"></span><br><span class="line">    SYNC_SERVICE.lock().unwrap().take();</span><br><span class="line">    log!(<span class="string">&quot;Sync service cleared during logout&quot;</span>);</span><br><span class="line"></span><br><span class="line">    REQUEST_SENDER.lock().unwrap().take();</span><br><span class="line">    log!(<span class="string">&quot;Request sender cleared during logout&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Only clear collections that don&#x27;t contain Matrix SDK objects</span></span><br><span class="line">    TOMBSTONED_ROOMS.lock().unwrap().clear();</span><br><span class="line">    IGNORED_USERS.lock().unwrap().clear();</span><br><span class="line">    ALL_JOINED_ROOMS.lock().unwrap().clear();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// let (tx, rx) = oneshot::channel::&lt;bool&gt;();</span></span><br><span class="line">    <span class="comment">// Cx::post_action(LogoutAction::CleanAppState &#123; on_clean_appstate: tx &#125;);</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// match tokio::time::timeout(config.app_state_cleanup_timeout, rx).await &#123;</span></span><br><span class="line">    <span class="comment">//     Ok(Ok(_)) =&gt; &#123;</span></span><br><span class="line">    <span class="comment">//         log!(&quot;Received signal that app state was cleaned successfully&quot;);</span></span><br><span class="line">    <span class="comment">//         Ok(())</span></span><br><span class="line">    <span class="comment">//     &#125;</span></span><br><span class="line">    <span class="comment">//     Ok(Err(e)) =&gt; Err(anyhow!(&quot;Failed to clean app state: &#123;&#125;&quot;, e)),</span></span><br><span class="line">    <span class="comment">//     Err(_) =&gt; Err(anyhow!(&quot;Timed out waiting for app state cleanup&quot;)),</span></span><br><span class="line">    <span class="comment">// &#125;</span></span><br><span class="line"></span><br><span class="line">    <span class="literal">Ok</span>(())</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>If we comment out the code as shown above, canceling this time-consuming operation, and then logout, we can still see panics related to deadpool-runtime.</p>
+<h3 id="About-Shutdown-and-Leak"><a href="#About-Shutdown-and-Leak" class="headerlink" title="About Shutdown and Leak"></a>About Shutdown and Leak</h3><p>The above is an analysis of logout. As an exit function, I feel obligated to address issues in shutdown (closing the process).</p>
+<p>Through the above analysis, I have reached the conclusion:</p>
+<blockquote>
+<p>The deadpool-runtime panic that occurs during the exit process is due to not fully ending asynchronous tasks before closing the runtime. Or, it’s entirely an issue of destruction order.</p>
+</blockquote>
+<p>In the logout state machine, because we adjusted the order of the state machine, we gave more time for the client to destruct when it’s being destructed, avoiding the deadpool-runtime panic. However, we don’t have a state machine to perform such a series of operations during shutdown, and we don’t have an API to pre-release deadpool-runtime in the matrix client. So if we directly shutdown robrix, this crash information will point to the robrix program.</p>
+<p>Therefore, I believe that since we have no way to release asynchronous tasks in the program, we might as well directly forget them, especially forgetting the tokio-runtime. Since the program is about to shutdown, forgetting might be acceptable.</p>
+<p>This design is the core idea of using leak in shutdown.</p>
+<h3 id="Current-Situation"><a href="#Current-Situation" class="headerlink" title="Current Situation"></a>Current Situation</h3><p>The current situation is a bit interesting. In the current version, I tried:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">cleanup_before_shutdown</span></span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>) &#123;</span><br><span class="line"></span><br><span class="line">    log!(<span class="string">&quot;Starting shutdown cleanup...&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Clear user profile cache first to prevent thread-local destructor issues</span></span><br><span class="line">    <span class="comment">// This must be done before leaking the tokio runtime</span></span><br><span class="line">    clear_all_caches();</span><br><span class="line">    log!(<span class="string">&quot;Cleared user profile cache&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Set logout in progress to suppress error messages</span></span><br><span class="line">    LOGOUT_IN_PROGRESS.store(<span class="literal">true</span>, Ordering::Relaxed);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Immediately take and leak all resources to prevent any destructors from running</span></span><br><span class="line">    <span class="comment">// This is a controlled leak at shutdown to avoid the deadpool panic</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Take the runtime first and leak it</span></span><br><span class="line">    leak_runtime();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Take and leak the client</span></span><br><span class="line">    leak_client();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Take and leak the sync service</span></span><br><span class="line">    leak_sync_service();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Take and leak the request sender</span></span><br><span class="line">    leak_request_sender();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Don&#x27;t clear any collections or caches as they might contain references</span></span><br><span class="line">    <span class="comment">// to Matrix SDK objects that would trigger the deadpool panic</span></span><br><span class="line">    log!(<span class="string">&quot;Shutdown cleanup completed - all resources leaked to prevent panics&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>This code is in src/app.rs. I now try not to call this method, which means not actively leaking these resources during shutdown, and the program still doesn’t crash. (Note that I did encounter crash errors in previous versions)</p>
+<p>Here are some possible analyses:</p>
+<p>Change in execution order:</p>
+<p>Previous issue:<br>shutdown → clear_all_caches() → Matrix SDK objects in cache destruct → access potentially closed runtime → crash</p>
+<p>Current safe process:<br>logout → clean_app_state() → Matrix SDK core resources already cleared → clear_all_caches() → safe<br>shutdown → do nothing → operating system reclaims resources → safe</p>
+<ol>
+<li>Key contribution of the state machine</li>
+<li>Separated the handling logic of logout and shutdown</li>
+<li>Ensured correct cleanup order (clear dependencies first, then clear dependents)</li>
+<li>Provided clear timing guarantees (perform dangerous operations only when it’s safe)</li>
+</ol>
+<p>Leaking is indeed a dangerous operation. Of course, the current situation suggests that the previous code might have been over-protective, and we might consider removing the related code.</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Rubric/" rel="tag"># Rubric</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/12714/" rel="prev" title="为 C++程序写 rustbinding">
+      <i class="fa fa-chevron-left"></i> 为 C++程序写 rustbinding
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Logout-Issues"><span class="nav-number">1.</span> <span class="nav-text">Logout Issues</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Logout-Issues-1"><span class="nav-number">1.1.</span> <span class="nav-text">Logout Issues</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-Earliest-%E2%80%98Dead-Pool%E2%80%99-Issue-in-Logout"><span class="nav-number">1.1.1.</span> <span class="nav-text">The Earliest ‘Dead-Pool’ Issue in Logout</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-core-issues-are-as-follows"><span class="nav-number">1.1.2.</span> <span class="nav-text">The core issues are as follows:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Design-of-the-Logout-State-Machine"><span class="nav-number">1.1.3.</span> <span class="nav-text">Design of the Logout State Machine</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#About-Shutdown-and-Leak"><span class="nav-number">1.1.4.</span> <span class="nav-text">About Shutdown and Leak</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Current-Situation"><span class="nav-number">1.1.5.</span> <span class="nav-text">Current Situation</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="TigerInYourDream"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">TigerInYourDream</p>
+  <div class="site-description" itemprop="description">每一篇文章都是一种进步，每一句感慨都是一次思考</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TigerInYourDream</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">163k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:28</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

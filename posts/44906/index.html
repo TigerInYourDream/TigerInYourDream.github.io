@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Pacifico:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"imzy.vip","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="最近给自己定下一个任务，用rust写一个可以运行的项目，最终定下的任务就如标题所示，搭建一个可以运行的博客，具备基本的登录功能，可以对自己的文章进行增删改查功能。目标定下，接下来开始行动。代码在此">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何用Rust写一个自己的博客">
+<meta property="og:url" content="https://imzy.vip/posts/44906/index.html">
+<meta property="og:site_name" content="TID&#39;s Blog">
+<meta property="og:description" content="最近给自己定下一个任务，用rust写一个可以运行的项目，最终定下的任务就如标题所示，搭建一个可以运行的博客，具备基本的登录功能，可以对自己的文章进行增删改查功能。目标定下，接下来开始行动。代码在此">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-04-06T08:53:40.000Z">
+<meta property="article:modified_time" content="2025-07-31T02:30:04.387Z">
+<meta property="article:author" content="TigerInYourDream">
+<meta property="article:tag" content="Rust">
+<meta property="article:tag" content="actix_web">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://imzy.vip/posts/44906/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>如何用Rust写一个自己的博客 | TID's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">TID's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-一言">
+
+    <a href="/motto" rel="section"><i class="fa fa-camera fa-fw"></i>一言</a>
+
+  </li>
+        <li class="menu-item menu-item-友链">
+
+    <a href="/friends" rel="section"><i class="fa fa-american-sign-language-interpreting fa-fw"></i>友链</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/44906/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="TigerInYourDream">
+      <meta itemprop="description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TID's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          如何用Rust写一个自己的博客
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-04-06 08:53:40" itemprop="dateCreated datePublished" datetime="2019-04-06T08:53:40+00:00">2019-04-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-07-31 02:30:04" itemprop="dateModified" datetime="2025-07-31T02:30:04+00:00">2025-07-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">技术笔记</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>最近给自己定下一个任务，用rust写一个可以运行的项目，最终定下的任务就如标题所示，搭建一个可以运行的博客，具备基本的登录功能，可以对自己的文章进行增删改查功能。目标定下，接下来开始行动。代码在此</p>
+<a id="more"></a>
+
+<p>Actix_blog    <a target="_blank" rel="noopener" href="https://github.com/TigerInYourDream/actix_blog_example">https://github.com/TigerInYourDream/actix_blog_example</a></p>
+<h4 id="选定框架"><a href="#选定框架" class="headerlink" title="选定框架"></a>选定框架</h4><p>​    搭建博客自然不可能能徒手写一个，初步定下使用Rust的web框架actix(其实还有另一个方案Rocket)。工欲善其事必先利其器，先阅读actix_web的基本资料了解actix_web的使用方式。再快速阅读玩actix_web的文档后，发现了问题。因为本人没有web开发的相关经历，不理解web项目的组织方式，很多术语都看不懂，所以开发中的第一个难题就出现了：不理解web项目的组织方式，无法开始web项目的开发。既然基础薄弱无法开始，那么去了解web项目的组织方式就是当务之急。actix_web的文档本身可以说是有些过于简单，无法帮我达成这一目的。这个时候怎么办呢？多交流！和朋友的交流中得到一个信息，或许可以通过阅读</p>
+<p>文档达到理解web项目的组织方式。（说明：本人并不会ruby）所以直接阅读rails文档。通过阅读rails文档，得到以下结论：</p>
+<blockquote>
+<p>web项目基本上是典型的mvc模式，v = view.是视图层。主要用于呈现界面。m = modle 是数据层，主要用户储存数据，是用db或者orm就在这一层，c是衔接v和m的控制层，web框架的主要作用就是充当c层。</p>
+<p>把actix_web和rails的概念对应起来，可以这么说。controller作为控制层是为了粘合其他部分的。在代码中的api文件夹里的代码就是c层。handle函数则是具体处理对应逻辑的函数，相当于rails里面的Action。模板很好理解，就是相当于rails里面的erb文件。(也就是c)。router这个术语就是给不同的网络请求分配对应的handler(Action)函数的。至于中间件middleware,则是夹在用户请求和响应之间的功能，名副其实的中间，可以做到加载特定参数或者写log等一下功能。</p>
+</blockquote>
+<p>到此，第一步选定框架，理解web术语的基本概念已经完成，可以动手了。以上结论并不重要，重要的是去阅读rails的文档，和看具体的代码，自己理解web的运作和组织方式。</p>
+<h4 id="选择Orm"><a href="#选择Orm" class="headerlink" title="选择Orm"></a>选择Orm</h4><p>​    rust中的orm可选的不多，diesel最有名，那就它了。diesel(吐槽一下，rust世界框架的名字，柴油机？？？)的好处在于文档很齐全，而且我们在之前定下的任务就是增删改查，目标简单。Orm选定还牵扯db的选择，emmmm,官方指引实例用的postgreSQL，那就它了！至于如何安装postgreSQL，请参考上一篇文章，已经说的很清楚，就不在这里重复了。安装上postgreSQL之后，根据diesel文档，安装diesle-cli。按照文档一步一步来就可以知道我们diesel怎么使用。现在我们开始设计我们的数据表。充分理解我们的目标之后，我们大概需要一个，用户表，文章表，分类表等几类表，具体用了什么表可以去看代码。本身也不复杂，不过如果以后继续写web项目，这个过程也是必不可少的。这里面遇到一个问题。diesel链接数据库的时候，dotenv并不能识别 .env文件中的DATABASE_URL路径，我之后把里面的路径直接写进去才成功链接数据库。但是在所有的example中.env都是同样的写法。现在尚未知道原因。</p>
+<h4 id="开始正式使用actix-web"><a href="#开始正式使用actix-web" class="headerlink" title="开始正式使用actix_web"></a>开始正式使用actix_web</h4><p>​    数据层的基础初步搭建好之后，开始引入actix_web。其实现在还是不能直接动手写acti_web。我们还是需要理清actix_web中的几个概念才可以开始。</p>
+<blockquote>
+<p>提取器。提取器就是从handle函数中提取信息，主要提取的信息有路径，动态路径，form表单信息和其他存在body里面穿过来的信息。另外App状态也可以在handle函数中提取出来</p>
+</blockquote>
+<p>当然以上的结论并不是一蹴而就的。需要阅读再回头阅读actix_web的文档。如果还是不理解，可以横向对比rocket的文档。个人认为rocket的文档，结构更加清晰，更能让人理解web的运行方式。其中life-cycle比较精彩，让人直观了解了rocket的运作过程，而且对handle函数的讲解更加清晰。我最后理解handler函数以及提取器就是反复阅读rocket文档的结果。现在开始启动actix服务器，加载app程序，加载router。编码的过程不再赘述，下面强调一下actix-web的架构或者说运作方式</p>
+<blockquote>
+<p>actix_web启动一个服务器，绑定到指定的ip和端口，在服务器上装载或者叫运行一个(多个也可以)App。其中App实例可以加载router,用router来给不同的链接(不同的链接指不同的url和请求方式)分配不同的handler处理函数。handle处理函数中使用提取器获取诸多请求信息进行处理（处理部分主要是结合ORM），根据要求返回不同的结果。web程序中的结果就是渲染不同的页面或者在页面中进行跳转。</p>
+</blockquote>
+<h4 id="如何让diesel支持异步"><a href="#如何让diesel支持异步" class="headerlink" title="如何让diesel支持异步"></a>如何让diesel支持异步</h4><p>​    这是个让人头痛的问题，一般来说到上一步基本的框架已经理清了，剩下的就是写代码。但是diesel不支持异步，我们如何完美结合web框架来使用它呢。在actix_web官方文档中就有这样一节。说实话，讲的不是很好。对于我来说，读了两边完全不理解是在干什么。不过好处在在提示我：快去使用Actor。那什么是Actor呢。幸运的是使用Actor模型太多了。比如erlang，AKKA和Elixir。简单来说Actor模型思路就是万物皆Actor。所有的Actor都是独立的，他们之间通过消息来交流，Actor维护一个队列(mail queue)来处理消息。好了，了解了actor的基本思路之后，继续看文档中的database一小节来明白actor到底怎么用。看懂了吗？我觉得是看不懂的，所以直接看github上的actix（不是actix_web）指引文档。所以该怎么用呢</p>
+<blockquote>
+<p>actor既然要通过消息来交流，那我们就需要两个东西：消息(作为信息传递)，Actor本体(作为发送和处理消息的载体)。所以，我们要做的很简单，包装一个message,然后包装一个actor.在actor里面处理消息即可。打开actor的源码你会发现一句话</p>
+<p><strong>Method is called for every message received by this Actor</strong></p>
+<p>说明啥呢？说明我们想的没错。根据例子就知道这个actor该怎么用了。</p>
+</blockquote>
+<p>现在知道了actor怎么用了，我们开始直面问题 “如何让diesel支持异步”。还记得前面的提取器吗，提取器可以在handler里面提取什么？应该是路径，动态路径，状态，还有body里面的信息。别的几样都是传递过来的，那数据库信息该放哪里就有点眉目了？对！存在AppState里面。App.with_state(xxx)。好了，现在看actix_web的文档database一节就知道这一套该怎么用了。几个基本的问题搞清楚之后主要的障碍就不存在了。</p>
+<h4 id="使用Askma"><a href="#使用Askma" class="headerlink" title="使用Askma"></a>使用Askma</h4><p>​    不再强调了，看文档即可。之所以选Askma是我觉得Askma比另一个模板渲染看起来更简单。</p>
+<h4 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h4><p>​    最后总结整合思考过程：<strong>自顶向下，差缺补漏</strong></p>
+<p>首先了解web项目的组织方式，在看不懂actix_web项目的情况下去阅读文档更为清晰的rails，建立基础概念何为web项目，他的基础架构是什么，怎么组织。解决了这三个基本问题之后就可以初步开始了。接下来处理ORM部分，这一部分就是查找资料。接下来是web项目的的具体细节问题，何为controller,何为handler何为提取器，Appstate是什么，这一部分的理解是参考rocke的文档，横向对比得来的。最后是何为actor,幸运的是资料很多，很快能达成基本的理解。</p>
+<p>最后列出需要查阅的文档</p>
+<p>Actix_web     <a target="_blank" rel="noopener" href="https://actix.rs/docs/">https://actix.rs/docs/</a></p>
+<p>Diesel    <a target="_blank" rel="noopener" href="http://diesel.rs/guides/getting-started/">http://diesel.rs/guides/getting-started/</a></p>
+<p>Ruby on Rails    <a target="_blank" rel="noopener" href="https://ruby-china.github.io/rails-guides/getting_started.htm">https://ruby-china.github.io/rails-guides/getting_started.htm</a></p>
+<p>Rocket    <a target="_blank" rel="noopener" href="https://github.com/SergioBenitez/Rocket">https://github.com/SergioBenitez/Rocket</a></p>
+<p>其他材料可以自行查阅，另外就是英文文档比汉字的容易理解一些。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Rust/" rel="tag"># Rust</a>
+              <a href="/tags/actix-web/" rel="tag"># actix_web</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/31755/" rel="prev" title="Mac上安装和使用PostgreSQL的方法">
+      <i class="fa fa-chevron-left"></i> Mac上安装和使用PostgreSQL的方法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/34949/" rel="next" title="雪球速度法的感悟">
+      雪球速度法的感悟 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%89%E5%AE%9A%E6%A1%86%E6%9E%B6"><span class="nav-number">1.</span> <span class="nav-text">选定框架</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%89%E6%8B%A9Orm"><span class="nav-number">2.</span> <span class="nav-text">选择Orm</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%80%E5%A7%8B%E6%AD%A3%E5%BC%8F%E4%BD%BF%E7%94%A8actix-web"><span class="nav-number">3.</span> <span class="nav-text">开始正式使用actix_web</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%AE%A9diesel%E6%94%AF%E6%8C%81%E5%BC%82%E6%AD%A5"><span class="nav-number">4.</span> <span class="nav-text">如何让diesel支持异步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8Askma"><span class="nav-number">5.</span> <span class="nav-text">使用Askma</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%9E%E9%A1%BE"><span class="nav-number">6.</span> <span class="nav-text">回顾</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="TigerInYourDream"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">TigerInYourDream</p>
+  <div class="site-description" itemprop="description">每一篇文章都是一种进步，每一句感慨都是一次思考</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TigerInYourDream</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">163k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:28</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

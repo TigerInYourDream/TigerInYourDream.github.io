@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Pacifico:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"imzy.vip","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="之前写的安卓程序，并不存在跨域这种说法，是可以自由的从不同的域名下请求数据的，现在看前端知识，则就出现了跨域这个概念。了解跨域，主要清楚以下的知识点就可以。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="跨域问题">
+<meta property="og:url" content="https://imzy.vip/posts/48274/index.html">
+<meta property="og:site_name" content="TID&#39;s Blog">
+<meta property="og:description" content="之前写的安卓程序，并不存在跨域这种说法，是可以自由的从不同的域名下请求数据的，现在看前端知识，则就出现了跨域这个概念。了解跨域，主要清楚以下的知识点就可以。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-07-15T10:57:30.000Z">
+<meta property="article:modified_time" content="2025-07-31T02:30:04.388Z">
+<meta property="article:author" content="TigerInYourDream">
+<meta property="article:tag" content="前端">
+<meta property="article:tag" content="技术">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://imzy.vip/posts/48274/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>跨域问题 | TID's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">TID's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-一言">
+
+    <a href="/motto" rel="section"><i class="fa fa-camera fa-fw"></i>一言</a>
+
+  </li>
+        <li class="menu-item menu-item-友链">
+
+    <a href="/friends" rel="section"><i class="fa fa-american-sign-language-interpreting fa-fw"></i>友链</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/48274/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="TigerInYourDream">
+      <meta itemprop="description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TID's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          跨域问题
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-07-15 10:57:30" itemprop="dateCreated datePublished" datetime="2019-07-15T10:57:30+00:00">2019-07-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-07-31 02:30:04" itemprop="dateModified" datetime="2025-07-31T02:30:04+00:00">2025-07-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">技术笔记</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>之前写的安卓程序，并不存在跨域这种说法，是可以自由的从不同的域名下请求数据的，现在看前端知识，则就出现了跨域这个概念。了解跨域，主要清楚以下的知识点就可以。</p>
+<a id="more"></a>
+
+<ul>
+<li>什么是同源策略，满足同源策略的三个条件是什么</li>
+<li>跨域的具体方案是什么，怎么处理。</li>
+</ul>
+<h4 id="什么是同源策略，满足同源策略的三个条件是什么"><a href="#什么是同源策略，满足同源策略的三个条件是什么" class="headerlink" title="什么是同源策略，满足同源策略的三个条件是什么"></a>什么是同源策略，满足同源策略的三个条件是什么</h4><p>浏览器为了安全起见，制定了同源策略，只允许在本域名下的数据请求操作，同源策略主要要求以下三个条件</p>
+<ul>
+<li>协议相同，注意http和https是不同的协议</li>
+<li>域名相同</li>
+<li>端口一致</li>
+</ul>
+<p>请求的url和当前html的url满足以上三个条件就是同源的，非同源的情况下，使用数据就会受到限制。</p>
+<h4 id="跨域的具体方案是什么，怎么处理"><a href="#跨域的具体方案是什么，怎么处理" class="headerlink" title="跨域的具体方案是什么，怎么处理"></a>跨域的具体方案是什么，怎么处理</h4><p>实际场景中，我们不可能什么东西都放在自己的域名下来处理，比如我们可能需要一个天气请求的API，但是我们的主业是电商，那我们很可能就需要一个第三方的API来做。这个时候我们就不得不跨域。目前主流的跨域的方案有一下三类。</p>
+<ol>
+<li><h5 id="JSONP"><a href="#JSONP" class="headerlink" title="JSONP"></a>JSONP</h5><p> JSONP是JSON with padding的简称。我们知道 Script 标签中的js不受同源策略的影响，我们可以自由加载任何域名下的js来执行。JSONP就是以此为契机建立的。具体的我们在执行的时候可以这么做</p>
+<ol>
+<li><p>在html端</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src = <span class="string">&quot;https://a.imzy.me?callback = getWeather&quot;</span>&gt;</span><br><span class="line">								    <span class="function"><span class="keyword">function</span> <span class="title">getWeather</span>(<span class="params">data</span>)</span>&#123;</span><br><span class="line">	        <span class="built_in">console</span>.log(data)</span><br><span class="line">		    &#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在服务端返回的时候  带上 callback({data: xxx})。</p>
+<p> 前后端配合，实现JSONP。不过以上的做法显得有些tricking。最主要的缺点是他只可以进行get请求。</p>
+</li>
+</ol>
+</li>
+<li><p>CROS</p>
+<p> CROS的意思是跨域资源共享，这种跨域的方法是对ajax的拓展。</p>
+<p> CROS机制是浏览器发现请求的链接和当前页面url是不同源的，就主动在请求头中添加一个Origin的头，然后后端设置一个Access-Control-Allow-Origin的响应头。响应头中带有服务端允许的域。允许的域和Origin中的域能对应上就可以使用CROS。主要需要后端设置响应头。</p>
+<p> 详细解释下，Origin头说明的是当前请求来自于哪个域，ACAO则说明的是服务端允许的域。</p>
+<p> 可以参考  <a target="_blank" rel="noopener" href="http://javascript.ruanyifeng.com/bom/cors.html">CROS</a>.</p>
+</li>
+<li><p>和iframe有关的行为</p>
+<p> 在html页面上，我们也可以使用iframe来嵌套另一个html页面。我们的主页面，一般是不允许控制iframe中的元素的，除非iframe和我们的主页面是同一个域。不过iframe确实存在需要跨域的场景。和iframe有关的跨域主要分为以下两种</p>
+<ol>
+<li><p>降域。</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">a.html</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  .ct&#123;</span><br><span class="line">    width: <span class="number">910</span>px;</span><br><span class="line">    margin: auto;</span><br><span class="line">  &#125;</span><br><span class="line">  .main&#123;</span><br><span class="line">    float: left;</span><br><span class="line">    width: <span class="number">450</span>px;</span><br><span class="line">    height: <span class="number">300</span>px;</span><br><span class="line">    border: 1px solid #ccc;</span><br><span class="line">  &#125;</span><br><span class="line">  .main input&#123;</span><br><span class="line">    margin: <span class="number">20</span>px;</span><br><span class="line">    width: <span class="number">200</span>px;</span><br><span class="line">  &#125;</span><br><span class="line">  .iframe&#123;</span><br><span class="line">    float: right;</span><br><span class="line">  &#125;</span><br><span class="line">  iframe&#123;</span><br><span class="line">    width: <span class="number">450</span>px;</span><br><span class="line">    height: <span class="number">300</span>px;</span><br><span class="line">    border: 1px dashed #ccc;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line"></span><br><span class="line">&lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">&quot;ct&quot;</span>&gt;</span><br><span class="line">  &lt;h1&gt;使用降域实现跨域&lt;/h1&gt;</span><br><span class="line">  &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">&quot;main&quot;</span>&gt;</span><br><span class="line">    &lt;input type=<span class="string">&quot;text&quot;</span> placeholder=<span class="string">&quot;http://a.nany.com:8080/a.html&quot;</span>&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">  &lt;iframe src=<span class="string">&quot;http://b.imzy.vip:8080/b.html&quot;</span> frameborder=<span class="string">&quot;0&quot;</span> &gt;&lt;/iframe&gt;</span><br><span class="line"></span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line"><span class="comment">//URL: http://a.imzy.vip:8080/a.html</span></span><br><span class="line"><span class="built_in">document</span>.querySelector(<span class="string">&#x27;.main input&#x27;</span>).addEventListener(<span class="string">&#x27;input&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="built_in">this</span>.value);</span><br><span class="line">  <span class="built_in">window</span>.frames[<span class="number">0</span>].document.querySelector(<span class="string">&#x27;input&#x27;</span>).value = <span class="built_in">this</span>.value;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">document</span>.domain = <span class="string">&#x27;imzy.vip&#x27;</span></span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p> 以下是iframe中的代码</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">    html,body&#123;</span><br><span class="line">        margin: <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    input&#123;</span><br><span class="line">        margin: <span class="number">20</span>px;</span><br><span class="line">        width: <span class="number">200</span>px;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line"></span><br><span class="line">    &lt;input id=<span class="string">&quot;input&quot;</span> type=<span class="string">&quot;text&quot;</span>  placeholder=<span class="string">&quot;http://b.imzy.vip:8080/b.html&quot;</span>&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line"><span class="comment">// URL: http://b.imzy.vip:8080/b.html</span></span><br><span class="line"> </span><br><span class="line"><span class="built_in">document</span>.querySelector(<span class="string">&#x27;#input&#x27;</span>).addEventListener(<span class="string">&#x27;input&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">window</span>.parent.document.querySelector(<span class="string">&#x27;input&#x27;</span>).value = <span class="built_in">this</span>.value;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">document</span>.domain = <span class="string">&#x27;imzy.vip&#x27;</span>;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p> 注意以上代码中，a.imzy.vip和b.imzy.vip是不同的域名。但是他们的后缀是一样的，所以可以降域为imzy.vip</p>
+</li>
+<li><p>PostMessage</p>
+<p> 主要使用的是iframe的postMessage方法，来进行iframe的通信。</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">    &lt;head&gt;</span><br><span class="line">        &lt;meta charset=<span class="string">&quot;utf-8&quot;</span>&gt;</span><br><span class="line">        &lt;meta http-equiv=<span class="string">&quot;X-UA-Compatible&quot;</span> content=<span class="string">&quot;IE=edge&quot;</span>&gt;</span><br><span class="line">        &lt;title&gt;跨域POST消息发送&lt;/title&gt;</span><br><span class="line">        &lt;script type=<span class="string">&quot;text/JavaScript&quot;</span>&gt;    </span><br><span class="line">            <span class="comment">// sendPost 通过postMessage实现跨域通信将表单信息发送到 指定的域名上,</span></span><br><span class="line">            <span class="comment">// 并取得返回的数据    </span></span><br><span class="line">            <span class="function"><span class="keyword">function</span> <span class="title">sendPost</span>(<span class="params"></span>) </span>&#123;        </span><br><span class="line">                <span class="comment">// 获取id为otherPage的iframe窗口对象        </span></span><br><span class="line">                <span class="keyword">var</span> iframeWinow = <span class="built_in">document</span>.getElementById(<span class="string">&quot;otherPage&quot;</span>).contentWindow;        </span><br><span class="line">                <span class="comment">// 向该窗口发送消息        </span></span><br><span class="line">                iframeWin.postMessage(<span class="built_in">document</span>.getElementById(<span class="string">&quot;message&quot;</span>).value, </span><br><span class="line">                    <span class="string">&#x27;http://imzy.vip&#x27;</span>);    </span><br><span class="line">            &#125;    </span><br><span class="line">            <span class="comment">// 监听跨域请求的返回    </span></span><br><span class="line">            <span class="built_in">window</span>.addEventListener(<span class="string">&quot;message&quot;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;        </span><br><span class="line">                <span class="built_in">console</span>.log(event, event.data);    </span><br><span class="line">            &#125;, <span class="literal">false</span>);</span><br><span class="line">        &lt;/script&gt;</span><br><span class="line">    &lt;/head&gt;</span><br><span class="line">    &lt;body&gt; </span><br><span class="line">        &lt;textarea id=<span class="string">&quot;message&quot;</span>&gt;&lt;/textarea&gt; </span><br><span class="line">        &lt;input type=<span class="string">&quot;button&quot;</span> value=<span class="string">&quot;发送&quot;</span> onclick=<span class="string">&quot;sendPost()&quot;</span>&gt; </span><br><span class="line">        &lt;iframe</span><br><span class="line">            src=<span class="string">&quot;http://imzy.vip/other-domain.html&quot;</span> id=<span class="string">&quot;otherPage&quot;</span></span><br><span class="line">            style=<span class="string">&quot;display:none&quot;</span>&gt;&lt;/iframe&gt;</span><br><span class="line">    &lt;/body&gt;</span><br><span class="line"></span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p> 放在另一个域名下的iframe内容 </p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">    &lt;head&gt;</span><br><span class="line">        &lt;meta charset=<span class="string">&quot;utf-8&quot;</span>&gt;</span><br><span class="line">        &lt;meta http-equiv=<span class="string">&quot;X-UA-Compatible&quot;</span> content=<span class="string">&quot;IE=edge&quot;</span>&gt;</span><br><span class="line">        &lt;title&gt;POST Handler&lt;/title&gt;</span><br><span class="line">        &lt;script src=<span class="string">&quot;//code.jquery.com/jquery-1.11.0.min.js&quot;</span>&gt;&lt;/script&gt;</span><br><span class="line">        &lt;script type=<span class="string">&quot;text/JavaScript&quot;</span>&gt;</span><br><span class="line">            <span class="built_in">window</span>.addEventListener(<span class="string">&quot;message&quot;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"> event </span>) </span>&#123;</span><br><span class="line">                <span class="comment">// 监听父窗口发送过来的数据向服务器发送post请求</span></span><br><span class="line">                <span class="keyword">var</span> data = event.data;</span><br><span class="line">                $.ajax(&#123;</span><br><span class="line">                    <span class="comment">// 注意这里的url只是一个示例.实际练习的时候你需要自己想办法提供		</span></span><br><span class="line">                    type: <span class="string">&#x27;POST&#x27;</span>, </span><br><span class="line">                    url: <span class="string">&#x27;http://imzy.vip/getData&#x27;</span>,</span><br><span class="line">                    data: <span class="string">&quot;info=&quot;</span> + data,</span><br><span class="line">                    dataType: <span class="string">&quot;json&quot;</span></span><br><span class="line">                &#125;).done(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;        </span><br><span class="line">                    <span class="comment">//将请求成功返回的数据通过postMessage发送给父窗口        </span></span><br><span class="line">                    <span class="built_in">window</span>.parent.postMessage(res, <span class="string">&quot;*&quot;</span>);    </span><br><span class="line">                &#125;).fail(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;        </span><br><span class="line">                    <span class="comment">//将请求失败返回的数据通过postMessage发送给父窗口        </span></span><br><span class="line">                    <span class="built_in">window</span>.parent.postMessage(res, <span class="string">&quot;*&quot;</span>);    </span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;, <span class="literal">false</span>);</span><br><span class="line">        &lt;/script&gt;</span><br><span class="line">    &lt;/head&gt;</span><br><span class="line"></span><br><span class="line">    &lt;body&gt;&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p> 以上是通过PostMessage来进行iframe通信的实例，主要是完成了，从主界面发送消息到子iframe,子iframe中监听消息，将数据使用window.parent.postMessage()方法，回传数据的过程。</p>
+</li>
+</ol>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag"># 前端</a>
+              <a href="/tags/%E6%8A%80%E6%9C%AF/" rel="tag"># 技术</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/55711/" rel="prev" title="再读编程之道-类型系统">
+      <i class="fa fa-chevron-left"></i> 再读编程之道-类型系统
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/12108/" rel="next" title="SPV">
+      SPV <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%EF%BC%8C%E6%BB%A1%E8%B6%B3%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E7%9A%84%E4%B8%89%E4%B8%AA%E6%9D%A1%E4%BB%B6%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.</span> <span class="nav-text">什么是同源策略，满足同源策略的三个条件是什么</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B7%A8%E5%9F%9F%E7%9A%84%E5%85%B7%E4%BD%93%E6%96%B9%E6%A1%88%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%8C%E6%80%8E%E4%B9%88%E5%A4%84%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">跨域的具体方案是什么，怎么处理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#JSONP"><span class="nav-number">2.1.</span> <span class="nav-text">JSONP</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="TigerInYourDream"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">TigerInYourDream</p>
+  <div class="site-description" itemprop="description">每一篇文章都是一种进步，每一句感慨都是一次思考</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TigerInYourDream</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">163k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:28</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

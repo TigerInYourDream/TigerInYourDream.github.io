@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Pacifico:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"imzy.vip","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="比特币pow难度验证何为POWpow的全称为proof of work，即工作量证明。简单的解释为“做了多少工作”。抛开区块链的背景，pow就是对自己做了多少工作的一种说明：比如做了学习了50个小时的汽车驾驶。而他人很容易验证这个结果：你可能50个小时之后拿到了一本驾照。别人就知道你确实在学习驾驶上使用了50个小时。 Block Header在区块链的世界里，pow的数据可以体现在区块链的区块头中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="比特币pow难度验证">
+<meta property="og:url" content="https://imzy.vip/posts/58506/index.html">
+<meta property="og:site_name" content="TID&#39;s Blog">
+<meta property="og:description" content="比特币pow难度验证何为POWpow的全称为proof of work，即工作量证明。简单的解释为“做了多少工作”。抛开区块链的背景，pow就是对自己做了多少工作的一种说明：比如做了学习了50个小时的汽车驾驶。而他人很容易验证这个结果：你可能50个小时之后拿到了一本驾照。别人就知道你确实在学习驾驶上使用了50个小时。 Block Header在区块链的世界里，pow的数据可以体现在区块链的区块头中">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-06-19T15:58:46.000Z">
+<meta property="article:modified_time" content="2025-07-31T02:30:04.387Z">
+<meta property="article:author" content="TigerInYourDream">
+<meta property="article:tag" content="区块链">
+<meta property="article:tag" content="比特币">
+<meta property="article:tag" content="POW">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://imzy.vip/posts/58506/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>比特币pow难度验证 | TID's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">TID's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-一言">
+
+    <a href="/motto" rel="section"><i class="fa fa-camera fa-fw"></i>一言</a>
+
+  </li>
+        <li class="menu-item menu-item-友链">
+
+    <a href="/friends" rel="section"><i class="fa fa-american-sign-language-interpreting fa-fw"></i>友链</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/58506/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="TigerInYourDream">
+      <meta itemprop="description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TID's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          比特币pow难度验证
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-06-19 15:58:46" itemprop="dateCreated datePublished" datetime="2021-06-19T15:58:46+00:00">2021-06-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-07-31 02:30:04" itemprop="dateModified" datetime="2025-07-31T02:30:04+00:00">2025-07-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">技术笔记</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="比特币pow难度验证"><a href="#比特币pow难度验证" class="headerlink" title="比特币pow难度验证"></a>比特币pow难度验证</h1><h2 id="何为POW"><a href="#何为POW" class="headerlink" title="何为POW"></a>何为POW</h2><p>pow的全称为proof of work，即工作量证明。简单的解释为“做了多少工作”。抛开区块链的背景，pow就是对自己做了多少工作的一种说明：比如做了学习了50个小时的汽车驾驶。而他人很容易验证这个结果：你可能50个小时之后拿到了一本驾照。别人就知道你确实在学习驾驶上使用了50个小时。</p>
+<h2 id="Block-Header"><a href="#Block-Header" class="headerlink" title="Block Header"></a>Block Header</h2><p>在区块链的世界里，pow的数据可以体现在区块链的区块头中。当然一般来说，讲解POW的难度离不开挖矿问题。本文因为主要讨论方向的问题，不展开讲挖矿，主要从区块头入手。在阅读下面的内容之前，默认读者已经有了如下前置知识</p>
+<ol>
+<li>区块链常识</li>
+<li>比特币基本概念</li>
+<li>挖矿基本概念</li>
+</ol>
+<p>抛开前置知识之后，我们来看区块头的数据结构。</p>
+<p><a target="_blank" rel="noopener" href="https://en.bitcoin.it/wiki/Protocol_documentation#Block_Headers">https://en.bitcoin.it/wiki/Protocol_documentation#Block_Headers</a></p>
+<p>可以直接参考以上链接，当然可以可以直接查看比特币的源码，我们现在把数据列出来。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">header_structure</span> &#123;</span>      <span class="comment">// BYTES   NAME</span></span><br><span class="line"> <span class="keyword">uint32_t</span> nVersion;            <span class="comment">// 4       version</span></span><br><span class="line"> <span class="keyword">uint8_t</span> hashPrevBlock[<span class="number">32</span>];    <span class="comment">// 32      previous block header hash</span></span><br><span class="line"> <span class="keyword">uint8_t</span> hashMerkleRoot[<span class="number">32</span>];   <span class="comment">// 32      merkle root hash</span></span><br><span class="line"> <span class="keyword">uint32_t</span> nTime;               <span class="comment">// 4       time</span></span><br><span class="line"> <span class="keyword">uint32_t</span> nBits;               <span class="comment">// 4       target</span></span><br><span class="line"> <span class="keyword">uint32_t</span> nNonce;              <span class="comment">// 4       nonce</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>现在逐条解释block header中的字段。</p>
+<blockquote>
+<p>nVersion    版本号，主要用来跟踪软件版本（bitcoin core）和协议号  现在固定为2</p>
+</blockquote>
+<blockquote>
+<p>hashPrevBlock 前一个节点的hash值，我们知道区块链的链，大致指的是数据链式存储。我们可以简单粗暴的理解为它是指向前置节点的链表。</p>
+</blockquote>
+<blockquote>
+<p>hashMerkleRoot 默克尔根，区块中所有交易组合起来生产成本的默克尔树的根。详情可参考数据结构“默克尔树”</p>
+</blockquote>
+<blockquote>
+<p>nTime    时间戳，标志块生成的时间</p>
+</blockquote>
+<blockquote>
+<p>nBits 和难度有关，本文讨论的重点</p>
+</blockquote>
+<blockquote>
+<p>nNonce 随机值，和难度有关，本文讨论的重点</p>
+</blockquote>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>现在介绍基本概念，方便理解：</p>
+<ol>
+<li>挖矿是矿工之间互相竞争的结果，谁先算出有效区块，谁就可以得到块中的比特币奖励，它叫做coinbase，另外块中有交易，交易中蕴含的手续费也是矿工的奖励</li>
+<li>有效区块的意思是：区块头的SHA256结果要小于等于一个目标值（target）</li>
+<li>merkleroot是矿工从内存池取出来的“交易”构建的。</li>
+<li>大致上是先构建，再验证<ul>
+<li>对<strong>区块头</strong>做<code>SHA256</code>运算，如果结果小于等于一个<strong>目标值（target）</strong>，则新块构建成功，广播到全网，随后开始下一次算力竞赛</li>
+<li>否则，调整区块头部分字段的值（修改<code>Nonce</code>或者通过调整交易来修改<code>Merkle Root</code>），重新做计算</li>
+</ul>
+</li>
+</ol>
+<h2 id="目标值target"><a href="#目标值target" class="headerlink" title="目标值target"></a>目标值target</h2><p>前一段提到了，区块头hash计算之后小于等于目标值才算有效区块。注意区块头哈希算法SHA256有256位，而bits只有32位。bit转换成target有特定公式：</p>
+<blockquote>
+<p>target = coefficient * 256^(exponent – 3)</p>
+</blockquote>
+<p>随机抽取一个幸运区块来分析一下，我们就选高度为<a target="_blank" rel="noopener" href="https://www.blockchain.com/btc/block/88888">88888</a>的区块。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bits <span class="number">454</span>,<span class="number">373</span>,<span class="number">987</span></span><br><span class="line">注意：这个bits是<span class="number">10</span>进制，我们分析时候需要转<span class="number">16</span>进制 对应为 <span class="number">0x1b153263</span></span><br></pre></td></tr></table></figure>
+
+<p>bit值是按照系数+指数的方式存储的，前两位为幂，后六位为系数。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1b</span>为幂（exponent） <span class="number">153263</span>为系数(coefficient)注意这是<span class="number">16</span>进制</span><br><span class="line">根据公式</span><br><span class="line">target = (<span class="number">0x153263</span>）* <span class="number">256</span>^(<span class="number">1b</span> - <span class="number">3</span>)</span><br><span class="line">target =  <span class="number">1389155</span> * <span class="number">256</span>^(<span class="number">27</span> - <span class="number">3</span>）</span><br><span class="line">			 = <span class="number">8719867261221084516486306056196045840260667577454435863762042880</span></span><br><span class="line">       = <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">15</span> <span class="number">32</span> <span class="number">63</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span></span><br></pre></td></tr></table></figure>
+
+<p>需要注意的有：计算的时候还是转10进制，计算完之后要转16进制，不够64位的要在高位补零。</p>
+<p>实际上我们发现，实际的hash</p>
+<blockquote>
+<p>000000000013a2a3a8f1aaec4690f55fdcb4067d812521a6d55239d8ea1a4dd3</p>
+</blockquote>
+<p>比目标target确实是小的。</p>
+<h2 id="难度"><a href="#难度" class="headerlink" title="难度"></a>难度</h2><p>查看创世区块 我们发现 bits为0x1d00ffff （486604799）。我们把这个难度定为1</p>
+<p>根据上面的公式，我们可以很简单的计算出target 0x00ffff * 256^26</p>
+<p>0x00000000ffff0000000000000000000000000000000000000000000000000000</p>
+<p>也就是说下一个区块头的sha256哈希值要小于这个值（前三十二位为0)。</p>
+<blockquote>
+<p>target用16进制表示，每两个十六进制位表示一个字节bytes，前面有8个0，相当于4个字节，为4*8 = 32位（2进制位bit）</p>
+</blockquote>
+<p>这里有个重要结论：</p>
+<blockquote>
+<p>SHA256运算的结果被认为是 一致的随机序列 。换个说法：SHA256的结果中的某一位的值，为0或为1的概率相同。所以做一次计算，满足上述条件（前32位的值均为0）的概率为1 / (2^32)，也就是平均要做2^32次运算，才能找到这个值</p>
+</blockquote>
+<p>关于一致的随机序列：可以<a target="_blank" rel="noopener" href="https://crypto.stackexchange.com/questions/12822/are-the-sha-family-hash-outputs-practically-random">看这个</a></p>
+<p>在此之上，我们定义：“使区块头的SHA256结果小于某个目标值（target），平均要尝试的计算次数，这个次数为难度（difficulty)”。创世区块的难度为1！</p>
+<p>比特币有这样一个公式</p>
+<blockquote>
+<p>difficulty—current = target-genesis / target-current</p>
+</blockquote>
+<p>随机选取一个幸运高度算一个 选择500000</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">bits: <span class="number">402</span>,<span class="number">691</span>,<span class="number">653</span></span><br><span class="line">Difficulty: <span class="number">1</span>,<span class="number">873</span>,<span class="number">105</span>,<span class="number">475</span>,<span class="number">221.61</span></span><br><span class="line"></span><br><span class="line">bit转<span class="number">16</span>进制 <span class="number">18</span> <span class="number">009645</span></span><br><span class="line">target = (<span class="number">0x009654</span>) * <span class="number">256</span>^(<span class="number">18</span><span class="number">-3</span>)</span><br><span class="line">			 =  <span class="number">38484</span> * <span class="number">256</span>^(<span class="number">24</span><span class="number">-3</span>)</span><br><span class="line">			</span><br><span class="line">创世块的target = (<span class="number">0x00ffff</span> * <span class="number">256</span> ^ <span class="number">26</span>)  </span><br><span class="line"></span><br><span class="line">两者相除 = <span class="number">65535</span>/<span class="number">38484</span> * <span class="number">256</span>^<span class="number">5</span></span><br><span class="line">			  = <span class="number">1.70291549735</span> * <span class="number">2</span> ^ <span class="number">40</span></span><br><span class="line">				= <span class="number">1</span>,<span class="number">873</span>,<span class="number">105</span>,<span class="number">475</span>,<span class="number">221.61</span></span><br><span class="line">				= <span class="number">1.87</span> * <span class="number">10</span>^<span class="number">12</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到计算出的难度和区块链浏览器展示的难度一致。大约为1.87T。</p>
+<p>此外，还有一个计算公式</p>
+<blockquote>
+<p>出块时间(单位：秒) ≈ difficulty_当前 * 2^32 / 全网算力</p>
+</blockquote>
+<p>有兴趣的话可以去区块链浏览器上计算一下，在当前的难度下，出块时间是不是保持在10分钟左右。</p>
+<h2 id="难度的调整"><a href="#难度的调整" class="headerlink" title="难度的调整"></a>难度的调整</h2><p>由上述计算得知，区块链难度取决于target值。target值和bits值相关。根据区块链的设计，要保证在10分钟左右出块。实际上，在难度不变的情况下，出块速度和全网算力相关，全网算力越大，则出块时间越短。为了保证出块时间的基本恒定，比特币在代码中内置了一个调整难度的算法。实际上这个算法很简单：</p>
+<blockquote>
+<p>每产生2016个块，期望时间为2016*10min，大约两周。全网实际出2016个块的时间和期望时间做对比（times对比），小于期望就增加难度，大于期望值就减小难度。总体保持恒定。</p>
+</blockquote>
+<p>根据比特币的源码，调整难度也是有限度的，如果调整的倍数超过4倍，按照4倍或者四分之一来调整。再次强调一遍，区块中的难度不是直接写入区块头的，是调整bits值得到的。有兴趣可以看<a target="_blank" rel="noopener" href="https://github.com/bitcoin/bitcoin/blob/45173fa6fca9537abb0a0554f731d14b9f89c456/src/pow.cpp#L49">这里</a>。</p>
+<p>注意：实际代码中2015个块就会调整，因为当初写代码写错了。。。</p>
+<h2 id="关于难度验证的闲话"><a href="#关于难度验证的闲话" class="headerlink" title="关于难度验证的闲话"></a>关于难度验证的闲话</h2><p>区块链pow难度验证如何保证数据的正确性</p>
+<p>这里面有两个问题：交换数据的时候如何保证这个块是正常的块，不是伪造的?</p>
+<p>答：区块链像链表一样，要指向前一个块。本区块中的的prvehash要和前一个区块的哈希一致。另外就是要计算pow难度，大致相当于之前的target计算过程，target要满足要求说明才是正常的块。</p>
+<p>再进一步：如果难度满足要求，就是正常的块，有没有可能同时有两个以上有效块产生？</p>
+<p>完全可能，因为coinbase不一样，merkle树不一样，nonce值也不一样，计算出来hash也不一样，是存在两个不一样的块都满足要求都 被接受的。但是，总有一个块会更快得到其他块，链接上。所以最长的链才是有效链。</p>
+<p>安全广播的问题？</p>
+<p>答：所谓安全广播，就是指如何应对别人窃取你的工作量，别人是否可以拿你打包的那些交易?答案是不可以，打包的时候，要从交易池获取对应的交易，其中第一个交易是自己的coinbase交易，如果你先成功，相当于矿工已经锁定了交易，锁定了merkletree。别的矿工只好开始下一轮竞争。换句话说：你打包了就是你的，别人只能放弃。这里有个常见的误解，因为交易是从内存池取过来的，交易不一样得到的merkler树不一样，会影响块hash计算，那我岂不是永远无法的的计算出合适的hash？实际在挖矿过程中，矿工会按照交易费高低排序，优先高交易费的交易打包进块。他为了快，选取什么交易（先算好），times是什么都是固定的（只要比上一个大就行），专心寻找nonce值即可。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" rel="tag"># 区块链</a>
+              <a href="/tags/%E6%AF%94%E7%89%B9%E5%B8%81/" rel="tag"># 比特币</a>
+              <a href="/tags/POW/" rel="tag"># POW</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/27143/" rel="prev" title="拜占庭将军问题简述">
+      <i class="fa fa-chevron-left"></i> 拜占庭将军问题简述
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/22991/" rel="next" title="占星与星座计算 天球">
+      占星与星座计算 天球 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AF%94%E7%89%B9%E5%B8%81pow%E9%9A%BE%E5%BA%A6%E9%AA%8C%E8%AF%81"><span class="nav-number">1.</span> <span class="nav-text">比特币pow难度验证</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%95%E4%B8%BAPOW"><span class="nav-number">1.1.</span> <span class="nav-text">何为POW</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Block-Header"><span class="nav-number">1.2.</span> <span class="nav-text">Block Header</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.3.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87%E5%80%BCtarget"><span class="nav-number">1.4.</span> <span class="nav-text">目标值target</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%BE%E5%BA%A6"><span class="nav-number">1.5.</span> <span class="nav-text">难度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%BE%E5%BA%A6%E7%9A%84%E8%B0%83%E6%95%B4"><span class="nav-number">1.6.</span> <span class="nav-text">难度的调整</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E9%9A%BE%E5%BA%A6%E9%AA%8C%E8%AF%81%E7%9A%84%E9%97%B2%E8%AF%9D"><span class="nav-number">1.7.</span> <span class="nav-text">关于难度验证的闲话</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="TigerInYourDream"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">TigerInYourDream</p>
+  <div class="site-description" itemprop="description">每一篇文章都是一种进步，每一句感慨都是一次思考</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TigerInYourDream</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">163k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:28</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

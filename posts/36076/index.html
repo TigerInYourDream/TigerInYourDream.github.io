@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Pacifico:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"imzy.vip","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="经过一段时间的学习，尝试去理解比特币和区块链的概念，也在阅读rust-bitcoin项目下的代码。现在来提出一个比特币交易的基本问题：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="比特币交易基本问题">
+<meta property="og:url" content="https://imzy.vip/posts/36076/index.html">
+<meta property="og:site_name" content="TID&#39;s Blog">
+<meta property="og:description" content="经过一段时间的学习，尝试去理解比特币和区块链的概念，也在阅读rust-bitcoin项目下的代码。现在来提出一个比特币交易的基本问题：">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-08-29T15:08:57.000Z">
+<meta property="article:modified_time" content="2025-07-31T02:30:04.387Z">
+<meta property="article:author" content="TigerInYourDream">
+<meta property="article:tag" content="区块链">
+<meta property="article:tag" content="比特币">
+<meta property="article:tag" content="交易">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://imzy.vip/posts/36076/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>比特币交易基本问题 | TID's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">TID's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-一言">
+
+    <a href="/motto" rel="section"><i class="fa fa-camera fa-fw"></i>一言</a>
+
+  </li>
+        <li class="menu-item menu-item-友链">
+
+    <a href="/friends" rel="section"><i class="fa fa-american-sign-language-interpreting fa-fw"></i>友链</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/36076/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="TigerInYourDream">
+      <meta itemprop="description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TID's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          比特币交易基本问题
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-08-29 15:08:57" itemprop="dateCreated datePublished" datetime="2019-08-29T15:08:57+00:00">2019-08-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-07-31 02:30:04" itemprop="dateModified" datetime="2025-07-31T02:30:04+00:00">2025-07-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">技术笔记</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>经过一段时间的学习，尝试去理解比特币和区块链的概念，也在阅读rust-bitcoin项目下的代码。现在来提出一个比特币交易的基本问题：</p>
+<a id="more"></a>
+
+<h3 id="我们怎样去实现比特币交易？"><a href="#我们怎样去实现比特币交易？" class="headerlink" title="我们怎样去实现比特币交易？"></a>我们怎样去实现比特币交易？</h3><h4 id="问题的产生"><a href="#问题的产生" class="headerlink" title="问题的产生"></a>问题的产生</h4><p>问题的产生很简单，现在只有一个目的，<strong>想要在比特币网络上实现一次转账交易</strong>。在实现这个目标之前，我做了一些准备工作：</p>
+<ul>
+<li>阅读了mastering bitcoin</li>
+<li>参阅了 rust-bitcoin  项目下 rust-wallet的源码</li>
+<li>阅读了bitcoinJ的源码，根据bitcoinJ的实现梳理出一个<strong>我认为</strong>的交易实现的过程</li>
+<li>查阅了 rust-bitcoin 项目的子项目<a target="_blank" rel="noopener" href="https://github.com/rust-bitcoin/murmel">murmel</a>，该项目是一个 SPV 节点的实现，截止目前还暂时无法运行</li>
+</ul>
+<p>之前也在博客撰写了 比特币交易过程 的文章，可以在之前的博客看到。其中涉及熵的生成，助记词生成，秘钥的派生等钱包的概念。也在后续的文章中提炼出来交易过程中的脚本构建的过程。初步构建了比特币交易的流程。也有文章描述了SPV节点的概念，简单来讲 SPV 节点不存储完整的区块链信息，使用称为 merkle   tree 的数据结构来验证交易信息。</p>
+<h4 id="初步思考"><a href="#初步思考" class="headerlink" title="初步思考"></a>初步思考</h4><p>第一层的准备工作完成之后，我阅读了 bitcoinj 的代码。bitcoinj 是使用 java 实现的比特币节点，它的功能非常齐全，包含全节点实现和轻节点（SPV）的实现。是受到 bitcoin core 推荐的一种实现。bitcoinj 使用的非常广泛，很多手机上的钱包都是基于bitcoin库的功能实现的。说一个和手机端最贴近的点：直接使用WalletAppkit 组件，他屏蔽了很多实现细节，暴露给开发者非常简洁的开发接口。具体的开发过程可以参考  bitcoinj 的文档，他已经非常简洁清楚了。此处提出一点建议，也是给自己的建议</p>
+<blockquote>
+<p>阅读代码请从开发文档开始。先了解用法，然后再深入源码细节。</p>
+</blockquote>
+<p>这个是最近阅读源码的经验之谈，这个道理也可以通用。</p>
+<blockquote>
+<p>要是没有文档怎么办？</p>
+<p>那就请从第二步开始，了解用法，从程序的启动入手。按照程序启动的顺序去梳理出代码的思路。这样也符合代码的开发流程，更容易体会代码开发过程和作者思路。</p>
+</blockquote>
+<p>按照以上原则，我总结出了了 <strong>我以为的</strong>交易过程（也就是实现本文中目的的过程），注意以下的思路可能是 <strong>错误</strong>的，但这是我阅读bitcoinj和横向阅读rust-wallet的得到的结论，我认为思路是有价值的。</p>
+<ol>
+<li>启动bitcoin节点，或者服务</li>
+<li>根据参数去配置bitcoin network。bitcoin netwrok 主要分为三类 <ol>
+<li>Mainnet 主网，默认端口 8333。</li>
+<li>Testnet 测试网，默认端口 18333。</li>
+<li>RegTest 私链，单机模式</li>
+</ol>
+</li>
+<li>节点探测，接入 bitcoin 的p2p网络，进行交互。节点（无论是轻节点还是全节点的一个重要工作就是维护这种p2p链接） </li>
+<li>所有节点都有根据比特币协议所实现的功能，根据这些接口功能，用户组建交易信息，<strong>让节点去广播交易</strong></li>
+</ol>
+<h4 id="再整理"><a href="#再整理" class="headerlink" title="再整理"></a>再整理</h4><p>在此基础上，又根据《精通比特币》，中提到的方法有以下的流程</p>
+<ol>
+<li>编译并启动比特币程序</li>
+<li>使用 bitcore 提供的cli工具去 bitcore 交互，bitcore 本身提供 RPC 服务可以交互，这样就可以完成查询，挖矿，和交易。</li>
+</ol>
+<p>根据这两方面的知识，去专门了解RPC服务是什么概念。因为 rust-bitcoin 中直接使用了 bitcoin-rpc 库。按照第一节的原则，整理RPC的用法。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/rust-bitcoin/rust-bitcoincore-rpc">https://github.com/rust-bitcoin/rust-bitcoincore-rpc</a></p>
+<p>可以在以上的链接中查阅 rpc 库的用法</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="keyword">crate</span> bitcoincore_rpc;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> bitcoincore_rpc::&#123;Auth, Client, RpcApi&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> rpc = Client::new(<span class="string">&quot;http://localhost:8332&quot;</span>.to_string(),</span><br><span class="line">                          Auth::UserPass(<span class="string">&quot;&lt;FILL RPC USERNAME&gt;&quot;</span>.to_string(),</span><br><span class="line">                                         <span class="string">&quot;&lt;FILL RPC PASSWORD&gt;&quot;</span>.to_string())).unwrap();</span><br><span class="line">    <span class="keyword">let</span> best_block_hash = rpc.get_best_block_hash().unwrap();</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;best block hash: &#123;&#125;&quot;</span>, best_block_hash);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以说 rpc 的用法很简单，只需要提供三个参数即可，即 ip，username，password。这下就产生让我最大的疑问</p>
+<blockquote>
+<ol>
+<li>ip从哪里来？</li>
+<li>username 和 password 从哪来？</li>
+</ol>
+</blockquote>
+<p>以下是对问题的思考，他的结论是可能<strong>错误</strong>的，或者说是<strong>不完全的</strong>，但也是真实的思考过程</p>
+<blockquote>
+<p>第一个问题：</p>
+<p>还记的当初第一部分的思考吗，阅读了 bitcoinj 的代码所总结出的流程。启动节点时刻，本节点是空白的，并不知道该如何去和其他的节点建立 p2p 链接。根据比特币标准，比特币官方维护了 dnsseed，大概是一共就四到六个域名，只要解析这几域名就可以得到ip。事实上我确实使用 dns-resolve 得到了大量ip。</p>
+<p>第二个问题：</p>
+<p>查阅rpc的用法，username 和 password 是避不开的。在所有的比特币指南的开发中，链接比特币节点，username 和 password 都是需要的。阅读《精通比特币》书中的启动比特币节点，这个用户名是自己在配置文件中配置的。</p>
+<p>错误的推理：</p>
+<p> 既然比特币官方提供dnsseed，确实能够解析出大量dns。而且考虑到比特币数据是公开的，那这些节点是不是开放的？不需要用户名和密码。</p>
+<p>错误的流程：</p>
+<p>基于以上错误流程，我总结出了要实现流程。去 dnsseed 上解析出ip，然后不用用户名和密码去和这些服务器建立 rpc 服务进行交互。</p>
+</blockquote>
+<p>其实在这个推理过程之后，我还是去阅读了 murmel 的源码 ，跟着他一步步的去实现这个 spv 的节点，但是心中的困惑完全没有解决。再模仿 murmel 写了很多代码之后开始整理思路，这样做到底能否实现我要的交易。</p>
+<blockquote>
+<p>矛盾的思考点出现了，我翻阅了比特币白皮书之类的资料。也对应查阅了很多具体的实现，<strong>发现没有一个这个做的</strong>。核心在于：<strong>比特币官方并不承诺提供RPC服务</strong>。也就是说解析出来这些 ip 地址是不可以进行 rpc 服务的。事实上我也尝试去链接这些 ip。确实没法办法链接！并且这些 rpc 服务在配置中是可以关闭的，比特币节点并不会承诺开放这种服务。</p>
+</blockquote>
+<h4 id="最后结论"><a href="#最后结论" class="headerlink" title="最后结论"></a>最后结论</h4><p>通过以上的过程，其实最大的问题就已经明白了。我们要完成交易，有哪些路径？</p>
+<blockquote>
+<ol>
+<li>使用第三方提供的 api 比如bitchain</li>
+<li>自己维护一个比特币节点，rpc 交互去交易</li>
+<li>维护一个SPV节点</li>
+</ol>
+</blockquote>
+<p>第一点不用说，第二点如果自己维护一个比特币节点，那么ip，username，password都是自己提供的，那只需要进行 rpc 链接。通过 rpc 服务完成交易即可。</p>
+<p>维护SPV节点，比特币根据自己协议，轻节点根据自己的验证方式去验证的交易。（轻节点要与别的全节点交互）</p>
+<p>最后顺带回答个小问题</p>
+<blockquote>
+<p>整个交易中 RPC 服务在哪里，P2P 服务在哪里</p>
+<p>我们把整个比特币的节点拆开看。分成三个部分，钱包，节点核心，别的节点。RPC 服务是节点对外界提供的功能（也可以不开启），用 RPC 的方式和比特币核心进行交互（比特币核心有多种实现，这个交互主要就是交易）。P2P则指的是比特币节点之间的链接方式，dnsseed 或者其他配置的节点链接发生在节点之间。至于为什么要分出钱包？因为我想实现个钱包去比特币核心上做交易。</p>
+</blockquote>
+<p>注：中间那个错误的流程对于eth是可以的，因为 eth 没有轻节点，所以官方承诺提供这种服务，外界是可以连接和交互的。这也是 eth 被诟病不够去中心化的地方，事实上这个可以对外开放的节点也遭受了多次攻击。</p>
+<p>完，如有错误，请指正。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" rel="tag"># 区块链</a>
+              <a href="/tags/%E6%AF%94%E7%89%B9%E5%B8%81/" rel="tag"># 比特币</a>
+              <a href="/tags/%E4%BA%A4%E6%98%93/" rel="tag"># 交易</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/57093/" rel="prev" title="申请测试比特币的过程">
+      <i class="fa fa-chevron-left"></i> 申请测试比特币的过程
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/55622/" rel="next" title="比特币客户端的设置">
+      比特币客户端的设置 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%91%E4%BB%AC%E6%80%8E%E6%A0%B7%E5%8E%BB%E5%AE%9E%E7%8E%B0%E6%AF%94%E7%89%B9%E5%B8%81%E4%BA%A4%E6%98%93%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">我们怎样去实现比特币交易？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E7%9A%84%E4%BA%A7%E7%94%9F"><span class="nav-number">1.1.</span> <span class="nav-text">问题的产生</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9D%E6%AD%A5%E6%80%9D%E8%80%83"><span class="nav-number">1.2.</span> <span class="nav-text">初步思考</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%8D%E6%95%B4%E7%90%86"><span class="nav-number">1.3.</span> <span class="nav-text">再整理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%80%E5%90%8E%E7%BB%93%E8%AE%BA"><span class="nav-number">1.4.</span> <span class="nav-text">最后结论</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="TigerInYourDream"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">TigerInYourDream</p>
+  <div class="site-description" itemprop="description">每一篇文章都是一种进步，每一句感慨都是一次思考</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TigerInYourDream</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">163k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:28</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

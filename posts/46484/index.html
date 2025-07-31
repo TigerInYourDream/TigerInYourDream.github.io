@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Pacifico:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"imzy.vip","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本文是在之前的复杂交易的基础上进行的，离线签名主要是为了满足以下场景">
+<meta property="og:type" content="article">
+<meta property="og:title" content="构建离线交易">
+<meta property="og:url" content="https://imzy.vip/posts/46484/index.html">
+<meta property="og:site_name" content="TID&#39;s Blog">
+<meta property="og:description" content="本文是在之前的复杂交易的基础上进行的，离线签名主要是为了满足以下场景">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-10-10T17:54:15.000Z">
+<meta property="article:modified_time" content="2025-07-31T02:30:04.387Z">
+<meta property="article:author" content="TigerInYourDream">
+<meta property="article:tag" content="区块链">
+<meta property="article:tag" content="比特币">
+<meta property="article:tag" content="交易">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://imzy.vip/posts/46484/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>构建离线交易 | TID's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">TID's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-一言">
+
+    <a href="/motto" rel="section"><i class="fa fa-camera fa-fw"></i>一言</a>
+
+  </li>
+        <li class="menu-item menu-item-友链">
+
+    <a href="/friends" rel="section"><i class="fa fa-american-sign-language-interpreting fa-fw"></i>友链</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/46484/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="TigerInYourDream">
+      <meta itemprop="description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TID's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          构建离线交易
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-10-10 17:54:15" itemprop="dateCreated datePublished" datetime="2019-10-10T17:54:15+00:00">2019-10-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-07-31 02:30:04" itemprop="dateModified" datetime="2025-07-31T02:30:04+00:00">2025-07-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">技术笔记</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>16k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>14 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文是在之前的复杂交易的基础上进行的，离线签名主要是为了满足以下场景</p>
+<a id="more"></a>
+
+<blockquote>
+<p>我们都知道，正常的交易需要确认6次以后才可以被视作可信（confirm）交易。当我们需要从A到B再到C连续交易时，如果离线签名不存在，则必须在A到B的交易被确认后，再发起一次B到C的交易。而离线签名可以使我们做到A到B的交易在广播之前就立刻发起一个下一步交易，之后再进行广播。</p>
+</blockquote>
+<p>按照之前惯例，列出离线签名的主干步骤</p>
+<ol>
+<li>发起第一步交易，完成对交易的签名</li>
+<li>在第一步交易<strong>未广播</strong>之前，发起第二笔交易</li>
+<li>依次广播第一次交易和第二交易，完成整个交易过程</li>
+</ol>
+<p>以上的交易中，提取UXTO，发起交易，签名的步骤和之前列出的交易类型是一致的，不可省略。下面列出发起离线签名的步骤，其中18步之前和前文的构建复杂交易是一致的，之后的步骤是发起离线签名的过程</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br></pre></td><td class="code"><pre><span class="line">1. 启动测试链</span><br><span class="line">bitcoind -printtoconsole -regtest</span><br><span class="line"></span><br><span class="line">2. 查询链信息</span><br><span class="line">bitcoin-cli -regtest  -getinfo</span><br><span class="line"></span><br><span class="line">3. 生成地址 2MvFP1Mf8Y7v3VsoUtPi4FqA39eNySyKhK9</span><br><span class="line">bitcoin-cli -regtest  getnewaddress</span><br><span class="line"></span><br><span class="line">4. 导出私钥备用 cUBZgraadC4HdjCf5px1QT9cLENgF6RPGkXfqaS7TivpCtAUctMb</span><br><span class="line">bitcoin-cli -regtest dumpprivkey 2MvFP1Mf8Y7v3VsoUtPi4FqA39eNySyKhK9</span><br><span class="line"></span><br><span class="line">5. 给这个地址挖矿 101块</span><br><span class="line">bitcoin-cli -regtest generatetoaddress 101 2MvFP1Mf8Y7v3VsoUtPi4FqA39eNySyKhK9</span><br><span class="line"></span><br><span class="line">6. 生成第二个地址 2N8nqc8HxKaziqbJR3T9KotZkb5unYq7R5n</span><br><span class="line">bitcoin-cli -regtest  getnewaddress</span><br><span class="line"></span><br><span class="line">7. 导出私钥 cQne7yVqswhrC43N3DushL6XzzejHBkBwzrEM8ydeRcR7MTBmPV9</span><br><span class="line">bitcoin-cli -regtest dumpprivkey 2N8nqc8HxKaziqbJR3T9KotZkb5unYq7R5n</span><br><span class="line"></span><br><span class="line">8. 挖矿 102块</span><br><span class="line">bitcoin-cli -regtest generatetoaddress 102 2N8nqc8HxKaziqbJR3T9KotZkb5unYq7R5n</span><br><span class="line"></span><br><span class="line">9. 生成地址作为输出 2NDkJxccs9Wd6cctvKSBtfk2Nza2EeavS1Y</span><br><span class="line">bitcoin-cli -regtest  getnewaddress</span><br><span class="line"></span><br><span class="line">10. 继续生成 2MxXvWg5KqLUHWQfm4z8rZhGj16aAqPWF6y</span><br><span class="line">bitcoin-cli -regtest  getnewaddress</span><br><span class="line"></span><br><span class="line">11. 提取UXTO</span><br><span class="line">bitcoin-cli -regtest listunspent 6 9999999 &quot;[\&quot;2MvFP1Mf8Y7v3VsoUtPi4FqA39eNySyKhK9\&quot;]&quot;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;txid&quot;: &quot;eef9c597e33f507bc8fd8a9e883bfd5843986b5cc4fb56ff688735f44b2e8539&quot;,</span><br><span class="line">    &quot;vout&quot;: 0,</span><br><span class="line">    &quot;address&quot;: &quot;2MvFP1Mf8Y7v3VsoUtPi4FqA39eNySyKhK9&quot;,</span><br><span class="line">    &quot;label&quot;: &quot;&quot;,</span><br><span class="line">    &quot;redeemScript&quot;: &quot;001482d55d9dff1765974f91aa49ca8390bc3da3d761&quot;,</span><br><span class="line">    &quot;scriptPubKey&quot;: &quot;a91420efe7d679e1ebfa932860265e6ae69ac0087b3987&quot;,</span><br><span class="line">    &quot;amount&quot;: 50.00000000,</span><br><span class="line">    &quot;confirmations&quot;: 182,</span><br><span class="line">    &quot;spendable&quot;: true,</span><br><span class="line">    &quot;solvable&quot;: true,</span><br><span class="line">    &quot;desc&quot;: &quot;sh(wpkh([bec83093/0&#x27;/0&#x27;/29&#x27;]02c7a49c3f29e63cf274819490e6e0bdc115756397ca60a86091f822286f5e9a88))#x6wqjynz&quot;,</span><br><span class="line">    &quot;safe&quot;: true</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;txid&quot;: &quot;33043fc71a74c6436f5672696e8bf0c4b809fd72f5d69d698bf406415a8d6f3b&quot;,</span><br><span class="line">    &quot;vout&quot;: 0,</span><br><span class="line">    &quot;address&quot;: &quot;2MvFP1Mf8Y7v3VsoUtPi4FqA39eNySyKhK9&quot;,</span><br><span class="line">    &quot;label&quot;: &quot;&quot;,</span><br><span class="line">    &quot;redeemScript&quot;: &quot;001482d55d9dff1765974f91aa49ca8390bc3da3d761&quot;,</span><br><span class="line">    &quot;scriptPubKey&quot;: &quot;a91420efe7d679e1ebfa932860265e6ae69ac0087b3987&quot;,</span><br><span class="line">    &quot;amount&quot;: 50.00000000,</span><br><span class="line">    &quot;confirmations&quot;: 196,</span><br><span class="line">    &quot;spendable&quot;: true,</span><br><span class="line">    &quot;solvable&quot;: true,</span><br><span class="line">    &quot;desc&quot;: &quot;sh(wpkh([bec83093/0&#x27;/0&#x27;/29&#x27;]02c7a49c3f29e63cf274819490e6e0bdc115756397ca60a86091f822286f5e9a88))#x6wqjynz&quot;,</span><br><span class="line">    &quot;safe&quot;: true</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">14. 提取UTXO  只列举一小部分</span><br><span class="line">bitcoin-cli -regtest listunspent 6 9999999 &quot;[\&quot;2N8nqc8HxKaziqbJR3T9KotZkb5unYq7R5n\&quot;]&quot;</span><br><span class="line"></span><br><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;txid&quot;: &quot;be12c06ce23a174d29a507b09a5bc86ef38fc0ad5467e2083c9d371f0928a5d5&quot;,</span><br><span class="line">    &quot;vout&quot;: 0,</span><br><span class="line">    &quot;address&quot;: &quot;2N8nqc8HxKaziqbJR3T9KotZkb5unYq7R5n&quot;,</span><br><span class="line">    &quot;label&quot;: &quot;&quot;,</span><br><span class="line">    &quot;redeemScript&quot;: &quot;0014044267290a1ed9e1b363bfdec43aac1df8f85bfb&quot;,</span><br><span class="line">    &quot;scriptPubKey&quot;: &quot;a914aa848392f25d6672385271ef62b80fc03ced47d287&quot;,</span><br><span class="line">    &quot;amount&quot;: 50.00000000,</span><br><span class="line">    &quot;confirmations&quot;: 101,</span><br><span class="line">    &quot;spendable&quot;: true,</span><br><span class="line">    &quot;solvable&quot;: true,</span><br><span class="line">    &quot;desc&quot;: &quot;sh(wpkh([bec83093/0&#x27;/0&#x27;/30&#x27;]030541bdfff7b3e4deb1e0addf5715cbbb13407e7b06a9793a1be36233b7d49fdc))#px0ff4zh&quot;,</span><br><span class="line">    &quot;safe&quot;: true</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;txid&quot;: &quot;a3ef346a4f86ea82ac4b78c2b60f5be3b6c2b21ab0fbcecdfd87acc3b5c439e2&quot;,</span><br><span class="line">    &quot;vout&quot;: 0,</span><br><span class="line">    &quot;address&quot;: &quot;2N8nqc8HxKaziqbJR3T9KotZkb5unYq7R5n&quot;,</span><br><span class="line">    &quot;label&quot;: &quot;&quot;,</span><br><span class="line">    &quot;redeemScript&quot;: &quot;0014044267290a1ed9e1b363bfdec43aac1df8f85bfb&quot;,</span><br><span class="line">    &quot;scriptPubKey&quot;: &quot;a914aa848392f25d6672385271ef62b80fc03ced47d287&quot;,</span><br><span class="line">    &quot;amount&quot;: 50.00000000,</span><br><span class="line">    &quot;confirmations&quot;: 102,</span><br><span class="line">    &quot;spendable&quot;: true,</span><br><span class="line">    &quot;solvable&quot;: true,</span><br><span class="line">    &quot;desc&quot;: &quot;sh(wpkh([bec83093/0&#x27;/0&#x27;/30&#x27;]030541bdfff7b3e4deb1e0addf5715cbbb13407e7b06a9793a1be36233b7d49fdc))#px0ff4zh&quot;,</span><br><span class="line">    &quot;safe&quot;: true</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  第一组</span><br><span class="line">  txid: eef9c597e33f507bc8fd8a9e883bfd5843986b5cc4fb56ff688735f44b2e8539</span><br><span class="line">  vout: 0</span><br><span class="line">  address: 2MvFP1Mf8Y7v3VsoUtPi4FqA39eNySyKhK9</span><br><span class="line">  privkey: cUBZgraadC4HdjCf5px1QT9cLENgF6RPGkXfqaS7TivpCtAUctMb</span><br><span class="line"></span><br><span class="line">  第二组:</span><br><span class="line">  txid: be12c06ce23a174d29a507b09a5bc86ef38fc0ad5467e2083c9d371f0928a5d5</span><br><span class="line">  vout: 0</span><br><span class="line">  address: 2N8nqc8HxKaziqbJR3T9KotZkb5unYq7R5n</span><br><span class="line">  privkey: cQne7yVqswhrC43N3DushL6XzzejHBkBwzrEM8ydeRcR7MTBmPV9</span><br><span class="line"></span><br><span class="line">  目标地址</span><br><span class="line">  2NDkJxccs9Wd6cctvKSBtfk2Nza2EeavS1Y</span><br><span class="line"></span><br><span class="line">  2MxXvWg5KqLUHWQfm4z8rZhGj16aAqPWF6y</span><br><span class="line"></span><br><span class="line">15 构建交易 给每个目标49.99个比特币</span><br><span class="line">bitcoin-cli -regtest createrawtransaction &#x27;&#x27;&#x27;</span><br><span class="line">    [</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;txid&quot;: &quot;eef9c597e33f507bc8fd8a9e883bfd5843986b5cc4fb56ff688735f44b2e8539&quot;, </span><br><span class="line">        &quot;vout&quot;: 0</span><br><span class="line">      &#125;, </span><br><span class="line">      &#123;</span><br><span class="line">        &quot;txid&quot;: &quot;be12c06ce23a174d29a507b09a5bc86ef38fc0ad5467e2083c9d371f0928a5d5&quot;,</span><br><span class="line">        &quot;vout&quot;: 0</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">    &#x27;&#x27;&#x27; &#x27;&#x27;&#x27;</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;2NDkJxccs9Wd6cctvKSBtfk2Nza2EeavS1Y&quot;: 49.99, </span><br><span class="line">      &quot;2MxXvWg5KqLUHWQfm4z8rZhGj16aAqPWF6y&quot;: 49.99 </span><br><span class="line">    &#125;&#x27;&#x27;&#x27;</span><br><span class="line"></span><br><span class="line">020000000239852e4bf4358768ff56fbc45c6b984358fd3b889e8afdc87b503fe397c5f9ee0000000000ffffffffd5a528091f379d3c08e26754adc08ff36ec85b9ab007a5294d173ae26cc012be0000000000ffffffff02c0aff6290100000017a914e0e2ba743a50d6c51176cf4006a73b07c29df3cf87c0aff6290100000017a9143a011cad3e72170448f61524c490ce1ec3c7e8a48700000000</span><br><span class="line"></span><br><span class="line">16. 现在一次进行签名 这里使用私钥进行签名</span><br><span class="line">bitcoin-cli -regtest signrawtransactionwithkey &quot;020000000239852e4bf4358768ff56fbc45c6b984358fd3b889e8afdc87b503fe397c5f9ee0000000000ffffffffd5a528091f379d3c08e26754adc08ff36ec85b9ab007a5294d173ae26cc012be0000000000ffffffff02c0aff6290100000017a914e0e2ba743a50d6c51176cf4006a73b07c29df3cf87c0aff6290100000017a9143a011cad3e72170448f61524c490ce1ec3c7e8a48700000000&quot; &quot;[\&quot;cUBZgraadC4HdjCf5px1QT9cLENgF6RPGkXfqaS7TivpCtAUctMb\&quot;]&quot;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;hex&quot;: &quot;0200000000010239852e4bf4358768ff56fbc45c6b984358fd3b889e8afdc87b503fe397c5f9ee000000001716001482d55d9dff1765974f91aa49ca8390bc3da3d761ffffffffd5a528091f379d3c08e26754adc08ff36ec85b9ab007a5294d173ae26cc012be0000000000ffffffff02c0aff6290100000017a914e0e2ba743a50d6c51176cf4006a73b07c29df3cf87c0aff6290100000017a9143a011cad3e72170448f61524c490ce1ec3c7e8a48702473044022074136f51a9f5dfc5b27e4e0b2a5b576f895f3e872f16bb74441b921ed670f7dd0220276d9f4fc40a1c0349008ae82135651077932010b5e9077bf62f8bc0b9142c33012102c7a49c3f29e63cf274819490e6e0bdc115756397ca60a86091f822286f5e9a880000000000&quot;,</span><br><span class="line">  &quot;complete&quot;: false,</span><br><span class="line">  &quot;errors&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;txid&quot;: &quot;be12c06ce23a174d29a507b09a5bc86ef38fc0ad5467e2083c9d371f0928a5d5&quot;,</span><br><span class="line">      &quot;vout&quot;: 0,</span><br><span class="line">      &quot;witness&quot;: [</span><br><span class="line">      ],</span><br><span class="line">      &quot;scriptSig&quot;: &quot;&quot;,</span><br><span class="line">      &quot;sequence&quot;: 4294967295,</span><br><span class="line">      &quot;error&quot;: &quot;Unable to sign input, invalid stack size (possibly missing key)&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">17 2签</span><br><span class="line">bitcoin-cli -regtest signrawtransactionwithkey &quot;0200000000010239852e4bf4358768ff56fbc45c6b984358fd3b889e8afdc87b503fe397c5f9ee000000001716001482d55d9dff1765974f91aa49ca8390bc3da3d761ffffffffd5a528091f379d3c08e26754adc08ff36ec85b9ab007a5294d173ae26cc012be0000000000ffffffff02c0aff6290100000017a914e0e2ba743a50d6c51176cf4006a73b07c29df3cf87c0aff6290100000017a9143a011cad3e72170448f61524c490ce1ec3c7e8a48702473044022074136f51a9f5dfc5b27e4e0b2a5b576f895f3e872f16bb74441b921ed670f7dd0220276d9f4fc40a1c0349008ae82135651077932010b5e9077bf62f8bc0b9142c33012102c7a49c3f29e63cf274819490e6e0bdc115756397ca60a86091f822286f5e9a880000000000&quot; &quot;[\&quot;cQne7yVqswhrC43N3DushL6XzzejHBkBwzrEM8ydeRcR7MTBmPV9\&quot;]&quot;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;hex&quot;: &quot;0200000000010239852e4bf4358768ff56fbc45c6b984358fd3b889e8afdc87b503fe397c5f9ee000000001716001482d55d9dff1765974f91aa49ca8390bc3da3d761ffffffffd5a528091f379d3c08e26754adc08ff36ec85b9ab007a5294d173ae26cc012be0000000017160014044267290a1ed9e1b363bfdec43aac1df8f85bfbffffffff02c0aff6290100000017a914e0e2ba743a50d6c51176cf4006a73b07c29df3cf87c0aff6290100000017a9143a011cad3e72170448f61524c490ce1ec3c7e8a48702473044022074136f51a9f5dfc5b27e4e0b2a5b576f895f3e872f16bb74441b921ed670f7dd0220276d9f4fc40a1c0349008ae82135651077932010b5e9077bf62f8bc0b9142c33012102c7a49c3f29e63cf274819490e6e0bdc115756397ca60a86091f822286f5e9a8802473044022053aaaa8f122a8430342d274fdd57ea8dc746cce269e099d78ce2778656406c48022003e3788c5694ce17fcd842b6685f44afe6a7151dcfa214d4198d5503134d2d210121030541bdfff7b3e4deb1e0addf5715cbbb13407e7b06a9793a1be36233b7d49fdc00000000&quot;,</span><br><span class="line">  &quot;complete&quot;: true</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">18 接下来进行离线签署</span><br><span class="line"></span><br><span class="line">1. decode</span><br><span class="line">bitcoin-cli -regtest decoderawtransaction 0200000000010239852e4bf4358768ff56fbc45c6b984358fd3b889e8afdc87b503fe397c5f9ee000000001716001482d55d9dff1765974f91aa49ca8390bc3da3d761ffffffffd5a528091f379d3c08e26754adc08ff36ec85b9ab007a5294d173ae26cc012be0000000017160014044267290a1ed9e1b363bfdec43aac1df8f85bfbffffffff02c0aff6290100000017a914e0e2ba743a50d6c51176cf4006a73b07c29df3cf87c0aff6290100000017a9143a011cad3e72170448f61524c490ce1ec3c7e8a48702473044022074136f51a9f5dfc5b27e4e0b2a5b576f895f3e872f16bb74441b921ed670f7dd0220276d9f4fc40a1c0349008ae82135651077932010b5e9077bf62f8bc0b9142c33012102c7a49c3f29e63cf274819490e6e0bdc115756397ca60a86091f822286f5e9a8802473044022053aaaa8f122a8430342d274fdd57ea8dc746cce269e099d78ce2778656406c48022003e3788c5694ce17fcd842b6685f44afe6a7151dcfa214d4198d5503134d2d210121030541bdfff7b3e4deb1e0addf5715cbbb13407e7b06a9793a1be36233b7d49fdc00000000</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;txid&quot;: &quot;593bc8b6149fc64d31d70d58d365764fc362fd2aecf6adabb6c2be3964682389&quot;,</span><br><span class="line">  &quot;hash&quot;: &quot;47d4757e05dffdd2a24ca98134ee4aa87d00521ac5237cdd8cbfbf475b6ef870&quot;,</span><br><span class="line">  &quot;version&quot;: 2,</span><br><span class="line">  &quot;size&quot;: 418,</span><br><span class="line">  &quot;vsize&quot;: 256,</span><br><span class="line">  &quot;weight&quot;: 1024,</span><br><span class="line">  &quot;locktime&quot;: 0,</span><br><span class="line">  &quot;vin&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;txid&quot;: &quot;eef9c597e33f507bc8fd8a9e883bfd5843986b5cc4fb56ff688735f44b2e8539&quot;,</span><br><span class="line">      &quot;vout&quot;: 0,</span><br><span class="line">      &quot;scriptSig&quot;: &#123;</span><br><span class="line">        &quot;asm&quot;: &quot;001482d55d9dff1765974f91aa49ca8390bc3da3d761&quot;,</span><br><span class="line">        &quot;hex&quot;: &quot;16001482d55d9dff1765974f91aa49ca8390bc3da3d761&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;txinwitness&quot;: [</span><br><span class="line">        &quot;3044022074136f51a9f5dfc5b27e4e0b2a5b576f895f3e872f16bb74441b921ed670f7dd0220276d9f4fc40a1c0349008ae82135651077932010b5e9077bf62f8bc0b9142c3301&quot;,</span><br><span class="line">        &quot;02c7a49c3f29e63cf274819490e6e0bdc115756397ca60a86091f822286f5e9a88&quot;</span><br><span class="line">      ],</span><br><span class="line">      &quot;sequence&quot;: 4294967295</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;txid&quot;: &quot;be12c06ce23a174d29a507b09a5bc86ef38fc0ad5467e2083c9d371f0928a5d5&quot;,</span><br><span class="line">      &quot;vout&quot;: 0,</span><br><span class="line">      &quot;scriptSig&quot;: &#123;</span><br><span class="line">        &quot;asm&quot;: &quot;0014044267290a1ed9e1b363bfdec43aac1df8f85bfb&quot;,</span><br><span class="line">        &quot;hex&quot;: &quot;160014044267290a1ed9e1b363bfdec43aac1df8f85bfb&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;txinwitness&quot;: [</span><br><span class="line">        &quot;3044022053aaaa8f122a8430342d274fdd57ea8dc746cce269e099d78ce2778656406c48022003e3788c5694ce17fcd842b6685f44afe6a7151dcfa214d4198d5503134d2d2101&quot;,</span><br><span class="line">        &quot;030541bdfff7b3e4deb1e0addf5715cbbb13407e7b06a9793a1be36233b7d49fdc&quot;</span><br><span class="line">      ],</span><br><span class="line">      &quot;sequence&quot;: 4294967295</span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  &quot;vout&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;value&quot;: 49.99000000,</span><br><span class="line">      &quot;n&quot;: 0,</span><br><span class="line">      &quot;scriptPubKey&quot;: &#123;</span><br><span class="line">        &quot;asm&quot;: &quot;OP_HASH160 e0e2ba743a50d6c51176cf4006a73b07c29df3cf OP_EQUAL&quot;,</span><br><span class="line">        &quot;hex&quot;: &quot;a914e0e2ba743a50d6c51176cf4006a73b07c29df3cf87&quot;,</span><br><span class="line">        &quot;reqSigs&quot;: 1,</span><br><span class="line">        &quot;type&quot;: &quot;scripthash&quot;,</span><br><span class="line">        &quot;addresses&quot;: [</span><br><span class="line">          &quot;2NDkJxccs9Wd6cctvKSBtfk2Nza2EeavS1Y&quot;</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;value&quot;: 49.99000000,</span><br><span class="line">      &quot;n&quot;: 1,</span><br><span class="line">      &quot;scriptPubKey&quot;: &#123;</span><br><span class="line">        &quot;asm&quot;: &quot;OP_HASH160 3a011cad3e72170448f61524c490ce1ec3c7e8a4 OP_EQUAL&quot;,</span><br><span class="line">        &quot;hex&quot;: &quot;a9143a011cad3e72170448f61524c490ce1ec3c7e8a487&quot;,</span><br><span class="line">        &quot;reqSigs&quot;: 1,</span><br><span class="line">        &quot;type&quot;: &quot;scripthash&quot;,</span><br><span class="line">        &quot;addresses&quot;: [</span><br><span class="line">          &quot;2MxXvWg5KqLUHWQfm4z8rZhGj16aAqPWF6y&quot;</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">从以上信息中提取一组有效信息  </span><br><span class="line"></span><br><span class="line">从vout中选择第二组数据</span><br><span class="line"></span><br><span class="line">UTXO_TXID = 593bc8b6149fc64d31d70d58d365764fc362fd2aecf6adabb6c2be3964682389</span><br><span class="line">UTXO_VOUT = 1</span><br><span class="line">UTXO_VALUE = 49.99000000</span><br><span class="line">UTXO_OUTPUT_SCRIPT = a9143a011cad3e72170448f61524c490ce1ec3c7e8a487</span><br><span class="line"></span><br><span class="line">2. 生成一个新的目标地址 2N7hMdx8XoKMyBJd4PLXZUvEa3szWLK7c4j</span><br><span class="line">bitcoin-cli -regtest getnewaddress</span><br><span class="line"></span><br><span class="line">3. 从以上的有效信息中构建一笔交易给新的地址49.98个比特币</span><br><span class="line">bitcoin-cli -regtest createrawtransaction &#x27;&#x27;&#x27;</span><br><span class="line">    [</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;txid&quot;: &quot;593bc8b6149fc64d31d70d58d365764fc362fd2aecf6adabb6c2be3964682389&quot;,</span><br><span class="line">        &quot;vout&quot;: &#x27;1&#x27;</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">    &#x27;&#x27;&#x27; &#x27;&#x27;&#x27;</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;2N7hMdx8XoKMyBJd4PLXZUvEa3szWLK7c4j&quot;: 49.98</span><br><span class="line">    &#125;&#x27;&#x27;&#x27;</span><br><span class="line"></span><br><span class="line">02000000018923686439bec2b6abadf6ec2afd62c34f7665d3580dd7314dc69f14b6c83b590100000000ffffffff01806de7290100000017a9149e82f61edb11d83f62a60368868a7a16bcf55a888700000000</span><br><span class="line"></span><br><span class="line">4. 离线签名</span><br><span class="line">bitcoin-cli -regtest signrawtransactionwithwallet 02000000018923686439bec2b6abadf6ec2afd62c34f7665d3580dd7314dc69f14b6c83b590100000000ffffffff01806de7290100000017a9149e82f61edb11d83f62a60368868a7a16bcf55a888700000000 &#x27;&#x27;&#x27;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;hex&quot;: &quot;020000000001018923686439bec2b6abadf6ec2afd62c34f7665d3580dd7314dc69f14b6c83b59010000001716001490c66a16ddd8405227e11efc87f7b93fce151373ffffffff01806de7290100000017a9149e82f61edb11d83f62a60368868a7a16bcf55a88870247304402203665a815716ed7c99a627acf896806101e851a9122a05a9dd337a7c70792800d022070b1a1c1947bbb81aff11e966392a4b05e3d4b2785a8170f70b4d0250f960e72012103d678d4c116ea3bff2b18760a45d86fd19692c213b217f88a6815006387290cfc00000000&quot;,        </span><br><span class="line">  &quot;complete&quot;: true</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">5. 广播之前的交易 593bc8b6149fc64d31d70d58d365764fc362fd2aecf6adabb6c2be3964682389</span><br><span class="line">bitcoin-cli -regtest sendrawtransaction 0200000000010239852e4bf4358768ff56fbc45c6b984358fd3b889e8afdc87b503fe397c5f9ee000000001716001482d55d9dff1765974f91aa49ca8390bc3da3d761ffffffffd5a528091f379d3c08e26754adc08ff36ec85b9ab007a5294d173ae26cc012be0000000017160014044267290a1ed9e1b363bfdec43aac1df8f85bfbffffffff02c0aff6290100000017a914e0e2ba743a50d6c51176cf4006a73b07c29df3cf87c0aff6290100000017a9143a011cad3e72170448f61524c490ce1ec3c7e8a48702473044022074136f51a9f5dfc5b27e4e0b2a5b576f895f3e872f16bb74441b921ed670f7dd0220276d9f4fc40a1c0349008ae82135651077932010b5e9077bf62f8bc0b9142c33012102c7a49c3f29e63cf274819490e6e0bdc115756397ca60a86091f822286f5e9a8802473044022053aaaa8f122a8430342d274fdd57ea8dc746cce269e099d78ce2778656406c48022003e3788c5694ce17fcd842b6685f44afe6a7151dcfa214d4198d5503134d2d210121030541bdfff7b3e4deb1e0addf5715cbbb13407e7b06a9793a1be36233b7d49fdc00000000</span><br><span class="line"></span><br><span class="line">6. 广播离线签名后的交易 9447820947c7fa1198a6342bbd06c22459a94e663a11aa2933d89f76e8597a80</span><br><span class="line">bitcoin-cli -regtest sendrawtransaction 020000000001018923686439bec2b6abadf6ec2afd62c34f7665d3580dd7314dc69f14b6c83b59010000001716001490c66a16ddd8405227e11efc87f7b93fce151373ffffffff01806de7290100000017a9149e82f61edb11d83f62a60368868a7a16bcf55a88870247304402203665a815716ed7c99a627acf896806101e851a9122a05a9dd337a7c70792800d022070b1a1c1947bbb81aff11e966392a4b05e3d4b2785a8170f70b4d0250f960e72012103d678d4c116ea3bff2b18760a45d86fd19692c213b217f88a6815006387290cfc00000000</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>以上的过程已经非常详尽了，现在对以上的过程进一步说明。</p>
+<p>文章列出的步骤是满足以下场景的：</p>
+<blockquote>
+<p>有两组地址，分别属于不同的私钥，从这两组地址中提取两个UTXO，输入到两个目标地址中，给每个目标地址49.9个比特币。这个过程称为第一次交易，在第一次交易广播之前，立刻发起第二笔交易。对第二笔交易签名完成之后，<strong>依次</strong>对这两个交易进行广播。</p>
+</blockquote>
+<p>在步骤18之前，和前面文章中的构建复杂交易是完全一样的。为了简单降低文章的复杂度，并没有设置找零，如需设置找零，参考之前的文章，在创建交易之后设置找零地址和计算交易费即可。</p>
+<p>再强调一遍，离线签署的重点是两个</p>
+<ol>
+<li>在第一次交易未广播之前发起第二笔交易</li>
+<li>在交易的最后，<strong>依次</strong>广播</li>
+</ol>
+<p>额外提示，如果最后发现交易无法广播，请回头查阅签名问题。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" rel="tag"># 区块链</a>
+              <a href="/tags/%E6%AF%94%E7%89%B9%E5%B8%81/" rel="tag"># 比特币</a>
+              <a href="/tags/%E4%BA%A4%E6%98%93/" rel="tag"># 交易</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/45941/" rel="prev" title="关于学习的两三事">
+      <i class="fa fa-chevron-left"></i> 关于学习的两三事
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/36864/" rel="next" title="Rust关于数据溢出安全">
+      Rust关于数据溢出安全 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="TigerInYourDream"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">TigerInYourDream</p>
+  <div class="site-description" itemprop="description">每一篇文章都是一种进步，每一句感慨都是一次思考</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TigerInYourDream</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">163k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:28</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

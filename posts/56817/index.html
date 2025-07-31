@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Pacifico:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"imzy.vip","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="从零构建一个SPV钱包其一开篇这是如何从零开始构建一个SPV钱包的开篇文章的第一篇，按照行文习惯，先列出系列文章的目的：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从零构建一个SPV钱包其一">
+<meta property="og:url" content="https://imzy.vip/posts/56817/index.html">
+<meta property="og:site_name" content="TID&#39;s Blog">
+<meta property="og:description" content="从零构建一个SPV钱包其一开篇这是如何从零开始构建一个SPV钱包的开篇文章的第一篇，按照行文习惯，先列出系列文章的目的：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.ax1x.com/2020/03/03/3fGrVg.md.jpg">
+<meta property="article:published_time" content="2020-03-03T00:20:49.000Z">
+<meta property="article:modified_time" content="2025-07-31T02:30:04.386Z">
+<meta property="article:author" content="TigerInYourDream">
+<meta property="article:tag" content="SPV钱包">
+<meta property="article:tag" content="系列文章">
+<meta property="article:tag" content="交易">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.ax1x.com/2020/03/03/3fGrVg.md.jpg">
+
+<link rel="canonical" href="https://imzy.vip/posts/56817/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>从零构建一个SPV钱包其一 | TID's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">TID's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-一言">
+
+    <a href="/motto" rel="section"><i class="fa fa-camera fa-fw"></i>一言</a>
+
+  </li>
+        <li class="menu-item menu-item-友链">
+
+    <a href="/friends" rel="section"><i class="fa fa-american-sign-language-interpreting fa-fw"></i>友链</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/56817/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="TigerInYourDream">
+      <meta itemprop="description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TID's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          从零构建一个SPV钱包其一
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-03 00:20:49" itemprop="dateCreated datePublished" datetime="2020-03-03T00:20:49+00:00">2020-03-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-07-31 02:30:04" itemprop="dateModified" datetime="2025-07-31T02:30:04+00:00">2025-07-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/" itemprop="url" rel="index"><span itemprop="name">技术文章</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="从零构建一个SPV钱包其一"><a href="#从零构建一个SPV钱包其一" class="headerlink" title="从零构建一个SPV钱包其一"></a>从零构建一个SPV钱包其一</h1><h3 id="开篇"><a href="#开篇" class="headerlink" title="开篇"></a>开篇</h3><p>这是如何从零开始构建一个SPV钱包的开篇文章的第一篇，按照行文习惯，先列出系列文章的目的：</p>
+<a id="more"></a>
+
+<blockquote>
+<p>构建一个SPV钱包，确切的说是一个BTC的SPV钱包</p>
+</blockquote>
+<p>在区块链世界中，<strong>去中心化</strong>一直是核心话题，实际上市面上很多钱包是有后端的，或者说有后端支援。出于种种目的，他们的钱包并非完全去中心化。但是BIP37给比特币提供了一个去中心的提案。本文的全部方案均起源于BIP37</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/bitcoin/bips/blob/master/bip-0037.mediawiki">https://github.com/bitcoin/bips/blob/master/bip-0037.mediawiki</a></p>
+</blockquote>
+<p>BIP37是一切的起点，所以阅读本片文章的开端必然需要阅读BIP37。</p>
+<h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><p>在正式开始之前，还需要预先的准备知识。因为不是知识普及型的文章，所以不准备介绍基本概念。但是需要提供的基本的知识会提到</p>
+<h4 id="首先会搭建BTC节点"><a href="#首先会搭建BTC节点" class="headerlink" title="首先会搭建BTC节点"></a>首先会搭建BTC节点</h4><p>关于如何搭建btc节点的文章很多，不列出。本文中使用过的节点版本为v0.18，其他稳定版本均可。使用环境为乌班图。一切以可以稳定运行比特币节点为主。它属于基础准备知识，并非重点。关于如何配置节点，可参考我的博文</p>
+<p><a href="https://imzy.vip/posts/55622/">比特币客户端设置</a></p>
+<p><a href="https://imzy.vip/posts/42988/">比特币节点远程访问</a></p>
+<p>搭建节点之后，再按照以上文章的内容，达到的的目标是配置的<strong>比特币节点可以在远端访问</strong>。当然这并不是强制目的，我只是希望开发和运行比特币节点不是在一台机器上。只要搭建的比特币节点可以支持rpc访问即可。</p>
+<h4 id="理解比特币如何交易"><a href="#理解比特币如何交易" class="headerlink" title="理解比特币如何交易"></a>理解比特币如何交易</h4><p><strong>交易</strong>是区块链系统的核心。在搭建一个比特币节点就是为了可以在这个节点上利用rpc发起交易，让读者理解比特币交易的具体形式（确切的说是构建裸交易的具体形式）。关于如何构建交易可以参考我的博文</p>
+<p><a href="https://imzy.vip/posts/36076/">比特币交易的基本问题</a></p>
+<p><a href="https://imzy.vip/posts/60903/">使用比特币节点进行交易</a></p>
+<p>读了以上两篇博文之后，基本可以理解如何进行比特币裸交易的构建，在以下还是特意列出核心步骤</p>
+<blockquote>
+<ol>
+<li>提取UTXO</li>
+<li>发起交易</li>
+<li>对交易进行签名</li>
+<li>全网广播</li>
+</ol>
+</blockquote>
+<p>理解比特币如何交易之后，就知道了如何发起一个基本的交易。基本交易的方式就是按照以上的步骤进行（特指使用本身提供的cli服务或者curl进行访问），如果还需要进一步（定义进一步为使用自己的rpc代码进行交互完成交易），我自己本身也写了一个rpc服务的代码，挂在我的githu上。很简陋，但是可以用。</p>
+<h3 id="准备的原因"><a href="#准备的原因" class="headerlink" title="准备的原因"></a>准备的原因</h3><p>有以上两方面的准备处于这个目的。其一，和比特币有关的东西都需要从搭建节点开始，虽然最后的代码中无需使用我们本地搭建的节点，以DNS探测为主，但这是基础中的基础。其二，使用SPV钱包最终也是要进行交易。我们在最开始的地方就确定最终的目标，防止在复杂的区块链钱包技术细节中迷失自己。为了达到这两个目的，我提到的文章建议阅读，如有其他疑惑也可以参考《精通比特币》一书。我很多对比特币最初的疑惑都在这本书中得到了解答。</p>
+<h3 id="理解基石"><a href="#理解基石" class="headerlink" title="理解基石"></a>理解基石</h3><p>进行以后的步骤之后，是需要明白构建SPV钱包的基石我们实现交易的形式</p>
+<blockquote>
+<ol>
+<li>搭建全节点，利用全节点提供的rpc服务进行交易。也就是准备章节的第二部分所提到的方法</li>
+<li>利用SPV节点，借助SPV节点，利用比特币协议进行交互达到交易的目的。</li>
+</ol>
+</blockquote>
+<p><strong>Rome was not built in a day</strong>理解第一点，更有助于理解第二点。为此我专门绘制了如下的图</p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/3fGrVg"><img src="https://s2.ax1x.com/2020/03/03/3fGrVg.md.jpg" alt="3fGrVg.md.jpg"></a></p>
+<p>以上的图体现了SPV体系的基本关系，对这张图提出一个简要的说明</p>
+<blockquote>
+<p>第一部分是全节点的交易方式，全节点保存全部的交易数据，互相关联且拥有全部数据。是基本的比特币网络和基本交易形式</p>
+<p>第二部分是我们需要关注的，SPV节点需要如何构建交易。为了清楚的说明问题，特地把wallet和spv且分开，其实我们要开发的钱包为了达到去中心化交易的目的，这两个部分是不可分割的。wallet链接一个SPV节点，SPV节点也通过p2p网络接入比特币网络。特别强调：SPV节点也需要和全节点相互链接才可以发挥正常的功能，否则spv节点数据缺失不足以完成正常功能。SPV节点发送loadfilter消息给fullNode。fullNode设置过滤器后加载过滤后的数据给SPV节点。其中用到的过滤器我布隆过滤器。他们之间的消息规范遵循比特币网络协议。此外SPV节点也需要存储完整的<strong>blockheader</strong>用于消息的验证。</p>
+</blockquote>
+<p>比特币网络协议请参考如下</p>
+<p><a target="_blank" rel="noopener" href="https://en.bitcoin.it/wiki/Protocol_documentation">https://en.bitcoin.it/wiki/Protocol_documentation</a></p>
+<p>请务必仔细研读，它对于后续的工作意义非凡。也需要反复参阅！</p>
+<p>基础理论的准备工作先写到这里，后续的细节会成为一个系列文章。本文也会在后续有较大幅度的改动。</p>
+<p>待续…</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/SPV%E9%92%B1%E5%8C%85/" rel="tag"># SPV钱包</a>
+              <a href="/tags/%E7%B3%BB%E5%88%97%E6%96%87%E7%AB%A0/" rel="tag"># 系列文章</a>
+              <a href="/tags/%E4%BA%A4%E6%98%93/" rel="tag"># 交易</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/10047/" rel="prev" title="rust工程实践">
+      <i class="fa fa-chevron-left"></i> rust工程实践
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/27183/" rel="next" title="使用rust写安卓库">
+      使用rust写安卓库 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8E%E9%9B%B6%E6%9E%84%E5%BB%BA%E4%B8%80%E4%B8%AASPV%E9%92%B1%E5%8C%85%E5%85%B6%E4%B8%80"><span class="nav-number">1.</span> <span class="nav-text">从零构建一个SPV钱包其一</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%80%E7%AF%87"><span class="nav-number">1.0.1.</span> <span class="nav-text">开篇</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%86%E5%A4%87"><span class="nav-number">1.0.2.</span> <span class="nav-text">准备</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A6%96%E5%85%88%E4%BC%9A%E6%90%AD%E5%BB%BABTC%E8%8A%82%E7%82%B9"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">首先会搭建BTC节点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%90%86%E8%A7%A3%E6%AF%94%E7%89%B9%E5%B8%81%E5%A6%82%E4%BD%95%E4%BA%A4%E6%98%93"><span class="nav-number">1.0.2.2.</span> <span class="nav-text">理解比特币如何交易</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="nav-number">1.0.3.</span> <span class="nav-text">准备的原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%90%86%E8%A7%A3%E5%9F%BA%E7%9F%B3"><span class="nav-number">1.0.4.</span> <span class="nav-text">理解基石</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="TigerInYourDream"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">TigerInYourDream</p>
+  <div class="site-description" itemprop="description">每一篇文章都是一种进步，每一句感慨都是一次思考</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TigerInYourDream</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">163k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:28</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Pacifico:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"imzy.vip","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="占星与星座计算 黄道十二宫与分宫原理在占星与星座计算的第一篇文章中，尽可能详细的介绍了天球的构建过程原理和相关的概念。这一节我来介绍何为黄道12宫以及分工制的基本原理，不涉及具体分宫制。 黄道带上一节的天球示意图中，我们已经标注出来了黄道，就是假定地球不动，太阳绕地球运动所形成的面，就是黄道。因为地球自转和地球公转是有一定角度偏差的。所以黄道和赤道是有一个23.5度的夹角的。  黄道带（或是黄道十">
+<meta property="og:type" content="article">
+<meta property="og:title" content="占星与星座计算 黄道十二宫与分宫原理">
+<meta property="og:url" content="https://imzy.vip/posts/13704/index.html">
+<meta property="og:site_name" content="TID&#39;s Blog">
+<meta property="og:description" content="占星与星座计算 黄道十二宫与分宫原理在占星与星座计算的第一篇文章中，尽可能详细的介绍了天球的构建过程原理和相关的概念。这一节我来介绍何为黄道12宫以及分工制的基本原理，不涉及具体分宫制。 黄道带上一节的天球示意图中，我们已经标注出来了黄道，就是假定地球不动，太阳绕地球运动所形成的面，就是黄道。因为地球自转和地球公转是有一定角度偏差的。所以黄道和赤道是有一个23.5度的夹角的。  黄道带（或是黄道十">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-08-06T20:29:32.000Z">
+<meta property="article:modified_time" content="2025-07-31T02:30:04.386Z">
+<meta property="article:author" content="TigerInYourDream">
+<meta property="article:tag" content="占星">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://imzy.vip/posts/13704/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>占星与星座计算 黄道十二宫与分宫原理 | TID's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">TID's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-一言">
+
+    <a href="/motto" rel="section"><i class="fa fa-camera fa-fw"></i>一言</a>
+
+  </li>
+        <li class="menu-item menu-item-友链">
+
+    <a href="/friends" rel="section"><i class="fa fa-american-sign-language-interpreting fa-fw"></i>友链</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/13704/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="TigerInYourDream">
+      <meta itemprop="description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TID's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          占星与星座计算 黄道十二宫与分宫原理
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-06 20:29:32" itemprop="dateCreated datePublished" datetime="2021-08-06T20:29:32+00:00">2021-08-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-07-31 02:30:04" itemprop="dateModified" datetime="2025-07-31T02:30:04+00:00">2025-07-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A4%A9%E6%96%87/" itemprop="url" rel="index"><span itemprop="name">天文</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="占星与星座计算-黄道十二宫与分宫原理"><a href="#占星与星座计算-黄道十二宫与分宫原理" class="headerlink" title="占星与星座计算 黄道十二宫与分宫原理"></a>占星与星座计算 黄道十二宫与分宫原理</h1><p>在占星与星座计算的第一篇文章中，尽可能详细的介绍了天球的构建过程原理和相关的概念。这一节我来介绍何为黄道12宫以及分工制的基本原理，不涉及具体分宫制。</p>
+<h2 id="黄道带"><a href="#黄道带" class="headerlink" title="黄道带"></a>黄道带</h2><p>上一节的天球示意图中，我们已经标注出来了黄道，就是假定地球不动，太阳绕地球运动所形成的面，就是黄道。因为地球自转和地球公转是有一定角度偏差的。所以黄道和赤道是有一个23.5度的夹角的。</p>
+<blockquote>
+<p>黄道带（或是黄道十二宫）的概念起源于巴比伦占星术，巴比伦人注意到了与太阳同时升起的星星，在黎明之前，可以观察到靠近太阳位置的星星升起，这些星星以一个似乎规则的圆周来回运动。他们将这些星星分为十二组，并给其命名。希腊人从巴比伦人那里继承了这一习惯，才有了黄道十二宫，这个词来源于希腊文zodion，意为“小动物”。</p>
+</blockquote>
+<p>具体的黄道带的概念如下</p>
+<blockquote>
+<p>黄道带（希腊语：ζῳδιακός, zōdiakos），是天文学的名词，指的是在黄道上的星座组成的环带，不仅是太阳每年在天球上所行经的路径，月球和行星的路径也大略都在黄道的附近，因此也全部都在黄道带的星座内。 在占星术，黄道带被人为划分为十二个随中气点移动（与实际星座位置不一致）的均等区域，各自都有符号。 因此，黄道带是一个天球坐标系统，或是更具体的说是一个黄道坐标系统，以黄道做为纬度的基准平面（原点），并且以太阳在春分时的位置作为经度的原点</p>
+</blockquote>
+<p>黄道12宫的顺序如下</p>
+<blockquote>
+<p>白羊宫（Aries, ♈︎）；<br>金牛宫（Taurus, ♉︎）；<br>双子宫（Gemini, ♊︎）；<br>巨蟹宫（Cancer, ♋︎）；<br>狮子宫（Leo, ♌︎）；<br>处女宫（Virgo, ♍︎）；<br>天秤宫（Libra, ♎︎）；<br>天蝎宫（Scorpio, ♏︎）；<br>射手宫（Sagittarius, ♐︎）；<br>摩羯宫（Capricornus, ♑︎）；<br>水瓶宫（Aquarius, ♒︎）；<br>双鱼宫（Pisces, ♓︎）。</p>
+</blockquote>
+<p>古人观察星空，发现天体分作两类：一类固定在天球上，组成各个星座，形成一幅永恒的天空背景，称之为恒星；另一类天体在黄道附近运行，不断穿过黄道上的十二个星座（或中国的二十八宿），称之为行星。这些行星包括七颗（七曜），分别是阴阳——太阳和太阴（月球），以及五行——金木水火土五个肉眼可见的经典行星。太阳在黄道上一年运行一圈，太阴在黄道上一个月运行一圈。一定要注意，占星中的行星和实际的行星概念并不一致，这毕竟是古代天文学。由于整体一环为360度，所以每个星座占据了360/12 = 30 度。</p>
+<p>现在根据上面这些背景知识，我们来理解一个说法，“太阳进入白羊座23度“，作何解，白羊座是星座起点，那对应的角度就是经度23度。</p>
+<p>“月亮进入天蝎座7度”：天蝎为第八个星座组。30*7+7 = 217。即便经度217度。</p>
+<p>值得注意的是蛇夫座⛎，也被黄道经过。但是蛇夫座并不属于占星中的黄道十二（三）宫。所以你应该能理解某些作品中不存在的黄道12宫中为什么会出现蛇夫座了吧。根据现代天文学黄道中有13个星座。</p>
+<h2 id="分宫制"><a href="#分宫制" class="headerlink" title="分宫制"></a>分宫制</h2><p>介绍了黄道带的概念之后，我们知道了一个事实：观测星空一整年，即太阳围绕地球一圈，在不同的时候依次在黎明的太阳附近看到12个星系，称为黄道12宫。但是现在有个问题，人并不是地球本身，受到人出生地点经纬度影响，怎么做出一个地面天球坐标系统，确定人出生的星座问题。</p>
+<p>下面介绍分宫制的基本原理：</p>
+<p>分宫制的计算方法是，根据诞生时刻和地点经纬度，计算东升点（Ascedent）及天顶（MC， Medium Coel）。东升点是在诞生时刻在诞生地点的东面地平与黄道交接的一点。相对於东升点，在西方地平交接黄道的一点就是日没点（Dsc， Dscendant）。此两点连接起来，代表诞生时刻的地平线。地平线以上是日间可见的星象，地平线以下是夜间可见的星象。天顶即是当时黄道在天球最高的一点；相对於天顶，黄道在天球最低的一点为天底（IC，Imum Coeli）。计算出东升点後，以东升点的定位，将当时天球分成12份，利用投影法或其他数学计算投射到黄道之上，那就是星盘上后天12宫（Houses）的分配情况。</p>
+<p>其本质就是如何确定坐标系的起点和方位。</p>
+<p>因为本文不是讲占星历史的，所以并不会考据占星历史上的分宫制的不同流派。但是所有的分宫制都是依据以上的基本原理进行划分的。但是全部都是以东升点和天定做定位的。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%8D%A0%E6%98%9F/" rel="tag"># 占星</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/22991/" rel="prev" title="占星与星座计算 天球">
+      <i class="fa fa-chevron-left"></i> 占星与星座计算 天球
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/3102/" rel="next" title="占星与星座计算  儒略历和恒星时计算">
+      占星与星座计算  儒略历和恒星时计算 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%A0%E6%98%9F%E4%B8%8E%E6%98%9F%E5%BA%A7%E8%AE%A1%E7%AE%97-%E9%BB%84%E9%81%93%E5%8D%81%E4%BA%8C%E5%AE%AB%E4%B8%8E%E5%88%86%E5%AE%AB%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">占星与星座计算 黄道十二宫与分宫原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%BB%84%E9%81%93%E5%B8%A6"><span class="nav-number">1.1.</span> <span class="nav-text">黄道带</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%AE%AB%E5%88%B6"><span class="nav-number">1.2.</span> <span class="nav-text">分宫制</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="TigerInYourDream"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">TigerInYourDream</p>
+  <div class="site-description" itemprop="description">每一篇文章都是一种进步，每一句感慨都是一次思考</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TigerInYourDream</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">163k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:28</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

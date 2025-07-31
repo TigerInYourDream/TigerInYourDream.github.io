@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Pacifico:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"imzy.vip","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="在之前的文章中提到了SPV节点，一直说要写文章说明是什么是比特币SPV节点。网上有很多文章来描述这个问题，我之前也写过相关的文章，有兴趣的话可以回去查阅相关问题。简单来说，SPV节点最主要的特点就是：只存储头信息（BlockHeader）。所以他做到了存储数据规模大幅减少，只有完整数据的千分之一的水平。所以SPV节点适合在存储有限的设备上运行，比如手机客户端。但是本文的重点不是重复讲述SPV节点的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SPV节点获取merkerblock数据">
+<meta property="og:url" content="https://imzy.vip/posts/2926/index.html">
+<meta property="og:site_name" content="TID&#39;s Blog">
+<meta property="og:description" content="在之前的文章中提到了SPV节点，一直说要写文章说明是什么是比特币SPV节点。网上有很多文章来描述这个问题，我之前也写过相关的文章，有兴趣的话可以回去查阅相关问题。简单来说，SPV节点最主要的特点就是：只存储头信息（BlockHeader）。所以他做到了存储数据规模大幅减少，只有完整数据的千分之一的水平。所以SPV节点适合在存储有限的设备上运行，比如手机客户端。但是本文的重点不是重复讲述SPV节点的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.ax1x.com/2019/12/10/QBiCUU.md.png">
+<meta property="article:published_time" content="2019-12-10T14:54:22.000Z">
+<meta property="article:modified_time" content="2025-07-31T02:30:04.385Z">
+<meta property="article:author" content="TigerInYourDream">
+<meta property="article:tag" content="区块链">
+<meta property="article:tag" content="比特币">
+<meta property="article:tag" content="SPV节点">
+<meta property="article:tag" content="比特币网络协议">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.ax1x.com/2019/12/10/QBiCUU.md.png">
+
+<link rel="canonical" href="https://imzy.vip/posts/2926/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>SPV节点获取merkerblock数据 | TID's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">TID's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-一言">
+
+    <a href="/motto" rel="section"><i class="fa fa-camera fa-fw"></i>一言</a>
+
+  </li>
+        <li class="menu-item menu-item-友链">
+
+    <a href="/friends" rel="section"><i class="fa fa-american-sign-language-interpreting fa-fw"></i>友链</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://imzy.vip/posts/2926/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="TigerInYourDream">
+      <meta itemprop="description" content="每一篇文章都是一种进步，每一句感慨都是一次思考">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TID's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SPV节点获取merkerblock数据
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-12-10 14:54:22" itemprop="dateCreated datePublished" datetime="2019-12-10T14:54:22+00:00">2019-12-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-07-31 02:30:04" itemprop="dateModified" datetime="2025-07-31T02:30:04+00:00">2025-07-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">技术笔记</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在之前的文章中提到了SPV节点，一直说要写文章说明是什么是比特币SPV节点。网上有很多文章来描述这个问题，我之前也写过相关的文章，有兴趣的话可以回去查阅相关问题。简单来说，SPV<strong>节点最主要的特点就是：只存储头信息（BlockHeader）。</strong>所以他做到了存储数据规模大幅减少，只有完整数据的千分之一的水平。所以SPV节点适合在存储有限的设备上运行，比如手机客户端。但是本文的重点不是重复讲述SPV节点的概念的，而是换一个角度，从比特币网络协议入手，描述如何从全节点下载SPV所需的数据到节点上（SPV节点上）。这个所需的的信息，就是merkerblock。</p>
+<a id="more"></a>
+
+<p>本文的关键字是：”SPV节点”，”比特币网络协议”，”BIP47”</p>
+<h2 id="交易的基本问题"><a href="#交易的基本问题" class="headerlink" title="交易的基本问题"></a>交易的基本问题</h2><p>在探讨如何和比特币网络进行信息交互之前先解释一个基本问题</p>
+<h3 id="实现比特币交易的形式有哪些？"><a href="#实现比特币交易的形式有哪些？" class="headerlink" title="实现比特币交易的形式有哪些？"></a>实现比特币交易的形式有哪些？</h3><p><a target="_blank" rel="noopener" href="https://imgse.com/i/QBiCUU"><img src="https://s2.ax1x.com/2019/12/10/QBiCUU.md.png" alt="QBiCUU.md.png"></a></p>
+<p>虽然如此描述这个问题并不准确，但我还是按照自己的理解去解答这个问题，同时参照以上的图片来辅助说明。实现交易的形式有两类</p>
+<ol>
+<li>借助于比特币全节点</li>
+<li>借助于比特币的SPV节点</li>
+</ol>
+<p>对于1，很明确。比特全节点有区块链完整的信息。获取任何交易信息，发起交易和广播不在话下。</p>
+<p>重点需要解释的是2。借助于比特币的SPV节点。之前的文章提到过，SPV节点需要根据merkel root来验证交易的存在（注意用词，是验证交易的存在，反之是不行的）。那把这个问题提前一步，变成<strong>SPV节点如何获取自己所需的merkle root数据</strong>，这个图就是来描述这个问题的</p>
+<blockquote>
+<p>一个SPV的体系如图所示，wallet连接一个SPV的节点，因为SPV节点不存在完整的数据，所以SPV必然连接其他的完整的节点以获取自己所需要的数据。节点Peers 指代的就是其他的Full Node。</p>
+<p>实际情况中，如果要实现一个用户意义上的钱包（这个意义指：用户用这样一个App就可以实现比特币交易）wallet 和 SPV节点必然紧密相连。这里为了说明情况，所以特意分开。SPV节点和其他的Full Node之间是建立P2P网络的，他们直接交互就需要借助<strong>比特币网络协议</strong>。</p>
+<p>本文假定SPV Node已经发现到了其他的Full Node(指已经知道了其他节点的IP)，节点发现和建立连接也是比特币网络协议中的专门话题，本文为了简化，暂不对其进行探讨。以后有机会再出一篇文章。当节点建立连接之后，SPV节点将向节点发送LoadFilter 消息，这条消息会设置和布隆过滤器有关的参数，比如filter，需要的的Hash Function个数等。Full Node会根据设置调整自己的布隆过滤器。接下来，SPV节点发送getdata消息给Full Node。因为第一次设置了布隆过滤器，所以全节点会利用布隆过滤器过滤掉无关信息，把SPV感兴趣的信息发送回来。这样就形成了一次完整的信息交互。</p>
+</blockquote>
+<p>以上的描述中，需要明确一个小的问题</p>
+<p><strong>Bloom Filtter在哪里？</strong></p>
+<blockquote>
+<p>Bloom Filtter在全节点上。一个支持布隆过滤器的节点，需要自己实现和Bloom Filtter 有关的方法。这样它就可以根据其他节点回传回来的loadfiltter 消息来设置。等到SPV节点需要getdata的时刻，利用之前已经设置好的Bloom filtter来过滤信息。发送merker root回去。</p>
+</blockquote>
+<p>以上的内容，希望参考bip47的文档来理解</p>
+<h2 id="如何从比特币P2P网络中获取需要的数据"><a href="#如何从比特币P2P网络中获取需要的数据" class="headerlink" title="如何从比特币P2P网络中获取需要的数据"></a>如何从比特币P2P网络中获取需要的数据</h2><p>以上的内容介绍过之后，其实其实如何从比特币P2P网络中获取信息就已经说明了，不过为了文章的完整性，按照之前的惯例列出步骤。以下步骤假定已经确定对等节点的ip，且我们需要的数据为 merkerblock</p>
+<ol>
+<li>SPV节点向Full Node发送 version 消息</li>
+<li>等待对等节点发送 verack 消息之后，SPV节点向Full Node发送 verack 消息</li>
+<li>SPV节点发送 loadfilter 消息给Full Node</li>
+<li>SPV节点发送 getdata 消息给Full Node</li>
+<li>Full Node 回传 merkerblock 消息给SPV节点</li>
+</ol>
+<p>其中前两个节点为握手的过程，必须有前两个步骤才可以正常的发送消息。比特币网络信息的交互全部依赖这种Message的传递。至于消息具体该怎么样请参考比特币网络协议的官方wiki和bitcoin-refrence。因为实际发送的数据和比特币网络协议wiki数据有出入，所以这两份材料要对照进行。另外比特币节点之间建立的是TCP链接。如果需要自己写代码的话，可以使用tokios这样的库（parity-bitcoin也借助这个库）。因为rust写起来相对麻烦，下面给出一个python的实例，体现这个过程</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> sleep</span><br><span class="line"><span class="keyword">from</span> hashlib <span class="keyword">import</span> sha256</span><br><span class="line"><span class="keyword">import</span> struct</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">network_string = <span class="string">&quot;f9beb4d9&quot;</span>.decode(<span class="string">&quot;hex&quot;</span>)  <span class="comment"># Mainnet</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">send</span>(<span class="params">msg,payload</span>):</span></span><br><span class="line">    <span class="comment">## Command is ASCII text, null padded to 12 bytes</span></span><br><span class="line">    command = msg + ( ( <span class="number">12</span> - len(msg) ) * <span class="string">&quot;\00&quot;</span> )</span><br><span class="line"></span><br><span class="line">    <span class="comment">## Payload length is a uint32_t</span></span><br><span class="line">    payload_raw = payload.decode(<span class="string">&quot;hex&quot;</span>)</span><br><span class="line">    payload_len = struct.pack(<span class="string">&quot;I&quot;</span>, len(payload_raw))</span><br><span class="line"></span><br><span class="line">    <span class="comment">## Checksum is first 4 bytes of SHA256(SHA256(&lt;payload&gt;))</span></span><br><span class="line">    checksum = sha256(sha256(payload_raw).digest()).digest()[:<span class="number">4</span>]</span><br><span class="line"></span><br><span class="line">    sys.stdout.write(</span><br><span class="line">        network_string</span><br><span class="line">        + command</span><br><span class="line">        + payload_len</span><br><span class="line">        + checksum</span><br><span class="line">        + payload_raw</span><br><span class="line">    )</span><br><span class="line">    sys.stdout.flush()</span><br><span class="line"></span><br><span class="line"><span class="comment">## Create a version message</span></span><br><span class="line">send(<span class="string">&quot;version&quot;</span>,</span><br><span class="line">      <span class="string">&quot;71110100&quot;</span> <span class="comment"># ........................ Protocol Version: 70001</span></span><br><span class="line">    + <span class="string">&quot;0000000000000000&quot;</span> <span class="comment"># ................ Services: Headers Only (SPV)</span></span><br><span class="line">    + <span class="string">&quot;c6925e5400000000&quot;</span> <span class="comment"># ................ Time: 1415484102</span></span><br><span class="line">    + <span class="string">&quot;00000000000000000000000000000000&quot;</span></span><br><span class="line">    + <span class="string">&quot;0000ffff7f000001208d&quot;</span> <span class="comment"># ............ Receiver IP Address/Port</span></span><br><span class="line">    + <span class="string">&quot;00000000000000000000000000000000&quot;</span></span><br><span class="line">    + <span class="string">&quot;0000ffff7f000001208d&quot;</span> <span class="comment"># ............ Sender IP Address/Port</span></span><br><span class="line">    + <span class="string">&quot;0000000000000000&quot;</span> <span class="comment"># ................ Nonce (not used here)</span></span><br><span class="line">    + <span class="string">&quot;1b&quot;</span> <span class="comment"># .............................. Bytes in version string</span></span><br><span class="line">    + <span class="string">&quot;2f426974636f696e2e6f726720457861&quot;</span></span><br><span class="line">    + <span class="string">&quot;6d706c653a302e392e332f&quot;</span> <span class="comment"># .......... Version string</span></span><br><span class="line">    + <span class="string">&quot;93050500&quot;</span> <span class="comment"># ........................ Starting block height: 329107</span></span><br><span class="line">    + <span class="string">&quot;00&quot;</span> <span class="comment"># .............................. Relay transactions: false</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">sleep(<span class="number">1</span>)</span><br><span class="line">send(<span class="string">&quot;verack&quot;</span>, <span class="string">&quot;&quot;</span>)</span><br><span class="line"></span><br><span class="line">send(<span class="string">&quot;filterload&quot;</span>,</span><br><span class="line">      <span class="string">&quot;02&quot;</span>  <span class="comment"># ........ Filter bytes: 2</span></span><br><span class="line">    + <span class="string">&quot;b50f&quot;</span> <span class="comment"># ....... Filter: 1010 1101 1111 0000</span></span><br><span class="line">    + <span class="string">&quot;0b000000&quot;</span> <span class="comment"># ... nHashFuncs: 11</span></span><br><span class="line">    + <span class="string">&quot;00000000&quot;</span> <span class="comment"># ... nTweak: 0/none</span></span><br><span class="line">    + <span class="string">&quot;00&quot;</span> <span class="comment"># ......... nFlags: BLOOM_UPDATE_NONE</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">send(<span class="string">&quot;getdata&quot;</span>,</span><br><span class="line">      <span class="string">&quot;01&quot;</span> <span class="comment"># ................................. Number of inventories: 1</span></span><br><span class="line">    + <span class="string">&quot;03000000&quot;</span> <span class="comment"># ........................... Inventory type: filtered block</span></span><br><span class="line">    + <span class="string">&quot;a4deb66c0d726b0aefb03ed51be407fb&quot;</span></span><br><span class="line">    + <span class="string">&quot;ad7331c6e8f9eef231b7000000000000&quot;</span> <span class="comment"># ... Block header hash</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>简单说明，网络的协议中的数据为hex小端编码。消息遵循的形式为messageHeader+payload。其中payload为具体消息的形式。比特币网络协议中的任何消息都遵循这个格式。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python get-merkle.py | nc localhost 8333 | hd</span><br></pre></td></tr></table></figure>
+
+<p>按以上格式运行即可。（假定节点搭建在本地，采用默认端口）。nc为netcat，hd为hexdump工具。</p>
+<p>给出参考的资料</p>
+<p><a target="_blank" rel="noopener" href="https://en.bitcoin.it/wiki/Protocol_documentation#filterload.2C_filteradd.2C_filterclear.2C_merkleblock">https://en.bitcoin.it/wiki/Protocol_documentation#filterload.2C_filteradd.2C_filterclear.2C_merkleblock</a></p>
+<p><a target="_blank" rel="noopener" href="https://bitcoin.org/en/developer-reference#message-headers">https://bitcoin.org/en/developer-reference#message-headers</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" rel="tag"># 区块链</a>
+              <a href="/tags/%E6%AF%94%E7%89%B9%E5%B8%81/" rel="tag"># 比特币</a>
+              <a href="/tags/SPV%E8%8A%82%E7%82%B9/" rel="tag"># SPV节点</a>
+              <a href="/tags/%E6%AF%94%E7%89%B9%E5%B8%81%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" rel="tag"># 比特币网络协议</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/64038/" rel="prev" title="如何给过长数组实现Debug">
+      <i class="fa fa-chevron-left"></i> 如何给过长数组实现Debug
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/21279/" rel="next" title="记录一次烦人的编译出错问题">
+      记录一次烦人的编译出错问题 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%A4%E6%98%93%E7%9A%84%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">交易的基本问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%AF%94%E7%89%B9%E5%B8%81%E4%BA%A4%E6%98%93%E7%9A%84%E5%BD%A2%E5%BC%8F%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">实现比特币交易的形式有哪些？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BB%8E%E6%AF%94%E7%89%B9%E5%B8%81P2P%E7%BD%91%E7%BB%9C%E4%B8%AD%E8%8E%B7%E5%8F%96%E9%9C%80%E8%A6%81%E7%9A%84%E6%95%B0%E6%8D%AE"><span class="nav-number">2.</span> <span class="nav-text">如何从比特币P2P网络中获取需要的数据</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="TigerInYourDream"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">TigerInYourDream</p>
+  <div class="site-description" itemprop="description">每一篇文章都是一种进步，每一句感慨都是一次思考</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TigerInYourDream</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">163k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:28</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
